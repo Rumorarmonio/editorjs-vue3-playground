@@ -1,0 +1,42 @@
+{
+  "time": 1777075200000,
+  "version": "2.0.0",
+  "blocks": [
+    {
+      "id": "intro-title",
+      "type": "header",
+      "data": {
+        "text": "Editor.js Nuxt playground",
+        "level": 1
+      }
+    },
+    {
+      "id": "intro-text",
+      "type": "paragraph",
+      "data": {
+        "text": "This default page is the static content source for the first editor and renderer workflow."
+      }
+    },
+    {
+      "id": "goals-list",
+      "type": "list",
+      "data": {
+        "style": "unordered",
+        "items": [
+          {
+            "content": "Keep editor data compatible with Editor.js OutputData.",
+            "items": []
+          },
+          {
+            "content": "Render saved blocks through a typed registry.",
+            "items": []
+          },
+          {
+            "content": "Use localStorage for draft content before backend persistence exists.",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}

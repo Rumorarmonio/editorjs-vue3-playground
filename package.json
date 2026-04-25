@@ -1,0 +1,19 @@
+{
+  "name": "editorjs-vue3",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^4.4.2"
+  },
+  "devDependencies": {
+    "sass": "^1.99.0",
+    "typescript": "^6.0.3"
+  }
+}

@@ -44,7 +44,7 @@
 - Этап 3 — не начат
 - Этап 4 — не начат
 - Этап 5 — не начат
-- Этап 6 — частично выполнен досрочно: code quality tooling настроен в начале проекта; подготовка static build и GitHub Pages deployment ещё не начата
+- Этап 6 — выполнен досрочно: code quality tooling настроен в начале проекта; static build и GitHub Pages deployment реализованы сейчас через `nuxt generate` и GitHub Actions
 
 ## Следующий этап
 

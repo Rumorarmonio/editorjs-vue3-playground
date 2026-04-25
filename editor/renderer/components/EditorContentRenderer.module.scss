@@ -4,6 +4,30 @@
   width: 100%;
   max-width: 760px;
   color: var(--color-text);
+
+  :global(.cdx-marker) {
+    padding: 0 2px;
+    background: #fff3a3;
+  }
+
+  :global(.cdx-underline) {
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.16em;
+  }
+
+  :global(.cdx-strikethrough) {
+    text-decoration: line-through;
+  }
+
+  :global(.inline-code) {
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono',
+      monospace;
+    font-size: 0.9em;
+    background: #eef3ee;
+  }
 }
 
 .heading {

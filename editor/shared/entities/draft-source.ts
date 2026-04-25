@@ -116,6 +116,7 @@ function isListBlockData(value: unknown): boolean {
   return (
     isRecord(value) &&
     isListStyle(value.style) &&
+    (value.meta === undefined || isRecord(value.meta)) &&
     Array.isArray(value.items) &&
     value.items.every(isListBlockItem)
   )
@@ -125,6 +126,7 @@ function isListBlockItem(value: unknown): boolean {
   return (
     isRecord(value) &&
     typeof value.content === 'string' &&
+    (value.meta === undefined || isRecord(value.meta)) &&
     Array.isArray(value.items) &&
     value.items.every(isListBlockItem)
   )

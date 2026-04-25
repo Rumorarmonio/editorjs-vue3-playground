@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type EditorJS from '@editorjs/editorjs'
 import { onBeforeUnmount, onMounted, shallowRef, ref } from 'vue'
-import { createEditorTools } from '~~/editor/admin/config/editor-tools'
+import {
+  createEditorTools,
+  editorInlineToolbar,
+} from '~~/editor/admin/config/editor-tools'
 import {
   isKnownEditorContentData,
   type EditorContentData,
@@ -67,6 +70,7 @@ onMounted(async () => {
       holder: holderElement.value,
       data: cloneEditorContent(props.initialData),
       tools,
+      inlineToolbar: editorInlineToolbar,
       autofocus: true,
       placeholder: 'Write content or press Tab to open the block toolbar',
       onChange: () => {

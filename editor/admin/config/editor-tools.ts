@@ -3,6 +3,16 @@ import type {
   ToolConstructable,
 } from '@editorjs/editorjs/types'
 
+export const editorInlineToolbar = [
+  'bold',
+  'italic',
+  'link',
+  'underline',
+  'marker',
+  'strikethrough',
+  'inlineCode',
+] satisfies NonNullable<EditorConfig['inlineToolbar']>
+
 export async function createEditorTools(): Promise<EditorConfig['tools']> {
   const [
     { default: Header },
@@ -12,6 +22,10 @@ export async function createEditorTools(): Promise<EditorConfig['tools']> {
     { default: Table },
     { default: Embed },
     { default: ImageTool },
+    { default: Marker },
+    { default: Underline },
+    { default: InlineCode },
+    { default: Strikethrough },
   ] = await Promise.all([
     import('@editorjs/header'),
     import('@editorjs/list'),
@@ -20,12 +34,16 @@ export async function createEditorTools(): Promise<EditorConfig['tools']> {
     import('@editorjs/table'),
     import('@editorjs/embed'),
     import('@editorjs/image'),
+    import('@editorjs/marker'),
+    import('@editorjs/underline'),
+    import('@editorjs/inline-code'),
+    import('@sotaproject/strikethrough'),
   ])
 
   return {
     header: {
       class: Header as unknown as ToolConstructable,
-      inlineToolbar: true,
+      inlineToolbar: editorInlineToolbar,
       config: {
         levels: [1, 2, 3, 4],
         defaultLevel: 2,
@@ -33,14 +51,14 @@ export async function createEditorTools(): Promise<EditorConfig['tools']> {
     },
     list: {
       class: List as unknown as ToolConstructable,
-      inlineToolbar: true,
+      inlineToolbar: editorInlineToolbar,
       config: {
         defaultStyle: 'unordered',
       },
     },
     quote: {
       class: Quote as unknown as ToolConstructable,
-      inlineToolbar: true,
+      inlineToolbar: editorInlineToolbar,
       config: {
         quotePlaceholder: 'Enter a quote',
         captionPlaceholder: 'Quote caption',
@@ -49,7 +67,7 @@ export async function createEditorTools(): Promise<EditorConfig['tools']> {
     delimiter: Delimiter as unknown as ToolConstructable,
     table: {
       class: Table as unknown as ToolConstructable,
-      inlineToolbar: true,
+      inlineToolbar: editorInlineToolbar,
       config: {
         rows: 2,
         cols: 3,
@@ -61,6 +79,7 @@ export async function createEditorTools(): Promise<EditorConfig['tools']> {
     },
     image: {
       class: ImageTool as unknown as ToolConstructable,
+      inlineToolbar: editorInlineToolbar,
       config: {
         uploader: {
           uploadByFile: uploadLocalImageByFile,
@@ -68,6 +87,16 @@ export async function createEditorTools(): Promise<EditorConfig['tools']> {
         },
       },
     },
+    marker: {
+      class: Marker as unknown as ToolConstructable,
+      shortcut: 'CMD+SHIFT+M',
+    },
+    underline: Underline as unknown as ToolConstructable,
+    inlineCode: {
+      class: InlineCode as unknown as ToolConstructable,
+      shortcut: 'CMD+SHIFT+C',
+    },
+    strikethrough: Strikethrough as unknown as ToolConstructable,
   }
 }
 

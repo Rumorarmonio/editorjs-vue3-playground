@@ -1,0 +1,15 @@
+declare module '@editorjs/marker' {
+  import type { ToolConstructable } from '@editorjs/editorjs/types'
+
+  const Marker: ToolConstructable
+
+  export default Marker
+}
+
+declare module '@sotaproject/strikethrough' {
+  import type { ToolConstructable } from '@editorjs/editorjs/types'
+
+  const Strikethrough: ToolConstructable
+
+  export default Strikethrough
+}

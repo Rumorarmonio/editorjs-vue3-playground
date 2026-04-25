@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { sanitizeInlineHtml } from '~~/editor/renderer/helpers/sanitize-inline-html'
 import type { ListBlockData, ListBlockItem } from '~~/editor/shared'
 
 defineOptions({
@@ -24,7 +25,7 @@ function getListTag(style: ListBlockData['style']): string {
       v-for="(item, index) in items"
       :key="`${item.content}-${index}`"
     >
-      <span>{{ item.content }}</span>
+      <span v-html="sanitizeInlineHtml(item.content)" />
       <EditorContentList
         v-if="item.items.length > 0"
         :items="item.items"

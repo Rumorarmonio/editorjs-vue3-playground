@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import EditorContentList from '~~/editor/renderer/components/EditorContentList.vue'
+import {
+  getInlineText,
+  sanitizeInlineHtml,
+} from '~~/editor/renderer/helpers/sanitize-inline-html'
 import type {
   EditorBlock,
   EditorContentBlock,
@@ -65,15 +69,14 @@ function getHeaderTag(level: EditorBlock<'header'>['data']['level']): string {
         v-if="isHeaderBlock(block)"
         :class="$style.heading"
       >
-        {{ block.data.text }}
+        <span v-html="sanitizeInlineHtml(block.data.text)" />
       </component>
 
       <p
         v-else-if="isParagraphBlock(block)"
         :class="$style.paragraph"
-      >
-        {{ block.data.text }}
-      </p>
+        v-html="sanitizeInlineHtml(block.data.text)"
+      />
 
       <EditorContentList
         v-else-if="isListBlock(block)"
@@ -85,8 +88,11 @@ function getHeaderTag(level: EditorBlock<'header'>['data']['level']): string {
         v-else-if="isQuoteBlock(block)"
         :class="$style.quote"
       >
-        <p>{{ block.data.text }}</p>
-        <footer v-if="block.data.caption">{{ block.data.caption }}</footer>
+        <p v-html="sanitizeInlineHtml(block.data.text)" />
+        <footer
+          v-if="block.data.caption"
+          v-html="sanitizeInlineHtml(block.data.caption)"
+        />
       </blockquote>
 
       <hr
@@ -109,7 +115,7 @@ function getHeaderTag(level: EditorBlock<'header'>['data']['level']): string {
                 v-for="(cell, cellIndex) in row"
                 :key="cellIndex"
               >
-                {{ cell }}
+                <span v-html="sanitizeInlineHtml(cell)" />
               </component>
             </tr>
           </tbody>
@@ -127,7 +133,10 @@ function getHeaderTag(level: EditorBlock<'header'>['data']['level']): string {
         >
           {{ block.data.service || block.data.source }}
         </a>
-        <figcaption v-if="block.data.caption">{{ block.data.caption }}</figcaption>
+        <figcaption
+          v-if="block.data.caption"
+          v-html="sanitizeInlineHtml(block.data.caption)"
+        />
       </figure>
 
       <figure
@@ -135,10 +144,13 @@ function getHeaderTag(level: EditorBlock<'header'>['data']['level']): string {
         :class="$style.image"
       >
         <img
-          :alt="block.data.alt ?? block.data.caption ?? ''"
+          :alt="block.data.alt ?? getInlineText(block.data.caption ?? '')"
           :src="block.data.file.url"
         />
-        <figcaption v-if="block.data.caption">{{ block.data.caption }}</figcaption>
+        <figcaption
+          v-if="block.data.caption"
+          v-html="sanitizeInlineHtml(block.data.caption)"
+        />
       </figure>
 
       <pre

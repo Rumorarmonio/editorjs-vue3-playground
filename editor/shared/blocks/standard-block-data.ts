@@ -15,6 +15,7 @@ export interface ListBlockItem {
 
 export interface ListBlockData {
   style: 'ordered' | 'unordered' | 'checklist'
+  meta?: Record<string, unknown>
   items: ListBlockItem[]
 }
 

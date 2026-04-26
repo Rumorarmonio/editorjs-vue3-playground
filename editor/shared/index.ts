@@ -2,6 +2,8 @@ export { editorBlockRegistry } from './registry/block-registry'
 export { EDITOR_DRAFT_STORAGE_KEY } from './constants/draft-storage'
 export {
   normalizeNoticeBlockData,
+  normalizeSectionIntroBlockData,
+  normalizeSectionIntroDescriptionData,
   noticeBlockTypes,
 } from './blocks/custom-block-data'
 export {
@@ -50,6 +52,9 @@ export type {
   CustomBlockDataMap,
   NoticeBlockData,
   NoticeBlockType,
+  SectionIntroBlockData,
+  SectionIntroDescriptionBlock,
+  SectionIntroDescriptionData,
 } from './blocks/custom-block-data'
 export type {
   EditorImageUploader,

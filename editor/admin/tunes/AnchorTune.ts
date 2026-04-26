@@ -1,4 +1,8 @@
-import type { BlockTune, BlockTuneConstructable } from '@editorjs/editorjs/types'
+import type {
+  BlockAPI,
+  BlockTune,
+  BlockTuneConstructable,
+} from '@editorjs/editorjs/types'
 import {
   normalizeAnchorTuneData,
   normalizeAnchorValue,
@@ -7,33 +11,53 @@ import {
 import { createTunePanel, createTuneTextField } from './tune-ui'
 
 interface AnchorTuneConstructorOptions {
+  block: BlockAPI
   data: unknown
 }
 
 class AnchorTune implements BlockTune {
   static isTune = true
 
+  private block: BlockAPI
   private data: AnchorTuneData
   private wrapper: HTMLElement | null = null
+  private field: HTMLLabelElement | null = null
+  private input: HTMLInputElement | null = null
+  private hint: HTMLParagraphElement | null = null
 
-  constructor({ data }: AnchorTuneConstructorOptions) {
+  constructor({ block, data }: AnchorTuneConstructorOptions) {
+    this.block = block
     this.data = normalizeAnchorTuneData(data)
   }
 
   render(): HTMLElement {
     const panel = createTunePanel('Anchor')
+    const field = createTuneTextField({
+      label: 'Anchor',
+      value: this.data.anchor ?? '',
+      placeholder: 'section-anchor',
+      onInput: (value) => {
+        this.data.anchor = normalizeAnchorValue(value)
+        this.syncWrapper()
+        this.syncValidation()
+        this.block.dispatchChange()
+      },
+    })
+    const input = field.querySelector<HTMLInputElement>('input')
+    const hint = document.createElement('p')
 
-    panel.append(
-      createTuneTextField({
-        label: 'Anchor',
-        value: this.data.anchor ?? '',
-        placeholder: 'section-anchor',
-        onInput: (value) => {
-          this.data.anchor = normalizeAnchorValue(value)
-          this.syncWrapper()
-        },
-      }),
-    )
+    hint.className = 'editor-block-tune-field__error'
+    hint.textContent = 'This anchor is already used in another block.'
+    hint.hidden = true
+
+    field.append(hint)
+
+    this.field = field
+    this.input = input
+    this.hint = hint
+    this.syncValidation()
+
+    panel.append(field)
 
     return panel
   }
@@ -42,6 +66,7 @@ class AnchorTune implements BlockTune {
     this.wrapper = document.createElement('div')
     this.wrapper.append(blockContent)
     this.syncWrapper()
+    this.syncValidation()
 
     return this.wrapper
   }
@@ -55,12 +80,41 @@ class AnchorTune implements BlockTune {
       return
     }
 
+    this.wrapper.dataset.blockId = this.block.id
+
     if (this.data.anchor) {
       this.wrapper.dataset.blockAnchor = this.data.anchor
       return
     }
 
     delete this.wrapper.dataset.blockAnchor
+  }
+
+  private syncValidation(): void {
+    const isDuplicate = this.isDuplicateAnchor()
+
+    this.field?.classList.toggle(
+      'editor-block-tune-field--invalid',
+      isDuplicate,
+    )
+
+    if (this.input) {
+      this.input.setAttribute('aria-invalid', String(isDuplicate))
+    }
+
+    if (this.hint) {
+      this.hint.hidden = !isDuplicate
+    }
+  }
+
+  private isDuplicateAnchor(): boolean {
+    if (!this.data.anchor || !this.wrapper) {
+      return false
+    }
+
+    return [...document.querySelectorAll<HTMLElement>('[data-block-anchor]')]
+      .filter((element) => element.dataset.blockId !== this.block.id)
+      .some((element) => element.dataset.blockAnchor === this.data.anchor)
   }
 }
 

@@ -20,6 +20,7 @@ export {
 export { isEditorOutputData } from './types/editor-output'
 export {
   editorBlockTuneNames,
+  getDuplicateAnchorValues,
   getKnownBlockTuneData,
   isKnownBlockTuneData,
   normalizeAnchorTuneData,

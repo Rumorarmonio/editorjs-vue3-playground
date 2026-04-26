@@ -22,10 +22,10 @@
 
   :global(.inline-code) {
     padding: 1px 4px;
-    color: inherit;
     font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono',
       monospace;
     font-size: 0.9em;
+    color: inherit;
     background: #eef3ee;
     border-radius: 4px;
   }

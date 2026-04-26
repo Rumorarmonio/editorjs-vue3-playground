@@ -7,6 +7,7 @@ import {
   editorInlineToolbar,
 } from '~~/editor/admin/config/editor-tools'
 import {
+  getDuplicateAnchorValues,
   isKnownEditorContentData,
   type EditorContentData,
 } from '~~/editor/shared'
@@ -38,6 +39,13 @@ async function save(): Promise<boolean> {
     if (!isKnownEditorContentData(savedContent)) {
       errorMessage.value =
         'Saved data contains block types that are not registered.'
+      return false
+    }
+
+    const duplicateAnchorValues = getDuplicateAnchorValues(savedContent.blocks)
+
+    if (duplicateAnchorValues.length > 0) {
+      errorMessage.value = `Anchor values must be unique: ${duplicateAnchorValues.join(', ')}.`
       return false
     }
 

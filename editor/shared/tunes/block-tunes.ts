@@ -78,6 +78,26 @@ export function getKnownBlockTuneData(
   }
 }
 
+export function getDuplicateAnchorValues(
+  blocks: { tunes?: Record<string, unknown> }[],
+): string[] {
+  const anchorCounts = new Map<string, number>()
+
+  blocks.forEach((block) => {
+    const anchor = getKnownBlockTuneData(block.tunes).anchor?.anchor
+
+    if (!anchor) {
+      return
+    }
+
+    anchorCounts.set(anchor, (anchorCounts.get(anchor) ?? 0) + 1)
+  })
+
+  return [...anchorCounts]
+    .filter(([, count]) => count > 1)
+    .map(([anchor]) => anchor)
+}
+
 export function isKnownBlockTuneData(value: unknown): boolean {
   if (value === undefined) {
     return true

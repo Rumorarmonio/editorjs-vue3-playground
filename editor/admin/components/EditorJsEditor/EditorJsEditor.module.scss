@@ -81,6 +81,16 @@
     border: 1px solid var(--color-border);
     border-radius: 6px;
   }
+
+  :global(.editor-block-tune-field--invalid .editor-block-tune-field__control) {
+    border-color: #b42318;
+  }
+
+  :global(.editor-block-tune-field__error) {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #b42318;
+  }
 }
 
 .status,

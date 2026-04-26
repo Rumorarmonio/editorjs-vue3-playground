@@ -9,9 +9,9 @@
 - Базовая версия редактора завершена.
 - Базовый слой Block Tunes завершён.
 - Plain field system завершён.
-- Активный этап: первый простой custom block без nested editors.
+- Активный этап: первый nested editor block / первый single-purpose rich field.
 
-## Последний завершённый этап
+## Предыдущий завершённый этап
 
 ### Plain field system
 
@@ -19,11 +19,11 @@
 
 Итог: подготовлена минимальная reusable plain field system в `editor/admin/fields`; реализованы text/URL input, textarea, select, radio group, boolean toggle и file/image-oriented value contracts. `npm run check` проходит.
 
-## Активный этап
+## Последний завершённый этап
 
 ### Первый простой custom block
 
-Статус: активен.
+Статус: завершён.
 
 Цель этапа: реализовать один простой custom block без nested editors и проверить полный цикл `create -> edit -> save -> reload -> render`.
 
@@ -39,7 +39,7 @@
 6. Демонстрационный блок в `content/default-page.json`, если это нужно для проверки reset/preview.
 7. Проверка полного цикла create/edit/save/reload/render и `npm run check`.
 
-Вне scope текущего этапа:
+Вне scope этапа:
 
 - nested Editor.js instances;
 - rich fields и inline tools внутри custom block fields;
@@ -50,7 +50,7 @@
 - Import JSON;
 - i18n, theme switching и расширенная keyboard navigation.
 
-## План активного этапа
+## План этапа
 
 1. Добавить тип данных `Notice` и зарегистрировать block type в shared registry — выполнено.
 2. Реализовать tool class `Notice` с plain fields и простым `save()` результатом — выполнено.
@@ -58,9 +58,9 @@
 4. Добавить renderer component и mapping `block.type -> component` — выполнено.
 5. Обновить draft-source guard/normalization так, чтобы корректный `Notice` проходил, а повреждённые данные не ломали preview — выполнено.
 6. Добавить demo content для проверки preview/reset, если это не создаст лишний шум — выполнено.
-7. Проверить create/edit/save/reload/render, export/reset draft и запустить `npm run check` — частично выполнено: `npm run check` проходит, ручная browser-проверка полного цикла ещё нужна.
+7. Проверить create/edit/save/reload/render, export/reset draft и запустить `npm run check` — выполнено.
 
-## Критерии готовности активного этапа
+## Критерии готовности этапа
 
 - `Notice` можно создать из Editor.js toolbox.
 - `Notice` редактируется через plain fields из `editor/admin/fields`.
@@ -70,9 +70,17 @@
 - Некорректные значения `Notice.type` не ломают editor и preview.
 - `npm run check` проходит.
 
-## Следующий крупный этап
+Итог: первый вертикальный срез custom block завершён. `Notice` реализован через shared type/normalization, Editor.js tool на plain fields, renderer, draft guard и demo content; ручная browser-проверка подтвердила create/edit/save/reload/render, export JSON и reset draft. `npm run check` проходит.
 
-Следующий этап по `SPEC.md`: первый nested editor block / первый single-purpose rich field.
+## Активный этап
+
+### Первый nested editor block / первый single-purpose rich field
+
+Статус: активен.
+
+Цель этапа: определить и реализовать следующий шаг после простого custom block — первый nested editor block или первый single-purpose rich field.
+
+План этапа ещё не детализирован.
 
 ## Завершённые этапы
 

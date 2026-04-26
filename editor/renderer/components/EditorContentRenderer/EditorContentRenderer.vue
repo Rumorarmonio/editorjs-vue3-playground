@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EditorContentList from '~~/editor/renderer/components/EditorContentList.vue'
+import EditorContentList from '~~/editor/renderer/components/EditorContentList/EditorContentList.vue'
 import {
   getInlineText,
   sanitizeInlineHtml,

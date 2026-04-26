@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer.vue'
+import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer/EditorContentRenderer.vue'
 
 const { isReady, loadContent, resolvedContent, sourceLabel } =
   useEditorContentSource()

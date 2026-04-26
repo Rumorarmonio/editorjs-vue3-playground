@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import EditorJsEditor from '~~/editor/admin/components/EditorJsEditor.vue'
+import EditorJsEditor from '~~/editor/admin/components/EditorJsEditor/EditorJsEditor.vue'
 import type { EditorContentData } from '~~/editor/shared'
 
 const {

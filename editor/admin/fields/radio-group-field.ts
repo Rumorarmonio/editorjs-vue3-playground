@@ -38,7 +38,20 @@ export function createPlainRadioGroupField<TValue extends string = string>(
       event.preventDefault()
     })
 
+    input.addEventListener('keydown', (event) => {
+      if (!isReadOnly || event.key === 'Tab') {
+        return
+      }
+
+      event.preventDefault()
+    })
+
     input.addEventListener('change', () => {
+      if (isReadOnly) {
+        syncRadioInputs(group, currentValue)
+        return
+      }
+
       if (!input.checked) {
         return
       }
@@ -62,12 +75,7 @@ export function createPlainRadioGroupField<TValue extends string = string>(
     getValue: () => currentValue,
     setValue(value) {
       currentValue = value
-
-      group
-        .querySelectorAll<HTMLInputElement>('input[type="radio"]')
-        .forEach((input) => {
-          input.checked = input.value === value
-        })
+      syncRadioInputs(group, value)
     },
     setError: wrapper.setError,
     setDisabled: wrapper.setDisabled,
@@ -82,4 +90,15 @@ export function createPlainRadioGroupField<TValue extends string = string>(
       wrapper.setReadOnly(readOnly)
     },
   }
+}
+
+function syncRadioInputs<TValue extends string>(
+  group: HTMLElement,
+  value: TValue,
+): void {
+  group
+    .querySelectorAll<HTMLInputElement>('input[type="radio"]')
+    .forEach((input) => {
+      input.checked = input.value === value
+    })
 }

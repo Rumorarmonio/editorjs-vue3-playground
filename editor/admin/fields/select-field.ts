@@ -4,6 +4,8 @@ import type { PlainFieldControl, PlainSelectFieldOptions } from './types'
 export function createPlainSelectField<TValue extends string = string>(
   options: PlainSelectFieldOptions<TValue>,
 ): PlainFieldControl<TValue, HTMLSelectElement> {
+  let currentValue = options.value
+  let isReadOnly = Boolean(options.readOnly)
   const select = document.createElement('select')
 
   select.className = 'editor-plain-field__control'
@@ -18,10 +20,32 @@ export function createPlainSelectField<TValue extends string = string>(
     select.append(optionElement)
   })
 
-  select.value = options.value
+  select.value = currentValue
 
   select.addEventListener('change', () => {
-    options.onChange(select.value as TValue)
+    if (isReadOnly) {
+      select.value = currentValue
+      return
+    }
+
+    currentValue = select.value as TValue
+    options.onChange(currentValue)
+  })
+
+  select.addEventListener('pointerdown', (event) => {
+    if (!isReadOnly) {
+      return
+    }
+
+    event.preventDefault()
+  })
+
+  select.addEventListener('keydown', (event) => {
+    if (!isReadOnly || event.key === 'Tab') {
+      return
+    }
+
+    event.preventDefault()
   })
 
   const wrapper = createPlainFieldWrapper({
@@ -32,12 +56,16 @@ export function createPlainSelectField<TValue extends string = string>(
   return {
     root: wrapper.root,
     control: select,
-    getValue: () => select.value as TValue,
+    getValue: () => currentValue,
     setValue(value) {
+      currentValue = value
       select.value = value
     },
     setError: wrapper.setError,
     setDisabled: wrapper.setDisabled,
-    setReadOnly: wrapper.setReadOnly,
+    setReadOnly(readOnly) {
+      isReadOnly = readOnly
+      wrapper.setReadOnly(readOnly)
+    },
   }
 }

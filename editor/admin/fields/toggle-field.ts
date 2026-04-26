@@ -6,12 +6,13 @@ export function createPlainToggleField(
 ): PlainFieldControl<boolean, HTMLInputElement> {
   const input = document.createElement('input')
   const toggle = document.createElement('span')
+  let currentValue = options.value
   let isReadOnly = Boolean(options.readOnly)
 
   input.className = 'editor-plain-field__toggle-input'
   input.type = 'checkbox'
   input.name = options.name
-  input.checked = options.value
+  input.checked = currentValue
   input.disabled = Boolean(options.disabled)
   input.toggleAttribute('aria-readonly', isReadOnly)
 
@@ -26,8 +27,22 @@ export function createPlainToggleField(
     event.preventDefault()
   })
 
+  input.addEventListener('keydown', (event) => {
+    if (!isReadOnly || event.key === 'Tab') {
+      return
+    }
+
+    event.preventDefault()
+  })
+
   input.addEventListener('change', () => {
-    options.onChange(input.checked)
+    if (isReadOnly) {
+      input.checked = currentValue
+      return
+    }
+
+    currentValue = input.checked
+    options.onChange(currentValue)
   })
 
   const wrapper = createPlainFieldWrapper({
@@ -39,18 +54,19 @@ export function createPlainToggleField(
   input.id = controlId
   toggle.removeAttribute('id')
 
-  syncToggleDescription(toggle, input)
+  syncToggleState(toggle, input)
 
   return {
     root: wrapper.root,
     control: input,
-    getValue: () => input.checked,
+    getValue: () => currentValue,
     setValue(value) {
+      currentValue = value
       input.checked = value
     },
     setError(error) {
       wrapper.setError(error)
-      syncToggleDescription(toggle, input)
+      syncToggleState(toggle, input)
     },
     setDisabled(disabled) {
       input.disabled = disabled
@@ -79,16 +95,23 @@ function createToggleTrack(): HTMLSpanElement {
   return track
 }
 
-function syncToggleDescription(
+function syncToggleState(
   toggle: HTMLSpanElement,
   input: HTMLInputElement,
 ): void {
   const description = toggle.getAttribute('aria-describedby')
+  const invalid = toggle.getAttribute('aria-invalid')
 
   if (description) {
     input.setAttribute('aria-describedby', description)
+  } else {
+    input.removeAttribute('aria-describedby')
+  }
+
+  if (invalid) {
+    input.setAttribute('aria-invalid', invalid)
     return
   }
 
-  input.removeAttribute('aria-describedby')
+  input.removeAttribute('aria-invalid')
 }

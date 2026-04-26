@@ -10,7 +10,8 @@
 - Базовый слой Block Tunes завершён.
 - Plain field system завершён.
 - Первый простой custom block завершён.
-- Активный этап: первый nested editor block / первый single-purpose rich field.
+- Первый nested editor block / первый single-purpose rich field завершён.
+- Активный этап: reusable rich fields.
 
 ## Предыдущий завершённый этап
 
@@ -20,7 +21,7 @@
 
 Итог: подготовлена минимальная reusable plain field system в `editor/admin/fields`; реализованы text/URL input, textarea, select, radio group, boolean toggle и file/image-oriented value contracts. `npm run check` проходит.
 
-## Последний завершённый этап
+## Завершённый этап
 
 ### Первый простой custom block
 
@@ -73,7 +74,7 @@
 
 Итог: первый вертикальный срез custom block завершён. `Notice` реализован через shared type/normalization, Editor.js tool на plain fields, renderer, draft guard и demo content; ручная browser-проверка подтвердила create/edit/save/reload/render, export JSON и reset draft. `npm run check` проходит.
 
-## Активный этап
+## Последний завершённый этап
 
 ### Первый nested editor block / первый single-purpose rich field
 
@@ -81,7 +82,7 @@
 
 Цель этапа: реализовать первый простой custom block с одним nested Editor.js instance и проверить single-purpose rich field lifecycle без перехода к composite blocks.
 
-Выбранный блок: `SectionIntro`, потому что он естественно проверяет rich text поле для вводного текста, но остаётся достаточно простым: один plain title и одно rich paragraph field. `TwoColumns`, media workflow и reusable rich fields остаются следующими этапами.
+Выбранный блок: `SectionIntro`, потому что он естественно проверяет rich text поле для вводного текста, но остаётся достаточно простым: один plain title и одно rich paragraph field. `TwoColumns`, media workflow и reusable rich fields на этом этапе оставались следующими шагами.
 
 В scope входят:
 
@@ -132,6 +133,55 @@
 - `npm run check` проходит.
 
 Итог: первый nested editor block / первый single-purpose rich field завершён. `SectionIntro` реализован через shared type/normalization, Editor.js tool с plain title и вложенным paragraph-only editor, renderer, draft guard и demo content; ручная browser-проверка подтвердила create/edit/save/reload/render, destroy, export JSON и reset draft. Конфликты `Enter` и слоёв dropdown/tune между внешним и вложенным editor исправлены.
+
+## Активный этап
+
+### Reusable rich fields
+
+Статус: активен.
+
+Цель этапа: вынести проверенный nested editor lifecycle из single-purpose `SectionIntro` в минимальную reusable rich field system, пригодную для следующих custom blocks и composite blocks.
+
+В scope входят:
+
+1. `RichParagraphField` как reusable field на базе nested Editor.js с paragraph-only output.
+2. `RichHeaderField` как reusable field для одиночного заголовка с контролируемым уровнем.
+3. Общий минимальный контракт rich field lifecycle: create/init, save, render holder, destroy.
+4. Ограниченный whitelist tools для каждого rich field.
+5. Поддержка inline tools там, где она совместима с текущей конфигурацией.
+6. Повторное использование rich fields в `SectionIntro` без изменения публичной схемы данных блока.
+7. Renderer/helper-логика для вывода rich paragraph/header data без зависимости от editor runtime.
+8. Проверка save/load/reload/render/destroy и `npm run check`.
+
+Вне scope этапа:
+
+- `TwoColumns` и другие composite blocks;
+- media fields и media gallery / slider;
+- custom inline color tool;
+- production validation через `zod`;
+- Import JSON;
+- i18n, theme switching и расширенная keyboard navigation.
+
+## План этапа
+
+1. Проанализировать текущий `createNestedParagraphEditor` и `SectionIntroTool`, выделить общий field lifecycle без преждевременной сложной абстракции.
+2. Реализовать `RichParagraphField` на базе существующего paragraph-only nested editor поведения.
+3. Реализовать `RichHeaderField` с ограниченным header-only data contract и контролем допустимых уровней.
+4. Перевести `SectionIntro` на `RichParagraphField`, сохранив текущую JSON-схему `description`.
+5. Добавить shared normalization/guard для rich header data, если он нужен новому reusable field contract.
+6. Обновить renderer helpers/components там, где rich field rendering должен стать переиспользуемым.
+7. Проверить lifecycle rich fields: create, edit, save, reload, render, destroy.
+8. Запустить `npm run check`.
+
+## Критерии готовности этапа
+
+- `RichParagraphField` и `RichHeaderField` реализованы как reusable editor/admin fields.
+- Rich fields используют nested Editor.js и ограниченный whitelist tools.
+- Inline tools доступны в rich paragraph/header fields, если совместимость подтверждена.
+- `SectionIntro` продолжает работать с прежней схемой данных после перехода на reusable field.
+- Rich field data стабильно сохраняется, восстанавливается и рендерится.
+- Nested editor instances корректно уничтожаются.
+- `npm run check` проходит.
 
 ## Завершённые этапы
 

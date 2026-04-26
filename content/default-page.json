@@ -300,7 +300,21 @@
               "id": "section-intro-description",
               "type": "paragraph",
               "data": {
-                "text": "This SectionIntro block stores its description as nested paragraph-only Editor.js output with <b>bold</b>, <i>italic</i>, and <code class=\"inline-code\">inline code</code>."
+                "text": "This SectionIntro block stores its description as nested paragraph-only Editor.js output with <b>bold text</b> and <i>italic text</i>."
+              }
+            },
+            {
+              "id": "section-intro-description-link",
+              "type": "paragraph",
+              "data": {
+                "text": "The nested field also keeps <a href=\"https://editorjs.io/\">links</a>, <u class=\"cdx-underline\">underlined text</u>, and <mark class=\"cdx-marker\">marked text</mark>."
+              }
+            },
+            {
+              "id": "section-intro-description-code",
+              "type": "paragraph",
+              "data": {
+                "text": "Inline code is stored as <code class=\"inline-code\">inline code</code>, while removed wording can be shown with <s class=\"cdx-strikethrough\">strikethrough</s>."
               }
             }
           ]

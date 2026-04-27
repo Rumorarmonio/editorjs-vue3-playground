@@ -12,7 +12,67 @@
 - Первый простой custom block завершён.
 - Первый nested editor block / первый single-purpose rich field завершён.
 - Reusable rich fields завершены.
-- Следующий крупный этап: composite blocks / `TwoColumns`.
+- Активный этап: composite blocks / `TwoColumns`.
+- Следующий крупный этап после `TwoColumns`: custom inline tools.
+
+## Активный этап
+
+### Composite blocks / `TwoColumns`
+
+Статус: запланирован.
+
+Цель этапа: реализовать первый composite block с двумя независимыми nested editor containers и проверить стабильный lifecycle многоконтейнерного блока: `create -> edit -> save -> reload -> render`.
+
+Выбранный блок: `TwoColumns`, потому что по `SPEC.md` он является первым обязательным composite scenario после nested editor и rich fields. Он проверяет работу нескольких nested editor instances внутри одного custom block без перехода к media gallery / slider и поздним UX-слоям.
+
+В scope входят:
+
+1. Shared data type для `TwoColumns`, включая `layout`, `isReversed`, `left` и `right`.
+2. Отдельные nested editor outputs для левой и правой колонок.
+3. Ограниченный whitelist tools внутри колонок: paragraph, header и list, если текущая nested editor инфраструктура позволяет подключить их без лишнего расширения.
+4. Editor.js tool class для `TwoColumns` с управлением layout variant и reversed state.
+5. Корректный lifecycle двух nested editor instances: create/init, save, reload и destroy.
+6. Renderer component для `TwoColumns`, который отображает обе колонки без зависимости от editor runtime.
+7. Draft guard/normalization для `TwoColumns` и вложенных данных.
+8. Demo content в `content/default-page.json` для проверки preview/reset.
+9. Проверка create/edit/save/reload/render, удаления и перемещения блока, export/reset draft и `npm run check`.
+
+Вне scope этапа:
+
+- media gallery / slider block;
+- image/media fields внутри composite blocks;
+- custom inline color tool;
+- production validation через `zod`;
+- Import JSON;
+- sidebar navigation;
+- i18n, theme switching и расширенная keyboard navigation.
+
+## План этапа
+
+1. Спроектировать минимальный JSON-контракт `TwoColumns` и допустимые layout variants.
+2. Добавить shared type, registry entry и normalization/guard для `TwoColumns`.
+3. Подготовить helper или локальную конфигурацию nested editor для column content с ограниченным набором tools.
+4. Реализовать `TwoColumnsTool` с plain controls для layout/reversed state и двумя nested editor holders.
+5. Подключить `TwoColumns` в Editor.js config/toolbox.
+6. Добавить renderer component и mapping `block.type -> component`.
+7. Добавить demo content для проверки preview/reset.
+8. Проверить lifecycle: create, edit, save, reload, render, destroy, delete/move block, export JSON, reset draft.
+9. Запустить `npm run check`.
+
+## Критерии готовности этапа
+
+- `TwoColumns` можно создать из Editor.js toolbox.
+- Блок содержит две независимые колонки с отдельными nested editor outputs.
+- Колонки используют ограниченный whitelist tools и не превращаются в полноценный общий editor.
+- Данные обеих колонок сохраняются в JSON и корректно восстанавливаются после reload.
+- Renderer отображает layout variant и reversed state без зависимости от editor runtime.
+- Draft guard не пропускает явно повреждённые вложенные данные и не ломает preview.
+- Nested editor instances корректно уничтожаются при destroy блока.
+- Preview, `Export JSON` и `Reset draft` работают с новым block type.
+- Удаление и перемещение блока не оставляют сломанных nested editor instances.
+- `npm run check` проходит.
+
+Следующий крупный этап после завершения `TwoColumns`: custom inline tools.
 
 ## Предыдущий завершённый этап
 

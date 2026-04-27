@@ -1,3 +1,9 @@
+import {
+  getTextColorInlineOptionByClassName,
+  textColorInlineClassName,
+  textColorInlineClassNames,
+} from '~~/editor/shared'
+
 const allowedTags = new Set(['A', 'B', 'I', 'U', 'MARK', 'SPAN', 'S', 'CODE'])
 const allowedClasses = new Set([
   'cdx-marker',
@@ -5,6 +11,7 @@ const allowedClasses = new Set([
   'cdx-strikethrough',
   'cdx-strikethroughs',
   'inline-code',
+  ...textColorInlineClassNames,
 ])
 
 export function sanitizeInlineHtml(html: string): string {
@@ -70,6 +77,17 @@ function sanitizeElement(element: HTMLElement): void {
       element.setAttribute('href', href)
       element.setAttribute('rel', 'noreferrer')
       element.setAttribute('target', '_blank')
+    }
+  }
+
+  if (element.tagName === 'SPAN') {
+    const colorOption = getTextColorInlineOptionByClassName(classes)
+
+    if (classes.includes(textColorInlineClassName) && colorOption) {
+      element.className = [textColorInlineClassName, colorOption.className].join(
+        ' ',
+      )
+      return
     }
   }
 

@@ -41,6 +41,13 @@ export {
   normalizeSpacingTuneData,
   spacingTuneValues,
 } from './tunes/block-tunes'
+export {
+  getTextColorInlineOption,
+  getTextColorInlineOptionByClassName,
+  textColorInlineClassName,
+  textColorInlineClassNames,
+  textColorInlineOptions,
+} from './inline/text-color'
 
 export type {
   EmbedBlockData,
@@ -109,3 +116,7 @@ export type {
   SpacingTuneValue,
 } from './tunes/block-tunes'
 export type { DraftStorage } from './entities/draft-source'
+export type {
+  TextColorInlineName,
+  TextColorInlineOption,
+} from './inline/text-color'

@@ -4,6 +4,7 @@ import type {
 } from '@editorjs/editorjs/types'
 import { ManualEmbedToolConstructable } from '~~/editor/admin/tools/ManualEmbedTool'
 import InlineCodeTool from '~~/editor/admin/tools/InlineCodeTool'
+import { TextColorToolConstructable } from '~~/editor/admin/tools/TextColorTool'
 import { AnchorTuneConstructable } from '~~/editor/admin/tunes/AnchorTune'
 import { LabelTuneConstructable } from '~~/editor/admin/tunes/LabelTune'
 import { SpacingTuneConstructable } from '~~/editor/admin/tunes/SpacingTune'
@@ -18,6 +19,7 @@ export const editorInlineToolbar = [
   'link',
   'underline',
   'marker',
+  'textColor',
   'strikethrough',
   'inlineCode',
 ] satisfies NonNullable<EditorConfig['inlineToolbar']>
@@ -108,6 +110,7 @@ export async function createEditorTools(): Promise<EditorConfig['tools']> {
       class: Marker as unknown as ToolConstructable,
       shortcut: 'CMD+SHIFT+M',
     },
+    textColor: TextColorToolConstructable as unknown as ToolConstructable,
     underline: Underline as unknown as ToolConstructable,
     inlineCode: {
       class: InlineCodeTool as unknown as ToolConstructable,

@@ -13,13 +13,14 @@
 - Первый nested editor block / первый single-purpose rich field завершён.
 - Reusable rich fields завершены.
 - Composite blocks / `TwoColumns` завершён.
-- Активный этап: custom inline tools.
+- Custom inline tools завершён.
+- Следующий крупный этап: media gallery / slider block.
 
-## Активный этап
+## Последний завершённый этап
 
 ### Custom inline tools
 
-Статус: активен.
+Статус: завершён.
 
 Цель этапа: реализовать кастомный inline tool для цвета текста и проверить его совместимость с уже подключёнными стандартными inline tools, основным editor и rich/nested editor scenarios.
 
@@ -49,14 +50,14 @@
 
 ## План этапа
 
-1. Проанализировать текущую inline tools конфигурацию, sanitizer и rich/nested editor подключение — в работе.
-2. Спроектировать минимальный HTML/data contract для text color inline tool — ожидает выполнения.
-3. Реализовать inline tool class и ограниченную палитру — ожидает выполнения.
-4. Подключить tool в основной editor и совместимые nested/rich editor configs — ожидает выполнения.
-5. Обновить renderer sanitizer и стили для безопасного отображения text color — ожидает выполнения.
-6. Добавить demo content при необходимости — ожидает выполнения.
-7. Проверить save/load/render и совместимость с существующими inline tools — ожидает выполнения.
-8. Запустить `npm run check` — ожидает выполнения.
+1. Проанализировать текущую inline tools конфигурацию, sanitizer и rich/nested editor подключение — выполнено.
+2. Спроектировать минимальный HTML/data contract для text color inline tool — выполнено.
+3. Реализовать inline tool class и ограниченную палитру — выполнено.
+4. Подключить tool в основной editor и совместимые nested/rich editor configs — выполнено.
+5. Обновить renderer sanitizer и стили для безопасного отображения text color — выполнено.
+6. Добавить demo content при необходимости — выполнено.
+7. Проверить save/load/render и совместимость с существующими inline tools — выполнено.
+8. Запустить `npm run check` — выполнено.
 
 ## Критерии готовности этапа
 
@@ -70,9 +71,11 @@
 - Preview, `Export JSON` и `Reset draft` работают с новым inline markup.
 - `npm run check` проходит.
 
+Итог: custom inline tools завершён. Добавлены shared-контракт палитры, Editor.js inline tool, подключение в основной editor и nested/rich editor configs, renderer sanitizer, стили editor/renderer и demo content. `npm run check` проходит; ручная browser-проверка подтвердила применение text color, корректное отображение в редакторе и renderer, save/reload/render и совместимость с существующими inline tools.
+
 Следующий крупный этап после завершения custom inline tools: media gallery / slider block.
 
-## Последний завершённый этап
+## Предыдущий завершённый этап
 
 ### Composite blocks / `TwoColumns`
 

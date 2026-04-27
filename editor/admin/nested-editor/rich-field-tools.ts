@@ -3,6 +3,7 @@ import type {
   ToolConstructable,
 } from '@editorjs/editorjs/types'
 import InlineCodeTool from '~~/editor/admin/tools/InlineCodeTool'
+import { TextColorToolConstructable } from '~~/editor/admin/tools/TextColorTool'
 
 export const nestedRichFieldInlineToolbar = [
   'bold',
@@ -10,6 +11,7 @@ export const nestedRichFieldInlineToolbar = [
   'link',
   'underline',
   'marker',
+  'textColor',
   'strikethrough',
   'inlineCode',
 ] satisfies NonNullable<EditorConfig['inlineToolbar']>
@@ -83,6 +85,7 @@ async function createNestedInlineTools(): Promise<EditorConfig['tools']> {
       class: Marker as unknown as ToolConstructable,
       shortcut: 'CMD+SHIFT+M',
     },
+    textColor: TextColorToolConstructable as unknown as ToolConstructable,
     underline: Underline as unknown as ToolConstructable,
     inlineCode: {
       class: InlineCodeTool as unknown as ToolConstructable,

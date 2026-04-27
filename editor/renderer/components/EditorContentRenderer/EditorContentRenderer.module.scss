@@ -29,6 +29,18 @@
     background: #eef3ee;
     border-radius: 4px;
   }
+
+  :global(.editor-text-color--accent) {
+    color: #0f766e;
+  }
+
+  :global(.editor-text-color--danger) {
+    color: #b42318;
+  }
+
+  :global(.editor-text-color--muted) {
+    color: #5e6268;
+  }
 }
 
 .block {

@@ -25,7 +25,7 @@
       "id": "intro-inline",
       "type": "paragraph",
       "data": {
-        "text": "This default page demonstrates standard block tools and inline tools: <b>bold</b>, <i>italic</i>, <a href=\"https://editorjs.io/\">link</a>, <u class=\"cdx-underline\">underline</u>, <mark class=\"cdx-marker\">marker</mark>, <s class=\"cdx-strikethrough\">strikethrough</s>, and <code class=\"inline-code\">inline code</code>."
+        "text": "This default page demonstrates standard block tools and inline tools: <b>bold</b>, <i>italic</i>, <a href=\"https://editorjs.io/\">link</a>, <u class=\"cdx-underline\">underline</u>, <mark class=\"cdx-marker\">marker</mark>, <span class=\"editor-text-color editor-text-color--accent\">text color</span>, <s class=\"cdx-strikethrough\">strikethrough</s>, and <code class=\"inline-code\">inline code</code>."
       },
       "tunes": {
         "label": {
@@ -84,7 +84,7 @@
             ]
           },
           {
-            "content": "List item with <u class=\"cdx-underline\">underline</u> and <s class=\"cdx-strikethrough\">strikethrough</s>.",
+            "content": "List item with <u class=\"cdx-underline\">underline</u>, <span class=\"editor-text-color editor-text-color--danger\">text color</span>, and <s class=\"cdx-strikethrough\">strikethrough</s>.",
             "meta": {},
             "items": []
           }
@@ -354,7 +354,7 @@
               "id": "section-intro-description-code",
               "type": "paragraph",
               "data": {
-                "text": "Inline code is stored as <code class=\"inline-code\">inline code</code>, while removed wording can be shown with <s class=\"cdx-strikethrough\">strikethrough</s>."
+                "text": "Inline code is stored as <code class=\"inline-code\">inline code</code>, <span class=\"editor-text-color editor-text-color--muted\">muted text color</span> stays renderable, and removed wording can be shown with <s class=\"cdx-strikethrough\">strikethrough</s>."
               }
             }
           ]
@@ -390,7 +390,7 @@
               "id": "two-columns-left-paragraph",
               "type": "paragraph",
               "data": {
-                "text": "The left column stores its own nested Editor.js output with <b>inline formatting</b>."
+                "text": "The left column stores its own nested Editor.js output with <b>inline formatting</b> and <span class=\"editor-text-color editor-text-color--accent\">text color</span>."
               }
             }
           ]

@@ -211,6 +211,58 @@
     opacity: 0.6;
   }
 
+  :global(.editor-text-color-tool__icon) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    font-weight: 700;
+    color: var(--editor-text-color-tool-current, var(--color-text));
+  }
+
+  :global(.editor-text-color-tool__icon::after) {
+    position: absolute;
+    right: 1px;
+    bottom: 0;
+    left: 1px;
+    height: 2px;
+    background: var(--editor-text-color-tool-current, var(--color-text));
+    content: '';
+  }
+
+  :global(.editor-text-color-tool__actions) {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+  }
+
+  :global(.editor-text-color-tool__swatch) {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: var(--editor-text-color-tool-swatch);
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  :global(.editor-text-color-tool__swatch--active) {
+    border-color: var(--color-text);
+  }
+
+  :global(.editor-text-color--accent) {
+    color: #0f766e;
+  }
+
+  :global(.editor-text-color--danger) {
+    color: #b42318;
+  }
+
+  :global(.editor-text-color--muted) {
+    color: #5e6268;
+  }
+
   :global(.editor-notice-tool) {
     display: grid;
     gap: 12px;

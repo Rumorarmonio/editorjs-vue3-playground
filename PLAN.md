@@ -14,7 +14,66 @@
 - Reusable rich fields завершены.
 - Composite blocks / `TwoColumns` завершён.
 - Custom inline tools завершён.
-- Следующий крупный этап: media gallery / slider block.
+- Активный этап: media gallery / slider block.
+
+## Активный этап
+
+### Media gallery / slider block
+
+Статус: активный.
+
+Цель этапа: реализовать первый обязательный media composite block с режимами `slider` и `gallery`, отдельными media fields для карточек, стабильным save/load/render и базовым viewer behavior.
+
+В scope входят:
+
+1. Shared data contract для media block: режим `slider | gallery`, `galleryId`, `enableFancybox`, `syncUrlWithFancybox` и массив карточек.
+2. Первый контракт карточки: один media item `image | video`, caption, `alt` для изображений и optional rich description, если текущая rich field инфраструктура позволит подключить его без лишнего усложнения.
+3. Custom media fields в editor/admin UI без nested Editor.js для image/video как базового способа работы с media.
+4. Block UI для управления карточками: добавление, удаление, изменение порядка и редактирование полей.
+5. Editor.js tool class для media gallery / slider block.
+6. Renderer component, который отображает `gallery` как сетку карточек, а `slider` через Swiper.
+7. Базовая интеграция Fancybox: включение/выключение viewer, группировка по `galleryId` и начальная поддержка URL sync.
+8. Draft guard/normalization для нового block type и вложенных media item данных.
+9. Demo content в `content/default-page.json` для проверки preview/reset.
+10. Проверка save/load/render, `Export JSON`, `Reset draft`, Swiper, Fancybox, caption и `alt`.
+
+Вне scope этапа:
+
+- полноценный backend upload/storage workflow;
+- несколько media items внутри одной карточки;
+- сложная внутренняя media-структура слайда;
+- полноценная production validation через `zod`;
+- sidebar navigation;
+- Import JSON;
+- i18n, theme switching и расширенная keyboard navigation.
+
+## План этапа
+
+1. Проанализировать текущие field helpers, rich fields, renderer mapping и image/embed contracts перед выбором минимальной data schema.
+2. Спроектировать shared-типы и normalizers для media block, media card и media item.
+3. Подготовить минимальные `createImageField` / `createVideoField` или общий media field helper на базе existing plain field system.
+4. Реализовать Editor.js tool UI для настроек блока и управления массивом карточек.
+5. Подключить media block в Editor.js config/toolbox и draft guard.
+6. Добавить renderer component для `gallery` режима и `slider` режима на Swiper.
+7. Добавить базовый Fancybox viewer с группировкой по `galleryId` и начальной URL sync логикой.
+8. Добавить demo content для проверки preview/reset.
+9. Проверить create/edit/save/reload/render, reorder/delete cards, export/reset draft, Swiper и Fancybox.
+10. Запустить `npm run check`.
+
+## Критерии готовности этапа
+
+- Media block можно создать из Editor.js toolbox.
+- Блок поддерживает режимы `gallery` и `slider`.
+- У каждой карточки на первом этапе есть один media item, caption и `alt` для image item.
+- Карточки можно добавлять, удалять и менять местами.
+- Данные блока сохраняются в JSON и корректно восстанавливаются после reload.
+- Renderer отображает `gallery` как сетку и `slider` через Swiper без зависимости от editor runtime.
+- Fancybox открывает media items и группирует их по `galleryId`, если viewer включён.
+- Базовая URL sync логика не ломает preview и может быть расширена позднее.
+- Preview, `Export JSON` и `Reset draft` работают с новым block type.
+- `npm run check` проходит.
+
+Следующий крупный этап после завершения media gallery / slider block: sidebar navigation из JSON.
 
 ## Последний завершённый этап
 

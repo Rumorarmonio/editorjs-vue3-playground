@@ -220,9 +220,9 @@ export function normalizeMediaGalleryItemData(
   return {
     id: normalizePlainValue(value.id) || createMediaGalleryItemId(),
     type,
-    url: normalizeUrlValue(value.url),
+    url: normalizeMediaUrlValue(value.url),
     alt: type === 'image' ? normalizePlainValue(value.alt) : '',
-    caption: normalizePlainValue(value.caption),
+    caption: normalizeMultilineValue(value.caption),
     description: normalizeRichParagraphFieldData(value.description),
   }
 }
@@ -314,6 +314,7 @@ export function isMediaGalleryItemData(
     typeof value.id === 'string' &&
     isMediaGalleryItemType(value.type) &&
     typeof value.url === 'string' &&
+    (value.url === '' || isAllowedMediaUrl(value.url)) &&
     typeof value.alt === 'string' &&
     typeof value.caption === 'string' &&
     isRichParagraphFieldData(value.description)
@@ -500,8 +501,37 @@ function normalizePlainValue(value: unknown): string {
   return typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : ''
 }
 
-function normalizeUrlValue(value: unknown): string {
-  return typeof value === 'string' ? value.trim() : ''
+function normalizeMultilineValue(value: unknown): string {
+  return typeof value === 'string'
+    ? value
+        .replaceAll('\r\n', '\n')
+        .replaceAll('\r', '\n')
+        .replace(/[ \t]+$/gm, '')
+        .trim()
+    : ''
+}
+
+function normalizeMediaUrlValue(value: unknown): string {
+  if (typeof value !== 'string') {
+    return ''
+  }
+
+  const url = value.trim()
+
+  return isAllowedMediaUrl(url) ? url : ''
+}
+
+function isAllowedMediaUrl(url: string): boolean {
+  return (
+    url.startsWith('https://') ||
+    url.startsWith('http://') ||
+    url.startsWith('blob:') ||
+    url.startsWith('data:image/') ||
+    url.startsWith('data:video/') ||
+    (url.startsWith('/') && !url.startsWith('//')) ||
+    url.startsWith('./') ||
+    url.startsWith('../')
+  )
 }
 
 function createMediaGalleryItemId(): string {

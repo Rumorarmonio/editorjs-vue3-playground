@@ -20,6 +20,7 @@ import {
 
 const props = defineProps<{
   data: MediaGalleryBlockData
+  fallbackGalleryId: string
 }>()
 
 const container = ref<HTMLElement | null>(null)
@@ -53,7 +54,7 @@ function bindFancybox(): void {
 }
 
 function getGalleryName(): string {
-  return mediaGallery.value.galleryId || 'media-gallery'
+  return mediaGallery.value.galleryId || props.fallbackGalleryId
 }
 
 function getItemCaption(item: MediaGalleryItemData): string {

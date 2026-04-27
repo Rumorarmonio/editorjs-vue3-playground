@@ -352,6 +352,7 @@ function getBlockStyle(
         <EditorMediaGalleryBlock
           v-else-if="isMediaGalleryBlock(block)"
           :data="normalizeMediaGalleryBlockData(block.data)"
+          :fallback-gallery-id="`media-gallery-${block.id ?? index}`"
         />
 
         <pre

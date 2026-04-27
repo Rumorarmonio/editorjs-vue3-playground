@@ -14,6 +14,7 @@ import type {
   TwoColumnsContentData,
 } from '~~/editor/shared'
 import {
+  getBlockAnchorId,
   getAllowedEmbedIframeUrl,
   getKnownBlockTuneData,
   normalizeMediaGalleryBlockData,
@@ -119,26 +120,6 @@ function getHeaderTag(level: EditorBlock<'header'>['data']['level']): string {
   return `h${level}`
 }
 
-function getBlockAnchor(
-  blocks: EditorContentBlock[],
-  block: EditorContentBlock,
-  index: number,
-): string | undefined {
-  const anchor = getKnownBlockTuneData(block.tunes).anchor?.anchor
-
-  if (!anchor) {
-    return undefined
-  }
-
-  const sameAnchorIndex = blocks
-    .slice(0, index)
-    .filter((currentBlock) => {
-      return getKnownBlockTuneData(currentBlock.tunes).anchor?.anchor === anchor
-    }).length
-
-  return sameAnchorIndex === 0 ? anchor : `${anchor}-${sameAnchorIndex + 1}`
-}
-
 function getBlockLabel(block: EditorContentBlock): string | undefined {
   return getKnownBlockTuneData(block.tunes).label?.label
 }
@@ -176,7 +157,7 @@ function getBlockStyle(
       :key="block.id ?? `${block.type}-${index}`"
     >
       <div
-        :id="getBlockAnchor(content.blocks, block, index)"
+        :id="getBlockAnchorId(content.blocks, block, index)"
         :class="getBlockClasses()"
         :data-block-label="getBlockLabel(block)"
         :style="getBlockStyle(content.blocks, block, index)"

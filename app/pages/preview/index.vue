@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer/EditorContentRenderer.vue'
+import EditorSidebarNavigation from '~~/editor/renderer/components/navigation/EditorSidebarNavigation/EditorSidebarNavigation.vue'
+import { buildFlatNavigationItems } from '~~/editor/shared'
 
 const { isReady, loadContent, resetDraft, resolvedContent, sourceLabel } =
   useEditorContentSource()
 
 const exportFileName = 'editor-content.json'
+const navigationItems = computed(() => {
+  return buildFlatNavigationItems(resolvedContent.value.data)
+})
 
 function handleExportJson(): void {
   if (!import.meta.client) {
@@ -67,8 +72,17 @@ onMounted(loadContent)
       </div>
     </section>
 
-    <section :class="$style.previewPanel">
-      <EditorContentRenderer :content="resolvedContent.data" />
+    <section :class="$style.previewLayout">
+      <aside
+        v-if="navigationItems.length > 0"
+        :class="$style.sidebar"
+      >
+        <EditorSidebarNavigation :items="navigationItems" />
+      </aside>
+
+      <div :class="$style.previewPanel">
+        <EditorContentRenderer :content="resolvedContent.data" />
+      </div>
     </section>
   </main>
 </template>

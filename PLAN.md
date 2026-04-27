@@ -15,15 +15,58 @@
 - Composite blocks / `TwoColumns` завершён.
 - Custom inline tools завершён.
 - Media gallery / slider block завершён.
-- Активный этап: sidebar navigation из JSON.
+- Sidebar navigation из JSON завершён.
+- Активный этап: Import JSON.
 
 ## Активный этап
 
+### Import JSON
+
+Статус: активный.
+
+Цель этапа: добавить ручной import JSON как поздний utility-сценарий, чтобы пользователь мог подставить внешний `EditorContentData` в editor/localStorage workflow без бэкенда.
+
+В scope входят:
+
+1. UI-действие для выбора или вставки JSON на editor/preview стороне по текущему UX-паттерну проекта.
+2. Парсинг JSON и базовая проверка структуры через существующие guards.
+3. Запись валидного imported content в `localStorage` draft.
+4. Обновление текущего editor/preview состояния после успешного import.
+5. Понятная ошибка для невалидного JSON без падения приложения.
+6. Проверка import -> edit -> save -> preview -> reset draft.
+
+Вне scope этапа:
+
+- production validation через `zod`;
+- backend persistence;
+- page-management admin;
+- import media files как upload workflow;
+- i18n, theme switching и расширенная keyboard navigation.
+
+## План этапа
+
+1. Проанализировать текущий `useEditorContentSource`, editor save/load workflow и preview actions.
+2. Выбрать минимальный UX для ручного import JSON без добавления зависимостей.
+3. Реализовать parse/validate/write draft flow на существующих shared helpers.
+4. Подключить import action к UI.
+5. Проверить success/error сценарии, preview, `Reset draft` и `Export JSON`.
+6. Запустить `npm run check`.
+
+## Критерии готовности этапа
+
+- Валидный JSON текущей content schema импортируется и становится draft source.
+- Невалидный JSON не ломает приложение и показывает ошибку.
+- Imported content открывается в editor и renderer.
+- `Export JSON` и `Reset draft` продолжают работать.
+- `npm run check` проходит.
+
+Следующий крупный этап после завершения Import JSON: поздняя базовая validation policy или следующий UX/accessibility слой по `SPEC.md`.
+
+## Последний завершённый этап
+
 ### Sidebar navigation из JSON
 
-Статус: активный, не завершён.
-
-Текущая проверка готовности: переход к следующему этапу `Import JSON` пока не выполняется, потому что navigation-подсистема ещё не реализована полностью. В коде есть только базовый `NavigationItem` type, но отсутствуют builder из JSON, renderer/sidebar component и подключение sidebar на preview странице.
+Статус: завершён.
 
 Цель этапа: реализовать первую navigation-подсистему, которая строит плоский список ссылок из JSON editor content, используя `AnchorTune` и `LabelTune`, без сканирования итогового DOM.
 
@@ -49,13 +92,13 @@
 
 ## План этапа
 
-1. Проанализировать текущие tune helpers, renderer anchor logic и preview layout.
-2. Спроектировать минимальный `NavigationItem` contract для flat sidebar.
-3. Реализовать builder из `EditorContentData` с учётом `AnchorTune`, `LabelTune` и duplicate anchors.
-4. Добавить renderer component для sidebar navigation.
-5. Подключить sidebar на preview странице рядом с текущим renderer.
-6. Проверить anchor navigation на default content и draft content.
-7. Запустить `npm run check`.
+1. Проанализировать текущие tune helpers, renderer anchor logic и preview layout — выполнено.
+2. Спроектировать минимальный `NavigationItem` contract для flat sidebar — выполнено.
+3. Реализовать builder из `EditorContentData` с учётом `AnchorTune`, `LabelTune` и duplicate anchors — выполнено.
+4. Добавить renderer component для sidebar navigation — выполнено.
+5. Подключить sidebar на preview странице рядом с текущим renderer — выполнено.
+6. Проверить anchor navigation на default content и draft content — выполнено; ручная browser-проверка подтверждена.
+7. Запустить `npm run check` — выполнено.
 
 ## Критерии готовности этапа
 
@@ -67,9 +110,11 @@
 - Базовый preview layout остаётся работоспособным на desktop и mobile.
 - `npm run check` проходит.
 
+Итог: sidebar navigation из JSON завершён. Добавлены shared helper для итогового block anchor id, flat navigation builder из `EditorContentData`, renderer/sidebar component и подключение на preview странице. Navigation строится только из блоков с `AnchorTune.anchor` и `LabelTune.label`; дубликаты anchor получают те же suffix-id, что и renderer blocks. `npm run check` проходит; ручная browser-проверка подтвердила работоспособность этапа.
+
 Следующий крупный этап после завершения sidebar navigation: Import JSON.
 
-## Последний завершённый этап
+## Предыдущий завершённый этап
 
 ### Media gallery / slider block
 

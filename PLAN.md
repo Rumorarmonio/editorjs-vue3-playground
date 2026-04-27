@@ -21,7 +21,9 @@
 
 ### Sidebar navigation из JSON
 
-Статус: активный.
+Статус: активный, не завершён.
+
+Текущая проверка готовности: переход к следующему этапу `Import JSON` пока не выполняется, потому что navigation-подсистема ещё не реализована полностью. В коде есть только базовый `NavigationItem` type, но отсутствуют builder из JSON, renderer/sidebar component и подключение sidebar на preview странице.
 
 Цель этапа: реализовать первую navigation-подсистему, которая строит плоский список ссылок из JSON editor content, используя `AnchorTune` и `LabelTune`, без сканирования итогового DOM.
 

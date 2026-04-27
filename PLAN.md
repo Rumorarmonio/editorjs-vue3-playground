@@ -13,7 +13,64 @@
 - Первый nested editor block / первый single-purpose rich field завершён.
 - Reusable rich fields завершены.
 - Composite blocks / `TwoColumns` завершён.
-- Следующий крупный этап: custom inline tools.
+- Активный этап: custom inline tools.
+
+## Активный этап
+
+### Custom inline tools
+
+Статус: активен.
+
+Цель этапа: реализовать кастомный inline tool для цвета текста и проверить его совместимость с уже подключёнными стандартными inline tools, основным editor и rich/nested editor scenarios.
+
+Выбранный tool: text color inline tool, потому что по `SPEC.md` стандартный `Marker` уже покрывает цвет фона текста, а следующим обязательным расширением должен стать собственный inline tool для цвета текста.
+
+В scope входят:
+
+1. Минимальный data/rendering contract для text color inline markup: собственная inline-обёртка, CSS class и безопасное хранение цвета.
+2. Editor.js inline tool class в `editor/admin/tools/inline` без зависимости от Vue runtime.
+3. Ограниченный набор допустимых цветов на первом шаге, чтобы не вводить полноценный color picker и сложную theme-интеграцию раньше времени.
+4. Подключение tool в общий inline tools config для максимально возможного числа совместимых стандартных blocks и nested/rich field scenarios.
+5. Обновление renderer sanitizer/inline rendering, чтобы preview сохранял text color markup без допуска произвольного HTML.
+6. Demo content в `content/default-page.json`, если это нужно для проверки preview/reset.
+7. Проверка комбинаций text color с bold, italic, link, underline, marker, strikethrough и несколькими inline tools одновременно.
+8. Проверка save/load/reload/render в основном editor и доступных nested/rich editor scenarios, export/reset draft и `npm run check`.
+
+Вне scope этапа:
+
+- полноценный свободный color picker;
+- theme switching и отдельная dark/light color policy;
+- background/spoiler tunes;
+- media gallery / slider block;
+- sidebar navigation;
+- Import JSON;
+- production validation через `zod`;
+- i18n и расширенная keyboard navigation.
+
+## План этапа
+
+1. Проанализировать текущую inline tools конфигурацию, sanitizer и rich/nested editor подключение — в работе.
+2. Спроектировать минимальный HTML/data contract для text color inline tool — ожидает выполнения.
+3. Реализовать inline tool class и ограниченную палитру — ожидает выполнения.
+4. Подключить tool в основной editor и совместимые nested/rich editor configs — ожидает выполнения.
+5. Обновить renderer sanitizer и стили для безопасного отображения text color — ожидает выполнения.
+6. Добавить demo content при необходимости — ожидает выполнения.
+7. Проверить save/load/render и совместимость с существующими inline tools — ожидает выполнения.
+8. Запустить `npm run check` — ожидает выполнения.
+
+## Критерии готовности этапа
+
+- Text color inline tool доступен в основном editor для совместимых rich text blocks.
+- Text color inline tool доступен в rich/nested editor scenarios, где уже подключаются inline tools.
+- Tool использует собственную inline-обёртку и CSS class, не мутируя `b`, `i`, `a`, `u`, `mark`, `s` и другие inline-элементы.
+- Цвет сохраняется в JSON и корректно восстанавливается после reload.
+- Renderer отображает text color без зависимости от editor runtime.
+- Sanitizer допускает только ожидаемую безопасную разметку text color.
+- Комбинации с bold, italic, link, underline, marker, strikethrough и несколькими inline tools одновременно не ломаются.
+- Preview, `Export JSON` и `Reset draft` работают с новым inline markup.
+- `npm run check` проходит.
+
+Следующий крупный этап после завершения custom inline tools: media gallery / slider block.
 
 ## Последний завершённый этап
 

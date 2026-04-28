@@ -17,7 +17,54 @@
 - Media gallery / slider block завершён.
 - Sidebar navigation из JSON завершён.
 - Import JSON завершён.
-- Активный этап: не выбран.
+- Активный этап: Валидация.
+
+## Активный этап
+
+### Валидация
+
+Статус: активный.
+
+Цель этапа: добавить базовую validation policy для plain fields и rich/nested field scenarios, чтобы ошибки отображались предсказуемо и критичные ошибки могли ограничивать сохранение/экспорт без изменения content JSON schema.
+
+В scope входят:
+
+1. Анализ текущих plain field helpers, rich field wrappers, custom block tools и save/export workflow.
+2. Минимальный validation contract для field-level ошибок.
+3. Базовые правила: required, min/max length, url и простые pattern-проверки там, где они уже нужны текущим полям.
+4. Отображение ошибок под plain fields.
+5. Отображение ошибок на уровне rich/nested field как цельного поля.
+6. Минимальная block validation для существующих custom blocks без глубокой проверки каждого внутреннего nested block.
+7. Интеграция с сохранением и экспортом так, чтобы критичные ошибки не приводили к сохранению заведомо невалидных данных.
+8. Проверка на текущих custom blocks, Import JSON, `Reset draft` и `Export JSON`.
+
+Вне scope этапа:
+
+- input masks и `imask`;
+- глубокая validation schema всей `EditorContentData`;
+- адресная валидация отдельных paragraph/header/list блоков внутри nested editors;
+- backend validation;
+- i18n, theme switching и расширенная keyboard navigation.
+
+## План этапа
+
+1. Проанализировать текущие plain/rich field APIs и места сохранения данных.
+2. Спроектировать минимальный validation result contract без преждевременного усложнения.
+3. Реализовать field-level ошибки для plain fields.
+4. Добавить ошибки для rich/nested fields на уровне поля.
+5. Подключить минимальную block validation к существующим custom blocks.
+6. Ограничить save/export при критичных ошибках и показать понятное состояние в UI.
+7. Проверить основные сценарии вручную.
+8. Запустить `npm run check`.
+
+## Критерии готовности этапа
+
+- Plain fields поддерживают базовые ошибки.
+- Rich/nested fields показывают ошибки на уровне поля.
+- Ошибки отображаются рядом с соответствующим UI и не ломают Editor.js lifecycle.
+- Сохранение и экспорт можно ограничить при критичных ошибках.
+- Import JSON, `Reset draft` и preview workflow продолжают работать.
+- `npm run check` проходит.
 
 ## Последний завершённый этап
 
@@ -63,7 +110,7 @@
 
 Итог: Import JSON завершён. Добавлен shared parse/validate helper на существующем `isKnownEditorContentData`, composable action для записи imported content в `localStorage` draft, import UI на editor и preview страницах с paste/file сценариями, сообщениями об успехе и ошибках. Editor-страница пересоздаёт `Editor.js` после успешного import, preview сразу перерисовывает renderer из draft. Review-замечания по несохранённым editor-правкам, reset-сообщениям и чтению файла исправлены. `npm run check` проходит; ручная browser-проверка подтверждена.
 
-Следующий крупный этап после завершения Import JSON: поздняя базовая validation policy или следующий UX/accessibility слой по `SPEC.md`.
+Следующий крупный этап после завершения Import JSON: Валидация.
 
 ## Предыдущий завершённый этап
 

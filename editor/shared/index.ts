@@ -24,6 +24,7 @@ export {
 export {
   clearEditorDraft,
   isKnownEditorContentData,
+  parseEditorContentJson,
   readEditorDraft,
   resolveEditorContent,
   writeEditorDraft,

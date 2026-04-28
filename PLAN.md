@@ -16,13 +16,14 @@
 - Custom inline tools завершён.
 - Media gallery / slider block завершён.
 - Sidebar navigation из JSON завершён.
-- Активный этап: Import JSON.
+- Import JSON завершён.
+- Активный этап: не выбран.
 
-## Активный этап
+## Последний завершённый этап
 
 ### Import JSON
 
-Статус: активный.
+Статус: завершён.
 
 Цель этапа: добавить ручной import JSON как поздний utility-сценарий, чтобы пользователь мог подставить внешний `EditorContentData` в editor/localStorage workflow без бэкенда.
 
@@ -45,12 +46,12 @@
 
 ## План этапа
 
-1. Проанализировать текущий `useEditorContentSource`, editor save/load workflow и preview actions.
-2. Выбрать минимальный UX для ручного import JSON без добавления зависимостей.
-3. Реализовать parse/validate/write draft flow на существующих shared helpers.
-4. Подключить import action к UI.
-5. Проверить success/error сценарии, preview, `Reset draft` и `Export JSON`.
-6. Запустить `npm run check`.
+1. Проанализировать текущий `useEditorContentSource`, editor save/load workflow и preview actions — выполнено.
+2. Выбрать минимальный UX для ручного import JSON без добавления зависимостей — выполнено.
+3. Реализовать parse/validate/write draft flow на существующих shared helpers — выполнено.
+4. Подключить import action к UI — выполнено.
+5. Проверить success/error сценарии, preview, `Reset draft` и `Export JSON` — выполнено; ручная browser-проверка подтверждена.
+6. Запустить `npm run check` — выполнено.
 
 ## Критерии готовности этапа
 
@@ -60,9 +61,11 @@
 - `Export JSON` и `Reset draft` продолжают работать.
 - `npm run check` проходит.
 
+Итог: Import JSON завершён. Добавлен shared parse/validate helper на существующем `isKnownEditorContentData`, composable action для записи imported content в `localStorage` draft, import UI на editor и preview страницах с paste/file сценариями, сообщениями об успехе и ошибках. Editor-страница пересоздаёт `Editor.js` после успешного import, preview сразу перерисовывает renderer из draft. Review-замечания по несохранённым editor-правкам, reset-сообщениям и чтению файла исправлены. `npm run check` проходит; ручная browser-проверка подтверждена.
+
 Следующий крупный этап после завершения Import JSON: поздняя базовая validation policy или следующий UX/accessibility слой по `SPEC.md`.
 
-## Последний завершённый этап
+## Предыдущий завершённый этап
 
 ### Sidebar navigation из JSON
 

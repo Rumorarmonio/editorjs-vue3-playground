@@ -64,6 +64,36 @@ export function writeEditorDraft(
   storage.setItem(EDITOR_DRAFT_STORAGE_KEY, JSON.stringify(draft))
 }
 
+export interface ParseEditorContentJsonResult {
+  content: EditorContentData | null
+  error: string | null
+}
+
+export function parseEditorContentJson(
+  serializedContent: string,
+): ParseEditorContentJsonResult {
+  try {
+    const parsedContent: unknown = JSON.parse(serializedContent)
+
+    if (!isKnownEditorContentData(parsedContent)) {
+      return {
+        content: null,
+        error: 'JSON must match the current EditorContentData schema.',
+      }
+    }
+
+    return {
+      content: parsedContent,
+      error: null,
+    }
+  } catch {
+    return {
+      content: null,
+      error: 'JSON could not be parsed.',
+    }
+  }
+}
+
 export function clearEditorDraft(storage: DraftStorage): void {
   storage.removeItem(EDITOR_DRAFT_STORAGE_KEY)
 }

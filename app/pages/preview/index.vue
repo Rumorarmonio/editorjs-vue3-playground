@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer/EditorContentRenderer.vue'
 import EditorSidebarNavigation from '~~/editor/renderer/components/navigation/EditorSidebarNavigation/EditorSidebarNavigation.vue'
 import { buildFlatNavigationItems } from '~~/editor/shared'
 
-const { isReady, loadContent, resetDraft, resolvedContent, sourceLabel } =
-  useEditorContentSource()
+const {
+  importDraftJson,
+  isReady,
+  loadContent,
+  resetDraft,
+  resolvedContent,
+  sourceLabel,
+} = useEditorContentSource()
 
 const exportFileName = 'editor-content.json'
+const importJsonText = ref('')
+const importMessage = ref<string | null>(null)
+const importError = ref<string | null>(null)
+const importFileInputRef = ref<HTMLInputElement | null>(null)
 const navigationItems = computed(() => {
   return buildFlatNavigationItems(resolvedContent.value.data)
 })
@@ -28,6 +38,54 @@ function handleExportJson(): void {
   link.download = exportFileName
   link.click()
   URL.revokeObjectURL(url)
+}
+
+function handleResetDraft(): void {
+  resetDraft()
+  importMessage.value = null
+  importError.value = null
+}
+
+function handleImportJson(serializedContent: string): boolean {
+  const error = importDraftJson(serializedContent)
+
+  importMessage.value = null
+  importError.value = error
+
+  if (error) {
+    return false
+  }
+
+  importJsonText.value = ''
+  importMessage.value = 'JSON imported to local draft.'
+
+  return true
+}
+
+function handleImportPastedJson(): void {
+  handleImportJson(importJsonText.value)
+}
+
+function handleChooseJsonFile(): void {
+  importFileInputRef.value?.click()
+}
+
+async function handleImportFile(event: Event): Promise<void> {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+
+  if (!file) {
+    return
+  }
+
+  try {
+    handleImportJson(await file.text())
+  } catch {
+    importMessage.value = null
+    importError.value = 'JSON file could not be read.'
+  } finally {
+    input.value = ''
+  }
 }
 
 onMounted(loadContent)
@@ -58,7 +116,7 @@ onMounted(loadContent)
           :class="$style.secondaryButton"
           type="button"
           :disabled="!isReady || resolvedContent.source !== 'draft'"
-          @click="resetDraft"
+          @click="handleResetDraft"
         >
           Reset draft
         </button>
@@ -82,6 +140,71 @@ onMounted(loadContent)
 
       <div :class="$style.previewPanel">
         <EditorContentRenderer :content="resolvedContent.data" />
+      </div>
+    </section>
+
+    <section
+      :class="$style.importPanel"
+      aria-labelledby="import-json-title"
+    >
+      <div :class="$style.importHeader">
+        <h2
+          id="import-json-title"
+          :class="$style.importTitle"
+        >
+          Import JSON
+        </h2>
+
+        <button
+          :class="$style.secondaryButton"
+          type="button"
+          :disabled="!isReady"
+          @click="handleChooseJsonFile"
+        >
+          Choose file
+        </button>
+      </div>
+
+      <textarea
+        v-model="importJsonText"
+        :class="$style.importTextarea"
+        rows="5"
+        spellcheck="false"
+        placeholder="Paste EditorContentData JSON"
+      />
+
+      <input
+        ref="importFileInputRef"
+        :class="$style.fileInput"
+        type="file"
+        accept="application/json,.json"
+        @change="handleImportFile"
+      >
+
+      <div :class="$style.importActions">
+        <button
+          :class="$style.secondaryButton"
+          type="button"
+          :disabled="!isReady || importJsonText.trim().length === 0"
+          @click="handleImportPastedJson"
+        >
+          Import pasted JSON
+        </button>
+
+        <p
+          v-if="importMessage"
+          :class="$style.success"
+        >
+          {{ importMessage }}
+        </p>
+
+        <p
+          v-if="importError"
+          :class="$style.error"
+          role="alert"
+        >
+          {{ importError }}
+        </p>
       </div>
     </section>
   </main>

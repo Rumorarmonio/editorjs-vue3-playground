@@ -2,6 +2,7 @@ import { computed, ref } from 'vue'
 import defaultPageContent from '~~/content/default-page.json'
 import {
   clearEditorDraft,
+  parseEditorContentJson,
   resolveEditorContent,
   writeEditorDraft,
   type EditorContentData,
@@ -48,6 +49,22 @@ export function useEditorContentSource() {
     }
   }
 
+  function importDraftJson(serializedContent: string): string | null {
+    if (!import.meta.client) {
+      return 'Import is available only in the browser.'
+    }
+
+    const result = parseEditorContentJson(serializedContent)
+
+    if (!result.content) {
+      return result.error
+    }
+
+    saveDraft(result.content)
+
+    return null
+  }
+
   function resetDraft(): void {
     if (!import.meta.client) {
       return
@@ -58,6 +75,7 @@ export function useEditorContentSource() {
   }
 
   return {
+    importDraftJson,
     isReady,
     loadContent,
     resetDraft,

@@ -31,29 +31,34 @@
 В scope входят:
 
 1. Анализ текущих plain fields и custom blocks на предмет реально нужных masks.
-2. Выбор минимального подхода: без зависимости, если маски не нужны, или `imask`, если есть поле с практической потребностью.
-3. Подключение masks только к релевантным полям без изменения content JSON schema.
-4. Проверка, что masks не ломают validation, save/load, Import JSON и renderer.
+2. Создание отдельного demo-only custom block для проверки masked field scenarios: phone, date, time, price, card и email.
+3. Выбор минимального подхода: без зависимости для slug-like нормализации или `imask`, если demo block подтверждает практическую потребность в настоящих masks.
+4. Подключение masks только к релевантным plain fields и demo block без изменения основной content JSON schema.
+5. Проверка, что masks не ломают validation, save/load, Import JSON и renderer.
 
 Вне scope этапа:
 
 - i18n, theme switching и расширенная keyboard navigation.
 - добавление masks "про запас" без реального поля;
+- превращение demo masked fields block в доменную фичу основного контента;
 - backend validation;
 - изменение content JSON schema.
 
 ## План этапа
 
 1. Проанализировать текущие поля на наличие phone/date/email/slug-like сценариев, где нужна маска.
-2. Решить, требуется ли `imask` на текущем этапе.
-3. Если требуется, добавить минимальную интеграцию в plain field system.
-4. Проверить UX ввода, save/load, Import JSON, `Reset draft` и `Export JSON`.
-5. Запустить `npm run check`.
+2. Зафиксировать текущий вывод: в существующих доменных блоках реальный кандидат только slug-like `galleryId`; phone/date/time/price/card/email полей пока нет.
+3. Добавить demo-only custom block `MaskedFieldsDemo` для проверки phone, date, time, price, card и email inputs.
+4. Решить по результатам demo block, требуется ли `imask` на текущем этапе.
+5. Если требуется, добавить минимальную интеграцию в plain field system с lifecycle cleanup.
+6. Проверить UX ввода, save/load, Import JSON, `Reset draft` и `Export JSON`.
+7. Запустить `npm run check`.
 
 ## Критерии готовности этапа
 
 - Понятно зафиксировано, какие текущие поля требуют masks и почему.
-- Если masks нужны, они работают только на релевантных plain fields.
+- Demo-only masked fields block позволяет проверить phone, date, time, price, card и email scenarios без превращения в основную доменную фичу.
+- Если masks нужны, они работают только на релевантных plain fields и demo block.
 - Masks не меняют content JSON schema.
 - Validation, save/load, Import JSON и renderer не ломаются.
 - `npm run check` проходит.

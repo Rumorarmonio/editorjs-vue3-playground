@@ -526,6 +526,7 @@ function isAllowedMediaUrl(url: string): boolean {
     url.startsWith('https://') ||
     url.startsWith('http://') ||
     url.startsWith('blob:') ||
+    url.startsWith('data:image/svg+xml') ||
     url.startsWith('data:image/') ||
     url.startsWith('data:video/') ||
     (url.startsWith('/') && !url.startsWith('//')) ||

@@ -8,7 +8,9 @@ import {
 } from '~~/editor/admin/config/editor-tools'
 import {
   getDuplicateAnchorValues,
+  getValidationSummary,
   isKnownEditorContentData,
+  validateEditorContentData,
   type EditorContentData,
 } from '~~/editor/shared'
 
@@ -21,13 +23,17 @@ const emit = defineEmits<{
   saved: [content: EditorContentData]
 }>()
 
+interface SaveOptions {
+  validateContent?: boolean
+}
+
 const holderElement = ref<HTMLElement | null>(null)
 const editor = shallowRef<EditorJS | null>(null)
 const isReady = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref<string | null>(null)
 
-async function save(): Promise<boolean> {
+async function save(options: SaveOptions = {}): Promise<boolean> {
   if (!editor.value || isSaving.value) {
     return false
   }
@@ -49,11 +55,24 @@ async function save(): Promise<boolean> {
       return false
     }
 
+    const shouldValidateContent = options.validateContent ?? true
+    const validationSummary = shouldValidateContent
+      ? getValidationSummary(validateEditorContentData(savedContent))
+      : null
+
+    if (validationSummary) {
+      errorMessage.value = validationSummary
+      return false
+    }
+
     errorMessage.value = null
     emit('saved', savedContent)
     return true
-  } catch {
-    errorMessage.value = 'Editor content could not be saved.'
+  } catch (error) {
+    errorMessage.value =
+      error instanceof Error && error.message.includes('validation errors')
+        ? 'Editor content has validation errors.'
+        : 'Editor content could not be saved.'
     return false
   } finally {
     isSaving.value = false

@@ -145,6 +145,11 @@
     border-color: #b42318;
   }
 
+  :global(.editor-plain-field--invalid .editor-rich-field__editor),
+  :global(.editor-plain-field--invalid .editor-two-columns-tool__editor) {
+    border-color: #b42318;
+  }
+
   :global(.editor-plain-field__toggle) {
     display: inline-flex;
     align-items: center;

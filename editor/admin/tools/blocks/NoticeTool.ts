@@ -13,6 +13,7 @@ import {
 } from '~~/editor/admin/fields'
 import {
   normalizeNoticeBlockData,
+  validateNoticeBlockData,
   type NoticeBlockData,
   type NoticeBlockType,
 } from '~~/editor/shared'
@@ -70,6 +71,7 @@ export default class NoticeTool implements BlockTool {
       readOnly: this.readOnly,
       onChange: (value) => {
         this.data.title = value
+        this.titleField?.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -83,6 +85,7 @@ export default class NoticeTool implements BlockTool {
       readOnly: this.readOnly,
       onChange: (value) => {
         this.data.text = value
+        this.textField?.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -110,6 +113,20 @@ export default class NoticeTool implements BlockTool {
   }
 
   save(): NoticeBlockData {
+    const data = this.getCurrentData()
+
+    this.syncValidationErrors(data)
+
+    return data
+  }
+
+  validate(data: Partial<NoticeBlockData>): boolean {
+    this.syncValidationErrors(normalizeNoticeBlockData(data))
+
+    return true
+  }
+
+  private getCurrentData(): NoticeBlockData {
     return normalizeNoticeBlockData({
       title: this.titleField?.getValue() ?? this.data.title,
       text: this.textField?.getValue() ?? this.data.text,
@@ -117,10 +134,17 @@ export default class NoticeTool implements BlockTool {
     })
   }
 
-  validate(data: Partial<NoticeBlockData>): boolean {
-    const noticeData = normalizeNoticeBlockData(data)
+  private syncValidationErrors(data: NoticeBlockData): boolean {
+    const result = validateNoticeBlockData(data)
 
-    return Boolean(noticeData.title.trim() || noticeData.text.trim())
+    this.titleField?.setError(
+      result.issues.find((issue) => issue.path === 'title')?.message,
+    )
+    this.textField?.setError(
+      result.issues.find((issue) => issue.path === 'text')?.message,
+    )
+
+    return result.valid
   }
 
   private dispatchChange(): void {

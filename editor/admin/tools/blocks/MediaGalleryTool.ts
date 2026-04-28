@@ -20,6 +20,7 @@ import {
   mediaGalleryModes,
   normalizeMediaGalleryBlockData,
   normalizeMediaGalleryItemData,
+  validateMediaGalleryBlockData,
   type MediaGalleryBlockData,
   type MediaGalleryItemData,
   type MediaGalleryItemType,
@@ -65,6 +66,7 @@ export default class MediaGalleryTool implements BlockTool {
   private urlSyncField: PlainFieldControl<boolean, HTMLInputElement> | null =
     null
   private cardsRoot: HTMLElement | null = null
+  private cardsErrorElement: HTMLParagraphElement | null = null
   private cardControls: MediaCardControls[] = []
 
   static get toolbox(): ToolboxConfig {
@@ -93,6 +95,10 @@ export default class MediaGalleryTool implements BlockTool {
     actions.className = 'editor-media-gallery-tool__actions'
     this.cardsRoot = document.createElement('div')
     this.cardsRoot.className = 'editor-media-gallery-tool__cards'
+    this.cardsErrorElement = document.createElement('p')
+    this.cardsErrorElement.className = 'editor-plain-field__error'
+    this.cardsErrorElement.hidden = true
+    this.cardsErrorElement.setAttribute('role', 'alert')
 
     this.modeField = createPlainSelectField<MediaGalleryMode>({
       name: 'media-gallery-mode',
@@ -114,6 +120,7 @@ export default class MediaGalleryTool implements BlockTool {
       placeholder: 'project-gallery',
       onChange: (value) => {
         this.data.galleryId = value
+        this.galleryIdField?.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -155,7 +162,7 @@ export default class MediaGalleryTool implements BlockTool {
       this.urlSyncField.root,
     )
     actions.append(addButton)
-    wrapper.append(settings, this.cardsRoot, actions)
+    wrapper.append(settings, this.cardsRoot, this.cardsErrorElement, actions)
     this.renderCards()
 
     return wrapper
@@ -164,7 +171,7 @@ export default class MediaGalleryTool implements BlockTool {
   async save(): Promise<MediaGalleryBlockData> {
     await this.syncCardsFromControls()
 
-    return normalizeMediaGalleryBlockData({
+    const data = normalizeMediaGalleryBlockData({
       mode: this.modeField?.getValue() ?? this.data.mode,
       galleryId: this.galleryIdField?.getValue() ?? this.data.galleryId,
       enableFancybox:
@@ -173,12 +180,16 @@ export default class MediaGalleryTool implements BlockTool {
         this.urlSyncField?.getValue() ?? this.data.syncUrlWithFancybox,
       items: this.data.items,
     })
+
+    this.syncValidationErrors(data)
+
+    return data
   }
 
   validate(data: Partial<MediaGalleryBlockData>): boolean {
-    return normalizeMediaGalleryBlockData(data).items.some((item) => {
-      return item.url.length > 0
-    })
+    this.syncValidationErrors(normalizeMediaGalleryBlockData(data))
+
+    return true
   }
 
   destroy(): void {
@@ -247,6 +258,7 @@ export default class MediaGalleryTool implements BlockTool {
         if (value === 'video') {
           item.alt = ''
           alt.setValue('')
+          alt.setError(undefined)
         }
         alt.root.hidden = value === 'video'
         this.dispatchChange()
@@ -261,6 +273,7 @@ export default class MediaGalleryTool implements BlockTool {
       placeholder: 'https://example.com/media.jpg',
       onChange: (value) => {
         item.url = value
+        url.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -273,6 +286,7 @@ export default class MediaGalleryTool implements BlockTool {
       placeholder: 'Describe the image',
       onChange: (value) => {
         item.alt = value
+        alt.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -286,6 +300,7 @@ export default class MediaGalleryTool implements BlockTool {
       placeholder: 'Short visible caption',
       onChange: (value) => {
         item.caption = value
+        caption.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -297,6 +312,7 @@ export default class MediaGalleryTool implements BlockTool {
       readOnly: this.readOnly,
       placeholder: 'Optional rich description',
       onChange: () => {
+        description.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -330,6 +346,7 @@ export default class MediaGalleryTool implements BlockTool {
   private async addCard(): Promise<void> {
     await this.syncCardsFromControls()
     this.data.items.push(normalizeMediaGalleryItemData({}))
+    this.setCardsError(undefined)
     this.renderCards()
     this.dispatchChange()
   }
@@ -358,6 +375,7 @@ export default class MediaGalleryTool implements BlockTool {
     }
 
     this.data.items.splice(index, 1)
+    this.setCardsError(undefined)
     this.renderCards()
     this.dispatchChange()
   }
@@ -390,6 +408,44 @@ export default class MediaGalleryTool implements BlockTool {
 
   private dispatchChange(): void {
     this.block.dispatchChange()
+  }
+
+  private syncValidationErrors(data: MediaGalleryBlockData): boolean {
+    const result = validateMediaGalleryBlockData(data)
+
+    this.galleryIdField?.setError(
+      result.issues.find((issue) => issue.path === 'galleryId')?.message,
+    )
+    this.setCardsError(
+      result.issues.find((issue) => issue.path === 'items')?.message,
+    )
+
+    this.cardControls.forEach((controls, index) => {
+      controls.url.setError(
+        result.issues.find((issue) => issue.path === `items.${index}.url`)
+          ?.message,
+      )
+      controls.alt.setError(
+        result.issues.find((issue) => issue.path === `items.${index}.alt`)
+          ?.message,
+      )
+      controls.caption.setError(
+        result.issues.find((issue) => issue.path === `items.${index}.caption`)
+          ?.message,
+      )
+      controls.description.setError(undefined)
+    })
+
+    return result.valid
+  }
+
+  private setCardsError(error?: string): void {
+    if (!this.cardsErrorElement) {
+      return
+    }
+
+    this.cardsErrorElement.textContent = error ?? ''
+    this.cardsErrorElement.hidden = !error
   }
 }
 

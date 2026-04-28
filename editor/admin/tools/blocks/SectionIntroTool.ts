@@ -13,6 +13,7 @@ import {
 } from '~~/editor/admin/fields'
 import {
   normalizeSectionIntroBlockData,
+  validateSectionIntroBlockData,
   type SectionIntroBlockData,
   type SectionIntroDescriptionData,
 } from '~~/editor/shared'
@@ -55,6 +56,7 @@ export default class SectionIntroTool implements BlockTool {
       readOnly: this.readOnly,
       onChange: (value) => {
         this.data.title = value
+        this.titleField?.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -66,6 +68,7 @@ export default class SectionIntroTool implements BlockTool {
       readOnly: this.readOnly,
       placeholder: 'Write an introductory paragraph',
       onChange: () => {
+        this.descriptionField?.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -78,22 +81,34 @@ export default class SectionIntroTool implements BlockTool {
   }
 
   async save(): Promise<SectionIntroBlockData> {
-    return normalizeSectionIntroBlockData({
+    const data = normalizeSectionIntroBlockData({
       title: this.titleField?.getValue() ?? this.data.title,
       description:
         (await this.descriptionField?.save()) ?? this.data.description,
     })
+
+    this.syncValidationErrors(data)
+
+    return data
   }
 
   validate(data: Partial<SectionIntroBlockData>): boolean {
-    const sectionIntroData = normalizeSectionIntroBlockData(data)
+    this.syncValidationErrors(normalizeSectionIntroBlockData(data))
 
-    return Boolean(
-      sectionIntroData.title.trim() ||
-        sectionIntroData.description.blocks.some((block) => {
-          return block.data.text.trim()
-        }),
+    return true
+  }
+
+  private syncValidationErrors(data: SectionIntroBlockData): boolean {
+    const result = validateSectionIntroBlockData(data)
+
+    this.titleField?.setError(
+      result.issues.find((issue) => issue.path === 'title')?.message,
     )
+    this.descriptionField?.setError(
+      result.issues.find((issue) => issue.path === 'description')?.message,
+    )
+
+    return result.valid
   }
 
   destroy(): void {

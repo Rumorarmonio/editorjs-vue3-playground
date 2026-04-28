@@ -17,45 +17,83 @@
 - Media gallery / slider block завершён.
 - Sidebar navigation из JSON завершён.
 - Import JSON завершён.
-- Активный этап: Валидация.
+- Валидация завершена.
+- Активный этап: Masks.
 
 ## Активный этап
 
-### Валидация
+### Masks
 
 Статус: активный.
 
-Цель этапа: добавить базовую validation policy для plain fields и rich/nested field scenarios, чтобы ошибки отображались предсказуемо и критичные ошибки могли ограничивать сохранение/экспорт без изменения content JSON schema.
+Цель этапа: определить и реализовать минимально необходимые input masks для текущих plain fields, если в существующем UI есть поля, где маска действительно улучшает ввод и не ломает данные.
 
 В scope входят:
 
-1. Анализ текущих plain field helpers, rich field wrappers, custom block tools и save/export workflow.
-2. Минимальный validation contract для field-level ошибок.
-3. Базовые правила: required, min/max length, url и простые pattern-проверки там, где они уже нужны текущим полям.
-4. Отображение ошибок под plain fields.
-5. Отображение ошибок на уровне rich/nested field как цельного поля.
-6. Минимальная block validation для существующих custom blocks без глубокой проверки каждого внутреннего nested block.
-7. Интеграция с сохранением и экспортом так, чтобы критичные ошибки не приводили к сохранению заведомо невалидных данных.
-8. Проверка на текущих custom blocks, Import JSON, `Reset draft` и `Export JSON`.
+1. Анализ текущих plain fields и custom blocks на предмет реально нужных masks.
+2. Выбор минимального подхода: без зависимости, если маски не нужны, или `imask`, если есть поле с практической потребностью.
+3. Подключение masks только к релевантным полям без изменения content JSON schema.
+4. Проверка, что masks не ломают validation, save/load, Import JSON и renderer.
 
 Вне scope этапа:
 
+- i18n, theme switching и расширенная keyboard navigation.
+- добавление masks "про запас" без реального поля;
+- backend validation;
+- изменение content JSON schema.
+
+## План этапа
+
+1. Проанализировать текущие поля на наличие phone/date/email/slug-like сценариев, где нужна маска.
+2. Решить, требуется ли `imask` на текущем этапе.
+3. Если требуется, добавить минимальную интеграцию в plain field system.
+4. Проверить UX ввода, save/load, Import JSON, `Reset draft` и `Export JSON`.
+5. Запустить `npm run check`.
+
+## Критерии готовности этапа
+
+- Понятно зафиксировано, какие текущие поля требуют masks и почему.
+- Если masks нужны, они работают только на релевантных plain fields.
+- Masks не меняют content JSON schema.
+- Validation, save/load, Import JSON и renderer не ломаются.
+- `npm run check` проходит.
+
+## Последний завершённый этап
+
+### Валидация
+
+Статус: завершён.
+
+Цель этапа: добавить базовую validation policy для plain fields и rich/nested field scenarios, чтобы ошибки отображались предсказуемо и критичные ошибки могли ограничивать сохранение/экспорт без изменения content JSON schema.
+
+В scope вошли:
+
+1. Минимальный shared validation contract для field-level и content-level ошибок.
+2. Базовые правила для текущих custom blocks: required, max length, media URL, image alt и gallery id pattern.
+3. Отображение ошибок под plain fields.
+4. Отображение ошибок на уровне rich/nested fields как цельных полей.
+5. Минимальная block validation для `Notice`, `SectionIntro`, `TwoColumns` и `MediaGallery`.
+6. Ограничение save/export при критичных ошибках.
+7. Сохранение совместимости Import JSON, `Reset draft` и preview workflow.
+
+Вне scope этапа остались:
+
 - input masks и `imask`;
 - глубокая validation schema всей `EditorContentData`;
-- адресная валидация отдельных paragraph/header/list блоков внутри nested editors;
+- адресная проверка внутренних paragraph/header/list blocks внутри nested editors;
 - backend validation;
 - i18n, theme switching и расширенная keyboard navigation.
 
 ## План этапа
 
-1. Проанализировать текущие plain/rich field APIs и места сохранения данных.
-2. Спроектировать минимальный validation result contract без преждевременного усложнения.
-3. Реализовать field-level ошибки для plain fields.
-4. Добавить ошибки для rich/nested fields на уровне поля.
-5. Подключить минимальную block validation к существующим custom blocks.
-6. Ограничить save/export при критичных ошибках и показать понятное состояние в UI.
-7. Проверить основные сценарии вручную.
-8. Запустить `npm run check`.
+1. Проанализировать текущие plain/rich field APIs и места сохранения данных — выполнено.
+2. Спроектировать минимальный validation result contract без преждевременного усложнения — выполнено.
+3. Реализовать field-level ошибки для plain fields — выполнено.
+4. Добавить ошибки для rich/nested fields на уровне поля — выполнено.
+5. Подключить минимальную block validation к существующим custom blocks — выполнено.
+6. Ограничить save/export при критичных ошибках и показать понятное состояние в UI — выполнено.
+7. Проверить основные сценарии — выполнено через `npm run check`; ручная browser-проверка validation UX подтверждена.
+8. Запустить `npm run check` — выполнено.
 
 ## Критерии готовности этапа
 
@@ -66,7 +104,11 @@
 - Import JSON, `Reset draft` и preview workflow продолжают работать.
 - `npm run check` проходит.
 
-## Последний завершённый этап
+Итог: Валидация завершена. Добавлен shared validation layer для текущих custom blocks, field-level ошибки подключены в `Notice`, `SectionIntro`, `TwoColumns` и `MediaGallery`, editor save и preview export блокируются при критичных ошибках. SVG data URL для существующего demo media content признан допустимым media URL. После ручной проверки исправлены UX-регрессии: dropdown/delete доступен у невалидных блоков, ошибки очищаются при изменении полей, вложенные editor holders получают красную рамку при ошибке, а переход на preview доступен даже при content validation errors. `npm run check` проходит; ручная browser-проверка validation UX подтверждена.
+
+Следующий крупный этап после завершения Валидации: Masks.
+
+## Предыдущий завершённый этап
 
 ### Import JSON
 

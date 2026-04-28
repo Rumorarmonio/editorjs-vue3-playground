@@ -2,7 +2,11 @@
 import { computed, onMounted, ref } from 'vue'
 import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer/EditorContentRenderer.vue'
 import EditorSidebarNavigation from '~~/editor/renderer/components/navigation/EditorSidebarNavigation/EditorSidebarNavigation.vue'
-import { buildFlatNavigationItems } from '~~/editor/shared'
+import {
+  buildFlatNavigationItems,
+  getValidationSummary,
+  validateEditorContentData,
+} from '~~/editor/shared'
 
 const {
   importDraftJson,
@@ -17,6 +21,7 @@ const exportFileName = 'editor-content.json'
 const importJsonText = ref('')
 const importMessage = ref<string | null>(null)
 const importError = ref<string | null>(null)
+const exportError = ref<string | null>(null)
 const importFileInputRef = ref<HTMLInputElement | null>(null)
 const navigationItems = computed(() => {
   return buildFlatNavigationItems(resolvedContent.value.data)
@@ -24,6 +29,16 @@ const navigationItems = computed(() => {
 
 function handleExportJson(): void {
   if (!import.meta.client) {
+    return
+  }
+
+  const validationSummary = getValidationSummary(
+    validateEditorContentData(resolvedContent.value.data),
+  )
+
+  exportError.value = validationSummary
+
+  if (validationSummary) {
     return
   }
 
@@ -44,6 +59,7 @@ function handleResetDraft(): void {
   resetDraft()
   importMessage.value = null
   importError.value = null
+  exportError.value = null
 }
 
 function handleImportJson(serializedContent: string): boolean {
@@ -57,6 +73,7 @@ function handleImportJson(serializedContent: string): boolean {
   }
 
   importJsonText.value = ''
+  exportError.value = null
   importMessage.value = 'JSON imported to local draft.'
 
   return true
@@ -127,6 +144,14 @@ onMounted(loadContent)
         >
           Back to editor
         </NuxtLink>
+
+        <p
+          v-if="exportError"
+          :class="$style.error"
+          role="alert"
+        >
+          {{ exportError }}
+        </p>
       </div>
     </section>
 

@@ -55,6 +55,15 @@ export {
   textColorInlineClassNames,
   textColorInlineOptions,
 } from './inline/text-color'
+export {
+  findValidationMessage,
+  getValidationSummary,
+  validateEditorContentData,
+  validateMediaGalleryBlockData,
+  validateNoticeBlockData,
+  validateSectionIntroBlockData,
+  validateTwoColumnsBlockData,
+} from './validation/content-validation'
 
 export type {
   EmbedBlockData,
@@ -131,3 +140,7 @@ export type {
   TextColorInlineName,
   TextColorInlineOption,
 } from './inline/text-color'
+export type {
+  ValidationIssue,
+  ValidationResult,
+} from './validation/content-validation'

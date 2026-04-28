@@ -29,7 +29,7 @@ async function handleSaveDraft(): Promise<void> {
 async function handleOpenPreview(): Promise<void> {
   saveMessage.value = null
 
-  if (await editorRef.value?.save()) {
+  if (await editorRef.value?.save({ validateContent: false })) {
     await navigateTo('/preview')
   }
 }

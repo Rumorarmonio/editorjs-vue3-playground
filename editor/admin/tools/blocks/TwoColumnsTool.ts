@@ -10,6 +10,7 @@ import {
   createPlainSelectField,
   createPlainToggleField,
   type PlainFieldControl,
+  type PlainFieldWrapper,
 } from '~~/editor/admin/fields'
 import {
   createNestedColumnTools,
@@ -20,7 +21,7 @@ import {
 import {
   normalizeTwoColumnsBlockData,
   normalizeTwoColumnsContentData,
-  type ListBlockItem,
+  validateTwoColumnsBlockData,
   type TwoColumnsBlockData,
   type TwoColumnsContentData,
   type TwoColumnsLayoutVariant,
@@ -58,6 +59,8 @@ export default class TwoColumnsTool implements BlockTool {
     null
   private leftEditor: NestedRichEditor<TwoColumnsContentData> | null = null
   private rightEditor: NestedRichEditor<TwoColumnsContentData> | null = null
+  private leftColumnField: PlainFieldWrapper | null = null
+  private rightColumnField: PlainFieldWrapper | null = null
 
   static get toolbox(): ToolboxConfig {
     return {
@@ -112,10 +115,16 @@ export default class TwoColumnsTool implements BlockTool {
     this.rightEditor = this.createColumnEditor(this.data.right)
 
     controls.append(this.layoutField.root, this.reversedField.root)
-    columns.append(
-      this.createColumnWrapper('Left column', this.leftEditor),
-      this.createColumnWrapper('Right column', this.rightEditor),
+    this.leftColumnField = this.createColumnWrapper(
+      'Left column',
+      this.leftEditor,
     )
+    this.rightColumnField = this.createColumnWrapper(
+      'Right column',
+      this.rightEditor,
+    )
+
+    columns.append(this.leftColumnField.root, this.rightColumnField.root)
     wrapper.append(controls, columns)
 
     this.syncLayoutAttributes(columns)
@@ -129,21 +138,22 @@ export default class TwoColumnsTool implements BlockTool {
   }
 
   async save(): Promise<TwoColumnsBlockData> {
-    return normalizeTwoColumnsBlockData({
+    const data = normalizeTwoColumnsBlockData({
       layout: this.layoutField?.getValue() ?? this.data.layout,
       isReversed: this.reversedField?.getValue() ?? this.data.isReversed,
       left: (await this.leftEditor?.save()) ?? this.data.left,
       right: (await this.rightEditor?.save()) ?? this.data.right,
     })
+
+    this.syncValidationErrors(data)
+
+    return data
   }
 
   validate(data: Partial<TwoColumnsBlockData>): boolean {
-    const twoColumnsData = normalizeTwoColumnsBlockData(data)
+    this.syncValidationErrors(normalizeTwoColumnsBlockData(data))
 
-    return (
-      hasColumnContent(twoColumnsData.left) ||
-      hasColumnContent(twoColumnsData.right)
-    )
+    return true
   }
 
   destroy(): void {
@@ -165,6 +175,8 @@ export default class TwoColumnsTool implements BlockTool {
       createTools: createNestedColumnTools,
       placeholder: 'Add paragraph, heading, or list',
       onChange: () => {
+        this.leftColumnField?.setError(undefined)
+        this.rightColumnField?.setError(undefined)
         this.dispatchChange()
       },
     })
@@ -173,13 +185,13 @@ export default class TwoColumnsTool implements BlockTool {
   private createColumnWrapper(
     label: string,
     editor: NestedRichEditor<TwoColumnsContentData>,
-  ): HTMLElement {
+  ): PlainFieldWrapper {
     return createPlainFieldWrapper({
       name: `two-columns-${label.toLowerCase().replaceAll(' ', '-')}`,
       label,
       readOnly: this.readOnly,
       control: editor.holder,
-    }).root
+    })
   }
 
   private syncLayoutAttributes(columns: HTMLElement): void {
@@ -190,29 +202,19 @@ export default class TwoColumnsTool implements BlockTool {
   private dispatchChange(): void {
     this.block.dispatchChange()
   }
-}
 
-function hasColumnContent(data: TwoColumnsContentData): boolean {
-  return data.blocks.some((block) => {
-    switch (block.type) {
-      case 'paragraph':
-      case 'header':
-        return block.data.text.trim().length > 0
-      case 'list':
-        return block.data.items.some(hasListItemContent)
-      default:
-        return false
-    }
-  })
-}
+  private syncValidationErrors(data: TwoColumnsBlockData): boolean {
+    const result = validateTwoColumnsBlockData(data)
 
-function hasListItemContent(item: ListBlockItem): boolean {
-  return (
-    item.content.trim().length > 0 ||
-    item.items.some((child) => {
-      return hasListItemContent(child)
-    })
-  )
+    this.leftColumnField?.setError(
+      result.issues.find((issue) => issue.path === 'left')?.message,
+    )
+    this.rightColumnField?.setError(
+      result.issues.find((issue) => issue.path === 'right')?.message,
+    )
+
+    return result.valid
+  }
 }
 
 export const TwoColumnsToolConstructable =

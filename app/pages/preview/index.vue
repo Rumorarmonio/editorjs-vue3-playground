@@ -12,6 +12,7 @@ import type { SupportedLocale } from '~~/i18n'
 
 const { t } = useI18n()
 const { currentLocale, setLocale, supportedLocales } = useAppLocale()
+const { appThemeOptions, currentTheme, setTheme } = useAppTheme()
 
 const {
   importDraftJson,
@@ -100,6 +101,12 @@ function handleChooseJsonFile(): void {
   importFileInputRef.value?.click()
 }
 
+function handleSetTheme(event: Event): void {
+  setTheme(
+    (event.target as HTMLSelectElement).value as Parameters<typeof setTheme>[0],
+  )
+}
+
 async function handleImportFile(event: Event): Promise<void> {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -157,6 +164,32 @@ onMounted(loadContent)
           >
             {{ item.label }}
           </button>
+        </div>
+
+        <div
+          :class="$style.themeControl"
+        >
+          <label
+            :class="$style.themeLabel"
+            for="preview-theme-select"
+          >
+            {{ t('app.theme.label') }}
+          </label>
+
+          <select
+            id="preview-theme-select"
+            :class="$style.themeSelect"
+            :value="currentTheme"
+            @change="handleSetTheme"
+          >
+            <option
+              v-for="themeOption in appThemeOptions"
+              :key="themeOption"
+              :value="themeOption"
+            >
+              {{ t(`app.theme.${themeOption}`) }}
+            </option>
+          </select>
         </div>
 
         <button

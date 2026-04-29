@@ -32,7 +32,7 @@
 .mediaFrame {
   display: block;
   overflow: hidden;
-  background: #eef3ee;
+  background: var(--color-media-background);
   border-radius: 6px;
 }
 

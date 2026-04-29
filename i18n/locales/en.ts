@@ -3,6 +3,12 @@ export const en = {
     locale: {
       label: 'Interface language',
     },
+    theme: {
+      label: 'Interface theme',
+      system: 'Auto',
+      light: 'Light',
+      dark: 'Dark',
+    },
     common: {
       loading: 'Loading',
       loaded: 'Loaded',

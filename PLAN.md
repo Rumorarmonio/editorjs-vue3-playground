@@ -21,13 +21,13 @@ deployment.
 - Валидация завершена.
 - Masks завершён.
 - Локализация UI редактора завершена.
-- Активный этап: Light/Dark theme.
+- Активный этап: Light/Dark theme завершён.
 
 ## Активный этап
 
 ### Light/Dark theme
 
-Статус: активен.
+Статус: завершён.
 
 Цель этапа: добавить рабочий слой светлой/тёмной темы для editor shell, базового Editor.js UI, custom tools и renderer/preview UI без изменения content JSON schema.
 
@@ -51,13 +51,13 @@ deployment.
 
 ## План этапа
 
-1. Проанализировать текущие SCSS tokens, CSS variables, editor global styles, component modules и сторонние CSS imports.
-2. Спроектировать минимальный theme state/composable и правило применения темы к app root без изменения content data.
-3. Добавить theme tokens/CSS variables для shell, renderer, fields, custom tools и editor-specific global styles.
-4. Подключить UI theme switcher на editor и preview страницах.
-5. Добавить Editor.js UI overrides для light/dark, включая toolbar, popovers, inline toolbar, block controls, selection, focus и error states.
-6. Пройти custom scenarios: Notice, SectionIntro, TwoColumns, MediaGallery/Swiper/Fancybox, MaskedFieldsDemo, Import JSON, validation errors и sidebar navigation.
-7. Запустить соразмерные проверки проекта после стилевых и TypeScript-изменений.
+1. Проанализировать текущие SCSS tokens, CSS variables, editor global styles, component modules и сторонние CSS imports — выполнено.
+2. Спроектировать минимальный theme state/composable и правило применения темы к app root без изменения content data — выполнено.
+3. Добавить theme tokens/CSS variables для shell, renderer, fields, custom tools и editor-specific global styles — выполнено.
+4. Подключить UI theme switcher на editor и preview страницах — выполнено.
+5. Добавить Editor.js UI overrides для light/dark, включая toolbar, popovers, inline toolbar, block controls, selection, focus и error states — выполнено.
+6. Пройти custom scenarios: Notice, SectionIntro, TwoColumns, MediaGallery/Swiper/Fancybox, MaskedFieldsDemo, Import JSON, validation errors и sidebar navigation — выполнено; после ручной проверки дополнительно исправлены popover/menu и Table Tool theme details.
+7. Запустить соразмерные проверки проекта после стилевых и TypeScript-изменений — выполнено через `npm run check` и `npm run build`.
 
 ## Критерии готовности этапа
 
@@ -66,9 +66,14 @@ deployment.
 - Базовый Editor.js UI читаем и функционален в обеих темах.
 - Custom tools, plain/rich fields, validation errors, masks demo block, media gallery/slider и sidebar navigation читаемы в обеих темах.
 - Save/load, Import JSON, validation, masks, preview, `Reset draft` и `Export JSON` остаются работоспособными.
-- Соразмерные проверки проекта проходят.
+- `npm run check` и `npm run build` проходят.
 
 Следующий крупный этап после завершения Light/Dark theme: Клавиатурная навигация и accessibility polish.
+
+Итог: Light/Dark theme завершён. Добавлен `useAppTheme`, сохранение theme preference `system | light | dark` в `localStorage`, применение
+resolved theme через `data-theme`/`color-scheme`, переключатели темы на editor/preview страницах, расширенные CSS variables для light/dark, Editor.js UI overrides и
+перевод renderer/custom editor UI на theme tokens. После ручной проверки исправлены тёмная тема Editor.js popover/menu, Table Tool popover/heading/borders,
+stacking меню колонки и видимость add-column plus icon. `npm run check` проходит с существующими предупреждениями `vue/no-v-html`; `npm run build` проходит.
 
 ## Последний завершённый этап
 

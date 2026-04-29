@@ -3,6 +3,12 @@ export const ru = {
     locale: {
       label: 'Язык интерфейса',
     },
+    theme: {
+      label: 'Тема интерфейса',
+      system: 'Авто',
+      light: 'Светлая',
+      dark: 'Тёмная',
+    },
     common: {
       loading: 'Загрузка',
       loaded: 'Загружено',

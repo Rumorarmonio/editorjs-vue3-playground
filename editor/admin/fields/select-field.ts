@@ -10,6 +10,7 @@ export function createPlainSelectField<TValue extends string = string>(
 
   select.className = 'editor-plain-field__control'
   select.name = options.name
+  select.tabIndex = 0
 
   options.options.forEach((option) => {
     const optionElement = document.createElement('option')

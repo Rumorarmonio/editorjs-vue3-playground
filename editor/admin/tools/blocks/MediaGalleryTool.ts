@@ -154,8 +154,13 @@ export default class MediaGalleryTool implements BlockTool {
 
     addButton.className = 'editor-media-gallery-tool__button'
     addButton.type = 'button'
+    addButton.contentEditable = 'false'
+    addButton.tabIndex = 0
     addButton.textContent = messages.tools.mediaGallery.addCardButton
     addButton.disabled = this.readOnly
+    addButton.addEventListener('keydown', (event) => {
+      event.stopPropagation()
+    })
     addButton.addEventListener('click', () => {
       void this.addCard()
     })
@@ -353,7 +358,12 @@ export default class MediaGalleryTool implements BlockTool {
 
     button.className = 'editor-media-gallery-tool__button'
     button.type = 'button'
+    button.contentEditable = 'false'
+    button.tabIndex = 0
     button.textContent = label
+    button.addEventListener('keydown', (event) => {
+      event.stopPropagation()
+    })
 
     return button
   }

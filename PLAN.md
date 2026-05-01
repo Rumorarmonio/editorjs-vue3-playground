@@ -53,13 +53,13 @@ keyboard-only покрытия всего внутреннего Editor.js UI.
 
 ## План этапа
 
-1. Пройти keyboard-аудит editor и preview страниц: shell controls, locale/theme controls, import/export/reset/save actions, sidebar navigation.
-2. Проверить custom tools и fields: `Notice`, `SectionIntro`, `TwoColumns`, `MediaGallery`, `MaskedFieldsDemo`, validation errors и block tune controls.
-3. Исправить нативность/атрибуты интерактивных элементов там, где `button`, `input`, `select`, `textarea` или `aria-*` используются неполно.
-4. Добавить или уточнить focus-visible styles для shell, field wrappers, custom controls, media card controls, sidebar links и validation states.
-5. Улучшить keyboard handling для reorder/delete/add controls в media/composite scenarios, если текущая реализация требует мышь.
+1. Пройти keyboard-аудит editor и preview страниц: shell controls, locale/theme controls, import/export/reset/save actions, sidebar navigation — начато; найдены проблемы с focus traversal в editor shell/custom tools.
+2. Проверить custom tools и fields: `Notice`, `SectionIntro`, `TwoColumns`, `MediaGallery`, `MaskedFieldsDemo`, validation errors и block tune controls — начато; найдены проблемы с select/toggle/card buttons внутри custom tools.
+3. Исправить нативность/атрибуты интерактивных элементов там, где `button`, `input`, `select`, `textarea` или `aria-*` используются неполно — частично выполнено для plain field wrappers, toggle, select/input controls и media card buttons.
+4. Добавить или уточнить focus-visible styles для shell, field wrappers, custom controls, media card controls, sidebar links и validation states — частично выполнено для toggle track и media card buttons.
+5. Улучшить keyboard handling для reorder/delete/add controls в media/composite scenarios, если текущая реализация требует мышь — частично выполнено через корректную focusability enabled media buttons и остановку keyboard event bubbling в Editor.js.
 6. Проверить отсутствие критичных focus traps между основным Editor.js instance, nested editors, popovers и соседними shell controls.
-7. Запустить соразмерные проверки после изменений: минимум `npm run check`, а `npm run build` — если затронуты runtime-компоненты или общие стили.
+7. Запустить соразмерные проверки после изменений: минимум `npm run check`, а `npm run build` — выполнено после первого accessibility-fix.
 
 ## Критерии готовности этапа
 

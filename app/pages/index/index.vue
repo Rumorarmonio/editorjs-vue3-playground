@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EditorJsEditor from '~~/editor/admin/components/EditorJsEditor/EditorJsEditor.vue'
 import type { EditorContentData } from '~~/editor/shared'
@@ -25,6 +25,7 @@ const importError = ref<string | null>(null)
 const hasUnsavedChanges = ref(false)
 const editorRenderKey = ref(0)
 const editorRef = ref<InstanceType<typeof EditorJsEditor> | null>(null)
+const headerActionsRef = ref<HTMLElement | null>(null)
 const importFileInputRef = ref<HTMLInputElement | null>(null)
 const translatedSourceLabel = computed(() =>
   resolvedContent.value.source === 'draft'
@@ -54,6 +55,20 @@ function handleSaved(content: EditorContentData): void {
 function handleChanged(): void {
   hasUnsavedChanges.value = true
   saveMessage.value = null
+}
+
+function stopHeaderTabPropagation(event: KeyboardEvent): void {
+  const target = event.target
+
+  if (
+    event.key !== 'Tab' ||
+    !(target instanceof Node) ||
+    !headerActionsRef.value?.contains(target)
+  ) {
+    return
+  }
+
+  event.stopImmediatePropagation()
 }
 
 function handleImportJson(serializedContent: string): boolean {
@@ -139,7 +154,19 @@ async function handleSetLocale(nextLocale: SupportedLocale): Promise<void> {
   editorRenderKey.value += 1
 }
 
+if (import.meta.client) {
+  document.addEventListener('keydown', stopHeaderTabPropagation, true)
+}
+
 onMounted(loadContent)
+
+onBeforeUnmount(() => {
+  if (!import.meta.client) {
+    return
+  }
+
+  document.removeEventListener('keydown', stopHeaderTabPropagation, true)
+})
 </script>
 
 <template>
@@ -150,7 +177,11 @@ onMounted(loadContent)
         <h1 :class="$style.title">{{ t('app.editorPage.title') }}</h1>
       </div>
 
-      <div :class="$style.headerActions">
+      <div
+        ref="headerActionsRef"
+        :class="$style.headerActions"
+        @keydown.stop
+      >
         <div
           :class="$style.localeSwitcher"
           :aria-label="t('app.locale.label')"

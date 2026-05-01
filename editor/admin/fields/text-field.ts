@@ -13,6 +13,7 @@ export function createPlainTextField(
   input.name = options.name
   input.value = options.value
   input.placeholder = options.placeholder ?? ''
+  input.tabIndex = 0
 
   if (options.autocomplete) {
     input.setAttribute('autocomplete', options.autocomplete)

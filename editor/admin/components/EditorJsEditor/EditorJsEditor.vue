@@ -114,7 +114,7 @@ onMounted(async () => {
       tools,
       tunes: editorBlockTunes,
       inlineToolbar: editorInlineToolbar,
-      autofocus: true,
+      autofocus: false,
       i18n: props.editorMessages.editorJs,
       placeholder: props.editorMessages.core.placeholder,
       onChange: () => {

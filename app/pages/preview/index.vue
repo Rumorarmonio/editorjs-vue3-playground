@@ -146,7 +146,10 @@ onMounted(loadContent)
         </p>
       </div>
 
-      <div :class="$style.actions">
+      <div
+        :class="$style.actions"
+        @keydown.stop
+      >
         <div
           :class="$style.localeSwitcher"
           :aria-label="t('app.locale.label')"

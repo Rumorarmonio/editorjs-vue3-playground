@@ -34,16 +34,24 @@ export function createPlainFieldWrapper<TValue>({
   const root = document.createElement('div')
   const labelElement = document.createElement('label')
   const controlId = createFieldId(name)
+  const shouldDetachFromEditor = isPlainInteractiveControl(control)
 
   root.className = 'editor-plain-field'
   root.classList.toggle('editor-plain-field--disabled', Boolean(disabled))
   root.classList.toggle('editor-plain-field--readonly', Boolean(readOnly))
+  if (shouldDetachFromEditor) {
+    root.contentEditable = 'false'
+  }
   labelElement.className = 'editor-plain-field__label'
   labelElement.htmlFor = controlId
   labelElement.textContent = label
 
   control.id = controlId
   applyFieldControlState(control, Boolean(disabled), Boolean(readOnly))
+
+  if (shouldDetachFromEditor) {
+    prepareInteractiveControl(control)
+  }
 
   const messages = createFieldMessages({ name, hint, error })
 
@@ -85,6 +93,7 @@ export function createPlainFieldGroupWrapper<TValue>({
   root.className = 'editor-plain-field editor-plain-field--group'
   root.classList.toggle('editor-plain-field--disabled', Boolean(disabled))
   root.classList.toggle('editor-plain-field--readonly', Boolean(readOnly))
+  root.contentEditable = 'false'
   root.disabled = Boolean(disabled)
   root.dataset.readonly = String(Boolean(readOnly))
 
@@ -94,6 +103,7 @@ export function createPlainFieldGroupWrapper<TValue>({
   const messages = createFieldMessages({ name, hint, error })
 
   root.append(legend, content, messages.hint, messages.error)
+  prepareInteractiveControl(content)
   syncDescribedBy(content, messages.hint, messages.error)
   syncInvalidState(root, content, error)
 
@@ -130,6 +140,24 @@ export function applyFieldControlState(
   }
 
   control.toggleAttribute('aria-readonly', readOnly)
+}
+
+function prepareInteractiveControl(control: HTMLElement): void {
+  control.contentEditable = 'false'
+  control.addEventListener('keydown', stopKeyboardEventPropagation)
+}
+
+function stopKeyboardEventPropagation(event: KeyboardEvent): void {
+  event.stopPropagation()
+}
+
+function isPlainInteractiveControl(control: HTMLElement): boolean {
+  return (
+    control instanceof HTMLInputElement ||
+    control instanceof HTMLLabelElement ||
+    control instanceof HTMLSelectElement ||
+    control instanceof HTMLTextAreaElement
+  )
 }
 
 function createFieldMessages({

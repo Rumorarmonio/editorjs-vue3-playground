@@ -12,6 +12,7 @@ export function createPlainTextareaField(
   textarea.value = options.value
   textarea.placeholder = options.placeholder ?? ''
   textarea.rows = options.rows ?? 4
+  textarea.tabIndex = 0
 
   textarea.addEventListener('input', () => {
     options.onChange(textarea.value)

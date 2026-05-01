@@ -5,7 +5,7 @@ export function createPlainToggleField(
   options: PlainToggleFieldOptions,
 ): PlainFieldControl<boolean, HTMLInputElement> {
   const input = document.createElement('input')
-  const toggle = document.createElement('span')
+  const toggle = document.createElement('label')
   let currentValue = options.value
   let isReadOnly = Boolean(options.readOnly)
 
@@ -14,6 +14,7 @@ export function createPlainToggleField(
   input.name = options.name
   input.checked = currentValue
   input.disabled = Boolean(options.disabled)
+  input.tabIndex = 0
   input.toggleAttribute('aria-readonly', isReadOnly)
 
   toggle.className = 'editor-plain-field__toggle'
@@ -96,7 +97,7 @@ function createToggleTrack(): HTMLSpanElement {
 }
 
 function syncToggleState(
-  toggle: HTMLSpanElement,
+  toggle: HTMLLabelElement,
   input: HTMLInputElement,
 ): void {
   const description = toggle.getAttribute('aria-describedby')

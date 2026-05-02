@@ -120,6 +120,12 @@ export interface EditorUiMessages {
       quotePlaceholder: string
       captionPlaceholder: string
     }
+    tableControls: {
+      addColumn: string
+      addRow: string
+      columnMenu: string
+      rowMenu: string
+    }
   }
   inlineTools: {
     textColor: string

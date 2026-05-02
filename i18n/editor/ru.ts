@@ -98,6 +98,12 @@ export const editorRu: EditorUiMessages = {
       quotePlaceholder: 'Введите цитату',
       captionPlaceholder: 'Подпись к цитате',
     },
+    tableControls: {
+      addColumn: 'Добавить колонку таблицы',
+      addRow: 'Добавить строку таблицы',
+      columnMenu: 'Открыть меню колонки таблицы',
+      rowMenu: 'Открыть меню строки таблицы',
+    },
   },
   inlineTools: {
     textColor: 'Цвет текста',

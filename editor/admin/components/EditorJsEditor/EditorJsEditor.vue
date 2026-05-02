@@ -2,6 +2,10 @@
 import type EditorJS from '@editorjs/editorjs'
 import { onBeforeUnmount, onMounted, shallowRef, ref } from 'vue'
 import {
+  enableTableToolKeyboardAccess,
+  type TableToolKeyboardPatch,
+} from '~~/editor/admin/accessibility/table-tool-keyboard'
+import {
   editorBlockTunes,
   createEditorTools,
   editorInlineToolbar,
@@ -34,6 +38,7 @@ const editor = shallowRef<EditorJS | null>(null)
 const isReady = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref<string | null>(null)
+let tableKeyboardPatch: TableToolKeyboardPatch | null = null
 
 async function save(options: SaveOptions = {}): Promise<boolean> {
   if (!editor.value || isSaving.value) {
@@ -102,6 +107,8 @@ onMounted(async () => {
     return
   }
 
+  const holder = holderElement.value
+
   try {
     const [{ default: EditorJS }, tools] = await Promise.all([
       import('@editorjs/editorjs'),
@@ -109,7 +116,7 @@ onMounted(async () => {
     ])
 
     const instance = new EditorJS({
-      holder: holderElement.value,
+      holder,
       data: cloneEditorContent(props.initialData),
       tools,
       tunes: editorBlockTunes,
@@ -124,6 +131,10 @@ onMounted(async () => {
 
     editor.value = instance
     await instance.isReady
+    tableKeyboardPatch = enableTableToolKeyboardAccess({
+      root: holder,
+      messages: props.editorMessages,
+    })
     isReady.value = true
   } catch {
     errorMessage.value = props.editorMessages.core.initError
@@ -131,6 +142,8 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  tableKeyboardPatch?.destroy()
+  tableKeyboardPatch = null
   editor.value?.destroy()
   editor.value = null
 })

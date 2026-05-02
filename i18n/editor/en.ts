@@ -96,6 +96,12 @@ export const editorEn: EditorUiMessages = {
       quotePlaceholder: 'Enter a quote',
       captionPlaceholder: 'Quote caption',
     },
+    tableControls: {
+      addColumn: 'Add table column',
+      addRow: 'Add table row',
+      columnMenu: 'Open table column menu',
+      rowMenu: 'Open table row menu',
+    },
   },
   inlineTools: {
     textColor: 'Text color',

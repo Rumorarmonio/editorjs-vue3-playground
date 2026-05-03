@@ -8,10 +8,11 @@ import {
   getValidationSummary,
   validateEditorContentData,
 } from '~~/editor/shared'
-import type { SupportedLocale } from '~~/i18n'
+import { isLocalePreference } from '~~/i18n'
 
 const { t } = useI18n()
-const { currentLocale, setLocale, supportedLocales } = useAppLocale()
+const { currentLocalePreference, setLocalePreference, supportedLocales } =
+  useAppLocale()
 const { appThemeOptions, currentTheme, setTheme } = useAppTheme()
 
 const {
@@ -125,8 +126,14 @@ async function handleImportFile(event: Event): Promise<void> {
   }
 }
 
-function handleSetLocale(nextLocale: SupportedLocale): void {
-  setLocale(nextLocale)
+function handleSetLocale(event: Event): void {
+  const nextPreference = (event.target as HTMLSelectElement).value
+
+  if (!isLocalePreference(nextPreference)) {
+    return
+  }
+
+  setLocalePreference(nextPreference)
   exportError.value = null
 }
 
@@ -150,30 +157,35 @@ onMounted(loadContent)
         :class="$style.actions"
         @keydown.stop
       >
-        <div
-          :class="$style.localeSwitcher"
-          :aria-label="t('app.locale.label')"
-        >
-          <button
-            v-for="item in supportedLocales"
-            :key="item.code"
-            :class="[
-              $style.secondaryButton,
-              currentLocale === item.code ? $style.activeLocaleButton : '',
-            ]"
-            type="button"
-            :aria-pressed="currentLocale === item.code"
-            @click="handleSetLocale(item.code)"
+        <div :class="$style.localeControl">
+          <label
+            :class="$style.controlLabel"
+            for="preview-locale-select"
           >
-            {{ item.label }}
-          </button>
+            {{ t('app.locale.label') }}
+          </label>
+
+          <select
+            id="preview-locale-select"
+            :class="$style.controlSelect"
+            :value="currentLocalePreference"
+            @change="handleSetLocale"
+          >
+            <option
+              v-for="localeOption in supportedLocales"
+              :key="localeOption.code"
+              :value="localeOption.code"
+            >
+              {{ t(`app.locale.${localeOption.code}`) }}
+            </option>
+          </select>
         </div>
 
         <div
           :class="$style.themeControl"
         >
           <label
-            :class="$style.themeLabel"
+            :class="$style.controlLabel"
             for="preview-theme-select"
           >
             {{ t('app.theme.label') }}
@@ -181,7 +193,7 @@ onMounted(loadContent)
 
           <select
             id="preview-theme-select"
-            :class="$style.themeSelect"
+            :class="$style.controlSelect"
             :value="currentTheme"
             @change="handleSetTheme"
           >

@@ -2,6 +2,10 @@ export const en = {
   app: {
     locale: {
       label: 'Interface language',
+      system: 'Auto',
+      ru: 'Russian',
+      en: 'English',
+      es: 'Spanish',
     },
     theme: {
       label: 'Interface theme',

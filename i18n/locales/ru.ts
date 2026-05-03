@@ -2,6 +2,10 @@ export const ru = {
   app: {
     locale: {
       label: 'Язык интерфейса',
+      system: 'Авто',
+      ru: 'Русский',
+      en: 'Английский',
+      es: 'Испанский',
     },
     theme: {
       label: 'Тема интерфейса',

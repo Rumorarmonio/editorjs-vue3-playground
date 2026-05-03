@@ -3,11 +3,16 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EditorJsEditor from '~~/editor/admin/components/EditorJsEditor/EditorJsEditor.vue'
 import type { EditorContentData } from '~~/editor/shared'
-import type { SupportedLocale } from '~~/i18n'
+import { isLocalePreference, type AppLocalePreference } from '~~/i18n'
 
 const { t } = useI18n()
-const { currentLocale, editorMessages, setLocale, supportedLocales } =
-  useAppLocale()
+const {
+  currentLocale,
+  currentLocalePreference,
+  editorMessages,
+  setLocalePreference,
+  supportedLocales,
+} = useAppLocale()
 const { appThemeOptions, currentTheme, setTheme } = useAppTheme()
 
 const {
@@ -133,10 +138,14 @@ async function handleImportFile(event: Event): Promise<void> {
   }
 }
 
-async function handleSetLocale(nextLocale: SupportedLocale): Promise<void> {
-  if (nextLocale === currentLocale.value) {
+async function handleSetLocalePreference(
+  nextPreference: AppLocalePreference,
+): Promise<void> {
+  if (nextPreference === currentLocalePreference.value) {
     return
   }
+
+  const previousLocale = currentLocale.value
 
   if (hasUnsavedChanges.value) {
     const currentContent = await editorRef.value?.getCurrentContent()
@@ -150,8 +159,21 @@ async function handleSetLocale(nextLocale: SupportedLocale): Promise<void> {
   }
 
   saveMessage.value = null
-  setLocale(nextLocale)
-  editorRenderKey.value += 1
+  setLocalePreference(nextPreference)
+
+  if (currentLocale.value !== previousLocale) {
+    editorRenderKey.value += 1
+  }
+}
+
+function handleSetLocale(event: Event): void {
+  const nextPreference = (event.target as HTMLSelectElement).value
+
+  if (!isLocalePreference(nextPreference)) {
+    return
+  }
+
+  void handleSetLocalePreference(nextPreference)
 }
 
 if (import.meta.client) {
@@ -182,30 +204,35 @@ onBeforeUnmount(() => {
         :class="$style.headerActions"
         @keydown.stop
       >
-        <div
-          :class="$style.localeSwitcher"
-          :aria-label="t('app.locale.label')"
-        >
-          <button
-            v-for="item in supportedLocales"
-            :key="item.code"
-            :class="[
-              $style.secondaryButton,
-              currentLocale === item.code ? $style.activeLocaleButton : '',
-            ]"
-            type="button"
-            :aria-pressed="currentLocale === item.code"
-            @click="handleSetLocale(item.code)"
+        <div :class="$style.localeControl">
+          <label
+            :class="$style.controlLabel"
+            for="editor-locale-select"
           >
-            {{ item.label }}
-          </button>
+            {{ t('app.locale.label') }}
+          </label>
+
+          <select
+            id="editor-locale-select"
+            :class="$style.controlSelect"
+            :value="currentLocalePreference"
+            @change="handleSetLocale"
+          >
+            <option
+              v-for="localeOption in supportedLocales"
+              :key="localeOption.code"
+              :value="localeOption.code"
+            >
+              {{ t(`app.locale.${localeOption.code}`) }}
+            </option>
+          </select>
         </div>
 
         <div
           :class="$style.themeControl"
         >
           <label
-            :class="$style.themeLabel"
+            :class="$style.controlLabel"
             for="editor-theme-select"
           >
             {{ t('app.theme.label') }}
@@ -213,7 +240,7 @@ onBeforeUnmount(() => {
 
           <select
             id="editor-theme-select"
-            :class="$style.themeSelect"
+            :class="$style.controlSelect"
             :value="currentTheme"
             @change="handleSetTheme"
           >

@@ -14,8 +14,7 @@
   gap: 24px;
 }
 
-.headerActions,
-.localeSwitcher {
+.headerActions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -23,19 +22,20 @@
   gap: 8px;
 }
 
+.localeControl,
 .themeControl {
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.themeLabel {
+.controlLabel {
   font-size: 0.8125rem;
   font-weight: 700;
   color: var(--color-muted);
 }
 
-.themeSelect {
+.controlSelect {
   min-height: 42px;
   padding: 9px 36px 9px 12px;
   font: inherit;
@@ -99,12 +99,6 @@
     opacity: 0.55;
     cursor: not-allowed;
   }
-}
-
-.activeLocaleButton {
-  color: var(--color-surface);
-  background: var(--color-text);
-  border-color: var(--color-text);
 }
 
 .workspace {
@@ -224,6 +218,7 @@
 @media (width <= 760px) {
   .header,
   .headerActions,
+  .localeControl,
   .themeControl,
   .actions,
   .importHeader,

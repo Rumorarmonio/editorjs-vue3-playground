@@ -1,16 +1,27 @@
 import { editorEn } from './en'
+import { editorEs } from './es'
 import { editorRu } from './ru'
-import type { EditorUiMessages, SupportedLocale } from './types'
+import type {
+  AppLocalePreference,
+  EditorUiMessages,
+  SupportedLocale,
+} from './types'
 
 export type {
   EditorUiMessages,
   EditorValidationMessages,
+  AppLocalePreference,
   SupportedLocale,
 } from './types'
 
-export const defaultLocale: SupportedLocale = 'ru'
+export const defaultLocale: SupportedLocale = 'en'
+export const defaultLocalePreference: AppLocalePreference = 'system'
 
 export const supportedLocales = [
+  {
+    code: 'system',
+    label: 'Auto',
+  },
   {
     code: 'ru',
     label: 'RU',
@@ -19,8 +30,12 @@ export const supportedLocales = [
     code: 'en',
     label: 'EN',
   },
+  {
+    code: 'es',
+    label: 'ES',
+  },
 ] as const satisfies ReadonlyArray<{
-  code: SupportedLocale
+  code: AppLocalePreference
   label: string
 }>
 
@@ -30,6 +45,7 @@ export const editorMessagesByLocale: Record<
 > = {
   ru: editorRu,
   en: editorEn,
+  es: editorEs,
 }
 
 let currentEditorMessages = editorMessagesByLocale[defaultLocale]
@@ -47,5 +63,11 @@ export function getCurrentEditorMessages(): EditorUiMessages {
 }
 
 export function isSupportedLocale(value: unknown): value is SupportedLocale {
-  return value === 'ru' || value === 'en'
+  return value === 'ru' || value === 'en' || value === 'es'
+}
+
+export function isLocalePreference(
+  value: unknown,
+): value is AppLocalePreference {
+  return value === 'system' || isSupportedLocale(value)
 }

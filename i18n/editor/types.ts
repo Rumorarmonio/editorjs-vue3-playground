@@ -1,6 +1,7 @@
 import type { SpacingTuneValue } from '~~/editor/shared'
 
-export type SupportedLocale = 'ru' | 'en'
+export type SupportedLocale = 'ru' | 'en' | 'es'
+export type AppLocalePreference = 'system' | SupportedLocale
 
 export interface EditorValidationMessages {
   fieldLabels: {

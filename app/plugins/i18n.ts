@@ -1,20 +1,21 @@
 import { createI18n } from 'vue-i18n'
+import { getSystemLocale, localeStorageKey } from '~/composables/useAppLocale'
 import {
   appMessages,
-  defaultLocale,
-  isSupportedLocale,
+  defaultLocalePreference,
+  isLocalePreference,
   type SupportedLocale,
 } from '~~/i18n'
 
-const localeStorageKey = 'editorjs-vue3-locale'
-
 export default defineNuxtPlugin((nuxtApp) => {
-  const storedLocale = import.meta.client
+  const storedLocalePreference = import.meta.client
     ? window.localStorage.getItem(localeStorageKey)
     : null
-  const locale: SupportedLocale = isSupportedLocale(storedLocale)
-    ? storedLocale
-    : defaultLocale
+  const localePreference = isLocalePreference(storedLocalePreference)
+    ? storedLocalePreference
+    : defaultLocalePreference
+  const locale: SupportedLocale =
+    localePreference === 'system' ? getSystemLocale() : localePreference
 
   const i18n = createI18n({
     legacy: false,

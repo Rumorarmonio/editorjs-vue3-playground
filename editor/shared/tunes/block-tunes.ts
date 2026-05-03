@@ -1,4 +1,9 @@
-export const editorBlockTuneNames = ['anchor', 'spacing', 'label'] as const
+export const editorBlockTuneNames = [
+  'anchor',
+  'spacing',
+  'label',
+  'animation',
+] as const
 
 export type EditorBlockTuneName = (typeof editorBlockTuneNames)[number]
 
@@ -17,10 +22,17 @@ export interface LabelTuneData {
   label?: string
 }
 
+export type AnimationTuneValue = 'none' | 'fade-up' | 'fade-left' | 'fade-right'
+
+export interface AnimationTuneData {
+  type?: AnimationTuneValue
+}
+
 export interface KnownEditorBlockTuneData {
   anchor?: AnchorTuneData
   spacing?: SpacingTuneData
   label?: LabelTuneData
+  animation?: AnimationTuneData
 }
 
 export const spacingTuneValues = [
@@ -29,6 +41,13 @@ export const spacingTuneValues = [
   'medium',
   'large',
 ] as const satisfies readonly SpacingTuneValue[]
+
+export const animationTuneValues = [
+  'none',
+  'fade-up',
+  'fade-left',
+  'fade-right',
+] as const satisfies readonly AnimationTuneValue[]
 
 const anchorMaxLength = 80
 const labelMaxLength = 120
@@ -64,6 +83,16 @@ export function normalizeLabelTuneData(value: unknown): LabelTuneData {
   }
 }
 
+export function normalizeAnimationTuneData(value: unknown): AnimationTuneData {
+  if (!isRecord(value)) {
+    return {}
+  }
+
+  return {
+    type: normalizeAnimationTuneValue(value.type),
+  }
+}
+
 export function getKnownBlockTuneData(
   tunes: Record<string, unknown> | undefined,
 ): KnownEditorBlockTuneData {
@@ -75,6 +104,7 @@ export function getKnownBlockTuneData(
     anchor: normalizeAnchorTuneData(tunes.anchor),
     spacing: normalizeSpacingTuneData(tunes.spacing),
     label: normalizeLabelTuneData(tunes.label),
+    animation: normalizeAnimationTuneData(tunes.animation),
   }
 }
 
@@ -110,7 +140,8 @@ export function isKnownBlockTuneData(value: unknown): boolean {
   return (
     isValidAnchorTuneData(value.anchor) &&
     isValidSpacingTuneData(value.spacing) &&
-    isValidLabelTuneData(value.label)
+    isValidLabelTuneData(value.label) &&
+    isValidAnimationTuneData(value.animation)
   )
 }
 
@@ -185,14 +216,36 @@ function isValidLabelTuneData(value: unknown): boolean {
   )
 }
 
+function isValidAnimationTuneData(value: unknown): boolean {
+  if (value === undefined) {
+    return true
+  }
+
+  if (!isRecord(value)) {
+    return false
+  }
+
+  return value.type === undefined || isAnimationTuneValue(value.type)
+}
+
 function normalizeSpacingTuneValue(
   value: unknown,
 ): SpacingTuneValue | undefined {
   return isSpacingTuneValue(value) ? value : undefined
 }
 
+function normalizeAnimationTuneValue(
+  value: unknown,
+): AnimationTuneValue | undefined {
+  return isAnimationTuneValue(value) ? value : undefined
+}
+
 function isSpacingTuneValue(value: unknown): value is SpacingTuneValue {
   return spacingTuneValues.includes(value as SpacingTuneValue)
+}
+
+function isAnimationTuneValue(value: unknown): value is AnimationTuneValue {
+  return animationTuneValues.includes(value as AnimationTuneValue)
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

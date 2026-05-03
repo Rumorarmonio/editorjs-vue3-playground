@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import {
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useCssModule,
+  watch,
+} from 'vue'
 import EditorContentList from '~~/editor/renderer/components/EditorContentList/EditorContentList.vue'
 import EditorMediaGalleryBlock from '~~/editor/renderer/components/EditorMediaGalleryBlock/EditorMediaGalleryBlock.vue'
 import {
@@ -6,7 +14,6 @@ import {
   sanitizeInlineHtml,
 } from '~~/editor/renderer/helpers/sanitize-inline-html'
 import { normalizeRichParagraphContent } from '~~/editor/renderer/helpers/rich-field-content'
-import { useCssModule } from 'vue'
 import type {
   EditorBlock,
   EditorContentBlock,
@@ -24,11 +31,17 @@ import {
   normalizeTwoColumnsBlockData,
 } from '~~/editor/shared'
 
-defineProps<{
+const props = defineProps<{
   content: EditorContentData
 }>()
 
 const style = useCssModule()
+const rendererRef = ref<HTMLElement | null>(null)
+let animationObserver: IntersectionObserver | null = null
+
+const animatedBlockClass = style.animatedBlock ?? ''
+const animationPreparedClass = style.animationPrepared ?? ''
+const animationVisibleClass = style.animationVisible ?? ''
 
 const defaultBlockSpacing = '18px'
 const spacingValueMap = {
@@ -131,8 +144,21 @@ function getBlockLabel(block: EditorContentBlock): string | undefined {
   return getKnownBlockTuneData(block.tunes).label?.label
 }
 
-function getBlockClasses(): string[] {
-  return style.block ? [style.block] : []
+function getBlockAnimation(block: EditorContentBlock): string | undefined {
+  const animation = getKnownBlockTuneData(block.tunes).animation?.type
+
+  return animation && animation !== 'none' ? animation : undefined
+}
+
+function getBlockClasses(block: EditorContentBlock): string[] {
+  const classes = style.block ? [style.block] : []
+
+  if (getBlockAnimation(block) && animatedBlockClass && animationPreparedClass) {
+    classes.push(animatedBlockClass)
+    classes.push(animationPreparedClass)
+  }
+
+  return classes
 }
 
 function getBlockStyle(
@@ -155,17 +181,95 @@ function getBlockStyle(
     marginTop: spacing ? spacingValueMap[spacing] : defaultBlockSpacing,
   }
 }
+
+function setupAnimationObserver(): void {
+  cleanupAnimationObserver()
+
+  if (
+    !import.meta.client ||
+    !rendererRef.value ||
+    !animationPreparedClass ||
+    !animationVisibleClass
+  ) {
+    return
+  }
+
+  const blocks = Array.from(rendererRef.value.children).filter(
+    (element): element is HTMLElement =>
+      element instanceof HTMLElement &&
+      element.dataset.blockAnimation !== undefined,
+  )
+
+  if (blocks.length === 0) {
+    return
+  }
+
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches
+
+  if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+    blocks.forEach((block) => {
+      block.classList.add(animationVisibleClass)
+    })
+    return
+  }
+
+  animationObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || !(entry.target instanceof HTMLElement)) {
+          return
+        }
+
+        entry.target.classList.add(animationVisibleClass)
+        animationObserver?.unobserve(entry.target)
+      })
+    },
+    {
+      rootMargin: '0px 0px -10% 0px',
+      threshold: 0.1,
+    },
+  )
+
+  blocks.forEach((block) => {
+    animationObserver?.observe(block)
+  })
+}
+
+function cleanupAnimationObserver(): void {
+  animationObserver?.disconnect()
+  animationObserver = null
+}
+
+onMounted(() => {
+  void nextTick(setupAnimationObserver)
+})
+
+watch(
+  () => props.content,
+  () => {
+    void nextTick(setupAnimationObserver)
+  },
+  { deep: true },
+)
+
+onBeforeUnmount(cleanupAnimationObserver)
 </script>
 
 <template>
-  <article :class="$style.renderer">
+  <article
+    ref="rendererRef"
+    :class="$style.renderer"
+  >
     <template
       v-for="(block, index) in content.blocks"
       :key="block.id ?? `${block.type}-${index}`"
     >
       <div
         :id="getBlockRenderedAnchorId(content.blocks, block, index)"
-        :class="getBlockClasses()"
+        :class="getBlockClasses(block)"
+        :data-block-animation="getBlockAnimation(block)"
         :data-block-label="getBlockLabel(block)"
         :style="getBlockStyle(content.blocks, block, index)"
       >

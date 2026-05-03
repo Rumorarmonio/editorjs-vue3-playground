@@ -46,9 +46,11 @@ export {
 } from './navigation/build-flat-navigation'
 export {
   editorBlockTuneNames,
+  animationTuneValues,
   getDuplicateAnchorValues,
   getKnownBlockTuneData,
   isKnownBlockTuneData,
+  normalizeAnimationTuneData,
   normalizeAnchorTuneData,
   normalizeAnchorValue,
   normalizeLabelTuneData,
@@ -138,6 +140,8 @@ export type {
 } from './types/editor-output'
 export type {
   AnchorTuneData,
+  AnimationTuneData,
+  AnimationTuneValue,
   EditorBlockTuneName,
   KnownEditorBlockTuneData,
   LabelTuneData,

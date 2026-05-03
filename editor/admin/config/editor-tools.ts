@@ -6,6 +6,7 @@ import { ManualEmbedToolConstructable } from '~~/editor/admin/tools/ManualEmbedT
 import InlineCodeTool from '~~/editor/admin/tools/InlineCodeTool'
 import { TextColorToolConstructable } from '~~/editor/admin/tools/TextColorTool'
 import { AnchorTuneConstructable } from '~~/editor/admin/tunes/AnchorTune'
+import { AnimationTuneConstructable } from '~~/editor/admin/tunes/AnimationTune'
 import { LabelTuneConstructable } from '~~/editor/admin/tunes/LabelTune'
 import { SpacingTuneConstructable } from '~~/editor/admin/tunes/SpacingTune'
 import { NoticeToolConstructable } from '~~/editor/admin/tools/blocks/NoticeTool'
@@ -133,6 +134,7 @@ export async function createEditorTools(
     anchor: AnchorTuneConstructable,
     spacing: SpacingTuneConstructable,
     label: LabelTuneConstructable,
+    animation: AnimationTuneConstructable,
   }
 }
 

@@ -136,6 +136,16 @@ export const editorEs: EditorUiMessages = {
         large: 'Grande',
       },
     },
+    animation: {
+      title: 'Animación',
+      label: 'Aparición',
+      options: {
+        none: 'Ninguna',
+        'fade-up': 'Aparecer hacia arriba',
+        'fade-left': 'Desde la izquierda',
+        'fade-right': 'Desde la derecha',
+      },
+    },
   },
   validation: {
     fieldLabels: {

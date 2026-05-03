@@ -1,4 +1,4 @@
-import type { SpacingTuneValue } from '~~/editor/shared'
+import type { AnimationTuneValue, SpacingTuneValue } from '~~/editor/shared'
 
 export type SupportedLocale = 'ru' | 'en' | 'es'
 export type AppLocalePreference = 'system' | SupportedLocale
@@ -152,6 +152,11 @@ export interface EditorUiMessages {
       topLabel: string
       bottomLabel: string
       options: Record<SpacingTuneValue, string>
+    }
+    animation: {
+      title: string
+      label: string
+      options: Record<AnimationTuneValue, string>
     }
   }
   validation: EditorValidationMessages

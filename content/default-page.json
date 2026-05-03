@@ -16,6 +16,9 @@
         "label": {
           "label": "Page title"
         },
+        "animation": {
+          "type": "fade-up"
+        },
         "spacing": {
           "bottom": "medium"
         }
@@ -46,6 +49,9 @@
         },
         "label": {
           "label": "Heading level 2"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -213,6 +219,9 @@
         "label": {
           "label": "Standard tools table"
         },
+        "animation": {
+          "type": "fade-up"
+        },
         "spacing": {
           "top": "small",
           "bottom": "large"
@@ -225,6 +234,11 @@
       "data": {
         "text": "Embeds",
         "level": 2
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -303,6 +317,11 @@
       "data": {
         "text": "Images",
         "level": 2
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -339,6 +358,9 @@
       },
       "tunes": {
         "anchor": {},
+        "animation": {
+          "type": "fade-up"
+        },
         "spacing": {},
         "label": {}
       }
@@ -591,6 +613,9 @@
         "anchor": {
           "anchor": "media-gallery"
         },
+        "animation": {
+          "type": "fade-left"
+        },
         "spacing": {
           "top": "large"
         },
@@ -682,6 +707,9 @@
         "anchor": {
           "anchor": "media-slider"
         },
+        "animation": {
+          "type": "fade-right"
+        },
         "spacing": {
           "top": "large"
         },
@@ -696,6 +724,11 @@
       "data": {
         "text": "Utilities",
         "level": 2
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-up"
+        }
       }
     },
     {

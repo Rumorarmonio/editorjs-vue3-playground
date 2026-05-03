@@ -133,6 +133,16 @@ export const editorEn: EditorUiMessages = {
         large: 'Large',
       },
     },
+    animation: {
+      title: 'Animation',
+      label: 'Reveal animation',
+      options: {
+        none: 'None',
+        'fade-up': 'Fade up',
+        'fade-left': 'Fade from left',
+        'fade-right': 'Fade from right',
+      },
+    },
   },
   validation: {
     fieldLabels: {

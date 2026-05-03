@@ -71,7 +71,6 @@ export function createTuneSelectField({
 
   const select = document.createElement('select')
   select.className = 'editor-block-tune-field__control'
-  select.value = value
 
   options.forEach((option) => {
     const optionElement = document.createElement('option')
@@ -79,6 +78,8 @@ export function createTuneSelectField({
     optionElement.textContent = option.label
     select.append(optionElement)
   })
+
+  select.value = value
 
   select.addEventListener('change', () => {
     onChange(select.value)

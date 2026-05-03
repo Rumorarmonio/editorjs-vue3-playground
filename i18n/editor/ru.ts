@@ -135,6 +135,16 @@ export const editorRu: EditorUiMessages = {
         large: 'Большой',
       },
     },
+    animation: {
+      title: 'Анимация',
+      label: 'Появление',
+      options: {
+        none: 'Нет',
+        'fade-up': 'Снизу вверх',
+        'fade-left': 'Слева направо',
+        'fade-right': 'Справа налево',
+      },
+    },
   },
   validation: {
     fieldLabels: {

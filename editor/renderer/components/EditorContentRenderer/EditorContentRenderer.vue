@@ -14,8 +14,8 @@ import type {
   TwoColumnsContentData,
 } from '~~/editor/shared'
 import {
-  getBlockAnchorId,
   getAllowedEmbedIframeUrl,
+  getBlockRenderedAnchorId,
   getKnownBlockTuneData,
   normalizeMaskedFieldsDemoBlockData,
   normalizeMediaGalleryBlockData,
@@ -164,7 +164,7 @@ function getBlockStyle(
       :key="block.id ?? `${block.type}-${index}`"
     >
       <div
-        :id="getBlockAnchorId(content.blocks, block, index)"
+        :id="getBlockRenderedAnchorId(content.blocks, block, index)"
         :class="getBlockClasses()"
         :data-block-label="getBlockLabel(block)"
         :style="getBlockStyle(content.blocks, block, index)"

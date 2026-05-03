@@ -13,6 +13,12 @@ export const ru = {
       light: 'Светлая',
       dark: 'Тёмная',
     },
+    navigation: {
+      title: 'На странице',
+      label: 'Навигация',
+      headings: 'По заголовкам',
+      labels: 'По якорям и меткам',
+    },
     common: {
       loading: 'Загрузка',
       loaded: 'Загружено',

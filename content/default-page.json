@@ -37,7 +37,7 @@
       "id": "heading-h2",
       "type": "header",
       "data": {
-        "text": "Heading level 2 with <mark class=\"cdx-marker\">marker</mark>",
+        "text": "Standard tools",
         "level": 2
       },
       "tunes": {
@@ -53,7 +53,7 @@
       "id": "heading-h3",
       "type": "header",
       "data": {
-        "text": "Heading level 3 with <u class=\"cdx-underline\">underline</u>",
+        "text": "Inline formatting",
         "level": 3
       }
     },
@@ -61,8 +61,16 @@
       "id": "heading-h4",
       "type": "header",
       "data": {
-        "text": "Heading level 4 with <s class=\"cdx-strikethrough\">strikethrough</s>",
+        "text": "Heading examples with <s class=\"cdx-strikethrough\">strikethrough</s>",
         "level": 4
+      }
+    },
+    {
+      "id": "lists-header",
+      "type": "header",
+      "data": {
+        "text": "Lists and checklists",
+        "level": 3
       }
     },
     {
@@ -132,6 +140,14 @@
       }
     },
     {
+      "id": "quote-header",
+      "type": "header",
+      "data": {
+        "text": "Quote",
+        "level": 3
+      }
+    },
+    {
       "id": "quote-block",
       "type": "quote",
       "data": {
@@ -156,6 +172,14 @@
       "id": "delimiter-block",
       "type": "delimiter",
       "data": {}
+    },
+    {
+      "id": "table-header",
+      "type": "header",
+      "data": {
+        "text": "Table",
+        "level": 3
+      }
     },
     {
       "id": "table-block",
@@ -196,6 +220,22 @@
       }
     },
     {
+      "id": "embeds-header",
+      "type": "header",
+      "data": {
+        "text": "Embeds",
+        "level": 2
+      }
+    },
+    {
+      "id": "embed-youtube-header",
+      "type": "header",
+      "data": {
+        "text": "Embed YouTube video",
+        "level": 3
+      }
+    },
+    {
       "id": "embed-youtube",
       "type": "embed",
       "data": {
@@ -205,6 +245,14 @@
         "width": 580,
         "height": 326,
         "caption": "Embed block caption with <b>bold</b>, <u class=\"cdx-underline\">underline</u>, and <code class=\"inline-code\">inline code</code>"
+      }
+    },
+    {
+      "id": "embed-vimeo-header",
+      "type": "header",
+      "data": {
+        "text": "Embed Vimeo video",
+        "level": 3
       }
     },
     {
@@ -225,6 +273,14 @@
       }
     },
     {
+      "id": "embed-coub-header",
+      "type": "header",
+      "data": {
+        "text": "Embed Coub video",
+        "level": 3
+      }
+    },
+    {
       "id": "embed-coub",
       "type": "embed",
       "data": {
@@ -239,6 +295,14 @@
         "spacing": {
           "top": "large"
         }
+      }
+    },
+    {
+      "id": "images-header",
+      "type": "header",
+      "data": {
+        "text": "Images",
+        "level": 2
       }
     },
     {
@@ -270,13 +334,21 @@
       "id": "custom-plugins-header",
       "type": "header",
       "data": {
-        "text": "Custom plugins",
+        "text": "Custom blocks",
         "level": 2
       },
       "tunes": {
         "anchor": {},
         "spacing": {},
         "label": {}
+      }
+    },
+    {
+      "id": "notice-header",
+      "type": "header",
+      "data": {
+        "text": "Notice blocks",
+        "level": 3
       }
     },
     {
@@ -328,6 +400,14 @@
       }
     },
     {
+      "id": "nested-fields-header",
+      "type": "header",
+      "data": {
+        "text": "Rich nested fields",
+        "level": 3
+      }
+    },
+    {
       "id": "section-intro-block",
       "type": "sectionIntro",
       "data": {
@@ -366,6 +446,14 @@
           "top": "medium"
         },
         "label": {}
+      }
+    },
+    {
+      "id": "two-columns-header",
+      "type": "header",
+      "data": {
+        "text": "Composite layout",
+        "level": 3
       }
     },
     {
@@ -433,6 +521,22 @@
       }
     },
     {
+      "id": "media-blocks-header",
+      "type": "header",
+      "data": {
+        "text": "Media blocks",
+        "level": 2
+      }
+    },
+    {
+      "id": "media-gallery-header",
+      "type": "header",
+      "data": {
+        "text": "Media gallery",
+        "level": 3
+      }
+    },
+    {
       "id": "media-gallery-block",
       "type": "mediaGallery",
       "data": {
@@ -493,6 +597,14 @@
         "label": {
           "label": "Media gallery"
         }
+      }
+    },
+    {
+      "id": "media-slider-header",
+      "type": "header",
+      "data": {
+        "text": "Media slider",
+        "level": 3
       }
     },
     {
@@ -576,6 +688,22 @@
         "label": {
           "label": "Media slider"
         }
+      }
+    },
+    {
+      "id": "utilities-header",
+      "type": "header",
+      "data": {
+        "text": "Utilities",
+        "level": 2
+      }
+    },
+    {
+      "id": "masked-fields-header",
+      "type": "header",
+      "data": {
+        "text": "Masked fields",
+        "level": 3
       }
     },
     {

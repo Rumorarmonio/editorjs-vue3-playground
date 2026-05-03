@@ -25,6 +25,7 @@ deployment.
 - Клавиатурная навигация и accessibility polish завершён.
 - Активный этап: Некритичные улучшения.
 - Первое optional improvement активного этапа реализовано: выбор языка переведён на dropdown по аналогии с темой, добавлены auto preference и испанский интерфейс.
+- Второе optional improvement активного этапа реализовано: preview sidebar получил временный demo-переключатель между navigation по заголовкам и старой navigation по `AnchorTune` / `LabelTune`.
 
 ## Активный этап
 
@@ -56,8 +57,8 @@ deployment.
 
 1. Составить короткий список optional improvements, которые реально повышают качество демо и не раздувают scope — выполнено для language switcher improvement.
 2. Выбрать первый небольшой improvement и зафиксировать ожидаемое поведение — выполнено: language preference `system | ru | en | es`, browser/OS detection, dropdown UI.
-3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — в работе; первый срез language switcher выполнен.
-4. После каждого значимого изменения запускать соразмерные проверки — выполнено для первого среза через `npm run check` и `npm run build`.
+3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — в работе; выполнены language switcher и heading-based sidebar navigation.
+4. После каждого значимого изменения запускать соразмерные проверки — выполнено для language switcher; для heading navigation проверки запускаются после реализации.
 5. Перед завершением этапа пройти smoke-check основных editor/preview сценариев.
 
 ## Критерии готовности этапа

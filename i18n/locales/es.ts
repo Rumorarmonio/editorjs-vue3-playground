@@ -13,6 +13,12 @@ export const es = {
       light: 'Claro',
       dark: 'Oscuro',
     },
+    navigation: {
+      title: 'En esta página',
+      label: 'Navegación',
+      headings: 'Por encabezados',
+      labels: 'Por anclas y etiquetas',
+    },
     common: {
       loading: 'Cargando',
       loaded: 'Cargado',

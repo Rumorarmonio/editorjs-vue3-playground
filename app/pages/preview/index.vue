@@ -5,6 +5,7 @@ import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRe
 import EditorSidebarNavigation from '~~/editor/renderer/components/navigation/EditorSidebarNavigation/EditorSidebarNavigation.vue'
 import {
   buildFlatNavigationItems,
+  buildHeadingNavigationItems,
   getValidationSummary,
   validateEditorContentData,
 } from '~~/editor/shared'
@@ -28,9 +29,24 @@ const importJsonText = ref('')
 const importMessage = ref<string | null>(null)
 const importError = ref<string | null>(null)
 const exportError = ref<string | null>(null)
+const navigationMode = ref<'labels' | 'headings'>('headings')
 const importFileInputRef = ref<HTMLInputElement | null>(null)
+const headingNavigationItems = computed(() =>
+  buildHeadingNavigationItems(resolvedContent.value.data),
+)
+const labelNavigationItems = computed(() =>
+  buildFlatNavigationItems(resolvedContent.value.data),
+)
 const navigationItems = computed(() => {
-  return buildFlatNavigationItems(resolvedContent.value.data)
+  return navigationMode.value === 'headings'
+    ? headingNavigationItems.value
+    : labelNavigationItems.value
+})
+const hasNavigationItems = computed(() => {
+  return (
+    headingNavigationItems.value.length > 0 ||
+    labelNavigationItems.value.length > 0
+  )
 })
 const translatedSourceLabel = computed(() =>
   resolvedContent.value.source === 'draft'
@@ -135,6 +151,16 @@ function handleSetLocale(event: Event): void {
 
   setLocalePreference(nextPreference)
   exportError.value = null
+}
+
+function handleSetNavigationMode(event: Event): void {
+  const nextMode = (event.target as HTMLSelectElement).value
+
+  if (nextMode !== 'labels' && nextMode !== 'headings') {
+    return
+  }
+
+  navigationMode.value = nextMode
 }
 
 onMounted(loadContent)
@@ -244,10 +270,37 @@ onMounted(loadContent)
 
     <section :class="$style.previewLayout">
       <aside
-        v-if="navigationItems.length > 0"
+        v-if="hasNavigationItems"
         :class="$style.sidebar"
       >
-        <EditorSidebarNavigation :items="navigationItems" />
+        <div :class="$style.navigationControl">
+          <label
+            :class="$style.controlLabel"
+            for="preview-navigation-mode-select"
+          >
+            {{ t('app.navigation.label') }}
+          </label>
+
+          <select
+            id="preview-navigation-mode-select"
+            :class="$style.controlSelect"
+            :value="navigationMode"
+            @change="handleSetNavigationMode"
+          >
+            <option value="headings">
+              {{ t('app.navigation.headings') }}
+            </option>
+            <option value="labels">
+              {{ t('app.navigation.labels') }}
+            </option>
+          </select>
+        </div>
+
+        <EditorSidebarNavigation
+          v-if="navigationItems.length > 0"
+          :items="navigationItems"
+          :title="t('app.navigation.title')"
+        />
       </aside>
 
       <div :class="$style.previewPanel">

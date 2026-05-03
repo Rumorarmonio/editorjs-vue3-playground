@@ -170,7 +170,16 @@
 }
 
 .sidebar {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 12px;
   min-width: 0;
+}
+
+.navigationControl {
+  display: grid;
+  gap: 6px;
 }
 
 .previewPanel {

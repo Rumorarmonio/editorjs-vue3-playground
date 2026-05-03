@@ -35,8 +35,15 @@ export {
   DEFAULT_EDITOR_DATA_VERSION,
 } from './types/create-editor-content-data'
 export { isEditorOutputData } from './types/editor-output'
-export { getBlockAnchorId } from './navigation/anchors'
-export { buildFlatNavigationItems } from './navigation/build-flat-navigation'
+export {
+  getBlockAnchorId,
+  getBlockRenderedAnchorId,
+  getHeaderAnchorId,
+} from './navigation/anchors'
+export {
+  buildFlatNavigationItems,
+  buildHeadingNavigationItems,
+} from './navigation/build-flat-navigation'
 export {
   editorBlockTuneNames,
   getDuplicateAnchorValues,

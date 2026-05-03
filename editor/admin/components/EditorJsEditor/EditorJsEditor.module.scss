@@ -765,8 +765,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  :global(.editor-media-gallery-tool__card-fields .editor-rich-field__editor),
-  :global(.editor-media-gallery-tool__card-fields .editor-plain-field:has(textarea)) {
+  :global(.editor-media-gallery-tool__card-fields .editor-plain-field:has(textarea, .editor-rich-field__editor)) {
     grid-column: 1 / -1;
   }
 

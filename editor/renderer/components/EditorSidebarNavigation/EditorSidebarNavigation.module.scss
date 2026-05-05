@@ -37,12 +37,17 @@
 
 .link {
   display: block;
-  padding: 6px 0;
+  padding: 6px 10px;
   overflow-wrap: anywhere;
   font-size: 0.9375rem;
   line-height: 1.4;
   text-decoration: none;
   color: var(--color-text);
+  background-color: transparent;
+  border-radius: 6px;
+  transition:
+    color var(--transition-base),
+    background-color var(--transition-base);
 
   &:hover,
   &:focus-visible {
@@ -50,6 +55,11 @@
     text-underline-offset: 0.2em;
     color: var(--color-accent);
   }
+}
+
+.activeLink {
+  color: var(--color-accent);
+  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
 }
 
 .nested {

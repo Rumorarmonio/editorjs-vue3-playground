@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer/EditorContentRenderer.vue'
 import EditorSidebarNavigation from '~~/editor/renderer/components/EditorSidebarNavigation/EditorSidebarNavigation.vue'
+import type { NavigationItem } from '~~/editor/shared'
 import {
   buildFlatNavigationItems,
   buildHeadingNavigationItems,
@@ -28,6 +29,8 @@ const importMessage = ref<string | null>(null)
 const importError = ref<string | null>(null)
 const exportError = ref<string | null>(null)
 const navigationMode = ref<'labels' | 'headings'>('headings')
+const activeAnchor = ref<string | null>(null)
+const previewPanelRef = ref<HTMLElement | null>(null)
 const headingNavigationItems = computed(() =>
   buildHeadingNavigationItems(resolvedContent.value.data),
 )
@@ -50,6 +53,94 @@ const translatedSourceLabel = computed(() =>
     ? t('app.common.localDraft')
     : t('app.common.defaultJson'),
 )
+let activeAnchorAnimationFrame = 0
+let activeAnchorResizeObserver: ResizeObserver | null = null
+
+function getFlattenedNavigationItems(items: NavigationItem[]): NavigationItem[] {
+  return items.flatMap((item) => [
+    item,
+    ...getFlattenedNavigationItems(item.children ?? []),
+  ])
+}
+
+function updateActiveAnchor(): void {
+  activeAnchorAnimationFrame = 0
+
+  if (!import.meta.client) {
+    return
+  }
+
+  const items = getFlattenedNavigationItems(navigationItems.value)
+  const anchoredSections = items
+    .map((item) => ({
+      anchor: item.anchor,
+      element: document.getElementById(item.anchor),
+    }))
+    .filter(
+      (
+        section,
+      ): section is {
+        anchor: string
+        element: HTMLElement
+      } => section.element instanceof HTMLElement,
+    )
+
+  if (anchoredSections.length === 0) {
+    activeAnchor.value = null
+    return
+  }
+
+  const activationOffset = 32
+  const isScrolledToPageEnd =
+    window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
+
+  if (isScrolledToPageEnd) {
+    activeAnchor.value = anchoredSections.at(-1)?.anchor ?? null
+    return
+  }
+
+  const activeSection = anchoredSections
+    .filter(
+      ({ element }) => element.getBoundingClientRect().top <= activationOffset,
+    )
+    .at(-1)
+
+  activeAnchor.value = activeSection?.anchor ?? anchoredSections[0]?.anchor ?? null
+}
+
+function scheduleActiveAnchorUpdate(): void {
+  if (!import.meta.client || activeAnchorAnimationFrame !== 0) {
+    return
+  }
+
+  activeAnchorAnimationFrame = window.requestAnimationFrame(updateActiveAnchor)
+}
+
+function cleanupActiveAnchorTracking(): void {
+  window.removeEventListener('scroll', scheduleActiveAnchorUpdate)
+  window.removeEventListener('resize', scheduleActiveAnchorUpdate)
+  activeAnchorResizeObserver?.disconnect()
+  activeAnchorResizeObserver = null
+
+  if (activeAnchorAnimationFrame !== 0) {
+    window.cancelAnimationFrame(activeAnchorAnimationFrame)
+    activeAnchorAnimationFrame = 0
+  }
+}
+
+function setupActiveAnchorResizeObserver(): void {
+  if (
+    !import.meta.client ||
+    !previewPanelRef.value ||
+    !('ResizeObserver' in window)
+  ) {
+    return
+  }
+
+  activeAnchorResizeObserver?.disconnect()
+  activeAnchorResizeObserver = new ResizeObserver(scheduleActiveAnchorUpdate)
+  activeAnchorResizeObserver.observe(previewPanelRef.value)
+}
 
 function handleExportJson(): void {
   if (!import.meta.client) {
@@ -137,7 +228,26 @@ function handleSetNavigationMode(event: Event): void {
   navigationMode.value = nextMode
 }
 
-onMounted(loadContent)
+onMounted(() => {
+  loadContent()
+  window.addEventListener('scroll', scheduleActiveAnchorUpdate, { passive: true })
+  window.addEventListener('resize', scheduleActiveAnchorUpdate)
+  void nextTick(() => {
+    setupActiveAnchorResizeObserver()
+    updateActiveAnchor()
+  })
+})
+
+watch(
+  navigationItems,
+  () => {
+    activeAnchor.value = null
+    void nextTick(updateActiveAnchor)
+  },
+  { deep: true },
+)
+
+onBeforeUnmount(cleanupActiveAnchorTracking)
 </script>
 
 <template>
@@ -230,12 +340,16 @@ onMounted(loadContent)
 
         <EditorSidebarNavigation
           v-if="navigationItems.length > 0"
+          :active-anchor="activeAnchor"
           :items="navigationItems"
           :title="t('app.navigation.title')"
         />
       </aside>
 
-      <div :class="$style.previewPanel">
+      <div
+        ref="previewPanelRef"
+        :class="$style.previewPanel"
+      >
         <EditorContentRenderer :content="resolvedContent.data" />
       </div>
     </section>

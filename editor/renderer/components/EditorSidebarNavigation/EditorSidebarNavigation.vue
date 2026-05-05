@@ -6,6 +6,7 @@ defineOptions({
 })
 
 defineProps<{
+  activeAnchor?: string | null
   items: NavigationItem[]
   isNested?: boolean
   title?: string
@@ -26,7 +27,11 @@ defineProps<{
         :class="$style.item"
       >
         <a
-          :class="$style.link"
+          :aria-current="activeAnchor === item.anchor ? 'location' : undefined"
+          :class="[
+            $style.link,
+            activeAnchor === item.anchor ? $style.activeLink : undefined,
+          ]"
           :href="`#${item.anchor}`"
         >
           {{ item.title }}
@@ -34,6 +39,7 @@ defineProps<{
         <EditorSidebarNavigation
           v-if="item.children?.length"
           :class="$style.nested"
+          :active-anchor="activeAnchor"
           :items="item.children"
           is-nested
         />
@@ -51,7 +57,11 @@ defineProps<{
       :class="$style.item"
     >
       <a
-        :class="$style.link"
+        :aria-current="activeAnchor === item.anchor ? 'location' : undefined"
+        :class="[
+          $style.link,
+          activeAnchor === item.anchor ? $style.activeLink : undefined,
+        ]"
         :href="`#${item.anchor}`"
       >
         {{ item.title }}
@@ -59,6 +69,7 @@ defineProps<{
       <EditorSidebarNavigation
         v-if="item.children?.length"
         :class="$style.nested"
+        :active-anchor="activeAnchor"
         :items="item.children"
         is-nested
       />

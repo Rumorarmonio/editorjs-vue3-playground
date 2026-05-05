@@ -169,23 +169,19 @@ onMounted(loadContent)
           @update:model-value="setTheme"
         />
 
-        <button
-          :class="$style.secondaryButton"
-          type="button"
+        <AppButton
           :disabled="!isReady"
           @click="handleExportJson"
         >
           {{ t('app.previewPage.exportJson') }}
-        </button>
+        </AppButton>
 
-        <button
-          :class="$style.secondaryButton"
-          type="button"
+        <AppButton
           :disabled="!isReady || resolvedContent.source !== 'draft'"
           @click="handleResetDraft"
         >
           {{ t('app.previewPage.resetDraft') }}
-        </button>
+        </AppButton>
 
         <NuxtLink
           :class="$style.editorLink"

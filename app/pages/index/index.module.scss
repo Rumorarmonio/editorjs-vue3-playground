@@ -43,27 +43,6 @@
   letter-spacing: 0;
 }
 
-.previewLink,
-.primaryButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 10px 16px;
-  font-weight: 700;
-  line-height: 1.2;
-  text-decoration: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.previewLink,
-.primaryButton {
-  color: var(--color-on-accent);
-  background: var(--color-accent);
-  border: 1px solid var(--color-accent);
-}
-
 .workspace {
   display: grid;
   align-items: start;

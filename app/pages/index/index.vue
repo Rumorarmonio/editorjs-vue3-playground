@@ -185,13 +185,12 @@ onBeforeUnmount(() => {
           @update:model-value="setTheme"
         />
 
-        <button
-          :class="$style.previewLink"
-          type="button"
+        <AppButton
+          variant="primary"
           @click="handleOpenPreview"
         >
           {{ t('app.editorPage.openPreview') }}
-        </button>
+        </AppButton>
       </div>
     </section>
 
@@ -229,13 +228,12 @@ onBeforeUnmount(() => {
         />
 
         <div :class="$style.actions">
-          <button
-            :class="$style.primaryButton"
-            type="button"
+          <AppButton
+            variant="primary"
             @click="handleSaveDraft"
           >
             {{ t('app.editorPage.saveDraft') }}
-          </button>
+          </AppButton>
 
           <p
             v-if="saveMessage"

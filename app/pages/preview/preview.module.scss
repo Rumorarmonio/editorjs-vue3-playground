@@ -67,8 +67,7 @@
   cursor: pointer;
 }
 
-.editorLink,
-.secondaryButton {
+.editorLink {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -84,18 +83,6 @@
   color: var(--color-on-accent);
   background: var(--color-accent);
   border: 1px solid var(--color-accent);
-}
-
-.secondaryButton {
-  color: var(--color-text);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  cursor: pointer;
-
-  &:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
 }
 
 .error {

@@ -65,14 +65,12 @@ function handleImportFile(event: Event): void {
         {{ t('app.common.importJson') }}
       </h2>
 
-      <button
-        :class="$style.secondaryButton"
-        type="button"
+      <AppButton
         :disabled="disabled"
         @click="handleChooseJsonFile"
       >
         {{ t('app.common.chooseFile') }}
-      </button>
+      </AppButton>
     </div>
 
     <textarea
@@ -93,14 +91,12 @@ function handleImportFile(event: Event): void {
     >
 
     <div :class="$style.actions">
-      <button
-        :class="$style.secondaryButton"
-        type="button"
+      <AppButton
         :disabled="disabled || modelValue.trim().length === 0"
         @click="emit('import-pasted')"
       >
         {{ t('app.common.importPastedJson') }}
-      </button>
+      </AppButton>
 
       <p
         v-if="message"

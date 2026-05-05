@@ -168,7 +168,7 @@ function cloneEditorContent(content: EditorContentData): EditorContentData {
   <div :class="$style.wrapper">
     <div
       ref="holderElement"
-      :class="$style.holder"
+      :class="[$style.holder, 'editor-admin-editor']"
     />
     <p
       v-if="!isReady && !errorMessage"

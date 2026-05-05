@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EditorJsEditor from '~~/editor/admin/components/EditorJsEditor/EditorJsEditor.vue'
 import type { EditorContentData } from '~~/editor/shared'
-import { isLocalePreference, type AppLocalePreference } from '~~/i18n'
+import type { AppLocalePreference } from '~~/i18n'
 
 const { t } = useI18n()
 const {
@@ -11,9 +11,8 @@ const {
   currentLocalePreference,
   editorMessages,
   setLocalePreference,
-  supportedLocales,
 } = useAppLocale()
-const { appThemeOptions, currentTheme, setTheme } = useAppTheme()
+const { currentTheme, setTheme } = useAppTheme()
 
 const {
   importDraftJson,
@@ -114,12 +113,6 @@ function handleChooseJsonFile(): void {
   importFileInputRef.value?.click()
 }
 
-function handleSetTheme(event: Event): void {
-  setTheme(
-    (event.target as HTMLSelectElement).value as Parameters<typeof setTheme>[0],
-  )
-}
-
 async function handleImportFile(event: Event): Promise<void> {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -166,16 +159,6 @@ async function handleSetLocalePreference(
   }
 }
 
-function handleSetLocale(event: Event): void {
-  const nextPreference = (event.target as HTMLSelectElement).value
-
-  if (!isLocalePreference(nextPreference)) {
-    return
-  }
-
-  void handleSetLocalePreference(nextPreference)
-}
-
 if (import.meta.client) {
   document.addEventListener('keydown', stopHeaderTabPropagation, true)
 }
@@ -204,55 +187,17 @@ onBeforeUnmount(() => {
         :class="$style.headerActions"
         @keydown.stop
       >
-        <div :class="$style.localeControl">
-          <label
-            :class="$style.controlLabel"
-            for="editor-locale-select"
-          >
-            {{ t('app.locale.label') }}
-          </label>
+        <AppLocaleSelect
+          id="editor-locale-select"
+          :model-value="currentLocalePreference"
+          @update:model-value="handleSetLocalePreference"
+        />
 
-          <select
-            id="editor-locale-select"
-            :class="$style.controlSelect"
-            :value="currentLocalePreference"
-            @change="handleSetLocale"
-          >
-            <option
-              v-for="localeOption in supportedLocales"
-              :key="localeOption.code"
-              :value="localeOption.code"
-            >
-              {{ t(`app.locale.${localeOption.code}`) }}
-            </option>
-          </select>
-        </div>
-
-        <div
-          :class="$style.themeControl"
-        >
-          <label
-            :class="$style.controlLabel"
-            for="editor-theme-select"
-          >
-            {{ t('app.theme.label') }}
-          </label>
-
-          <select
-            id="editor-theme-select"
-            :class="$style.controlSelect"
-            :value="currentTheme"
-            @change="handleSetTheme"
-          >
-            <option
-              v-for="themeOption in appThemeOptions"
-              :key="themeOption"
-              :value="themeOption"
-            >
-              {{ t(`app.theme.${themeOption}`) }}
-            </option>
-          </select>
-        </div>
+        <AppThemeSelect
+          id="editor-theme-select"
+          :model-value="currentTheme"
+          @update:model-value="setTheme"
+        />
 
         <button
           :class="$style.previewLink"

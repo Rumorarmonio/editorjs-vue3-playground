@@ -12,6 +12,7 @@ import {
   type TwoColumnsContentData,
 } from '~~/editor/shared/blocks/custom-block-data'
 import type { ListBlockItem } from '~~/editor/shared/blocks/standard-block-data'
+import { isAllowedMediaUrl } from '~~/editor/shared/entities/media'
 import type { EditorContentData } from '~~/editor/shared/types/content'
 import {
   getCurrentEditorMessages,
@@ -328,18 +329,4 @@ function hasTwoColumnsContent(data: TwoColumnsContentData): boolean {
 
 function hasListItemContent(item: ListBlockItem): boolean {
   return hasText(item.content) || item.items.some(hasListItemContent)
-}
-
-function isAllowedMediaUrl(url: string): boolean {
-  return (
-    url.startsWith('https://') ||
-    url.startsWith('http://') ||
-    url.startsWith('blob:') ||
-    url.startsWith('data:image/svg+xml') ||
-    url.startsWith('data:image/') ||
-    url.startsWith('data:video/') ||
-    (url.startsWith('/') && !url.startsWith('//')) ||
-    url.startsWith('./') ||
-    url.startsWith('../')
-  )
 }

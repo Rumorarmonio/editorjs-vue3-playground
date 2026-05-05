@@ -8,6 +8,7 @@ import type {
   EditorOutputBlock,
   EditorOutputData,
 } from '~~/editor/shared/types/editor-output'
+import { isAllowedMediaUrl } from '~~/editor/shared/entities/media'
 
 export const noticeBlockTypes = ['info', 'success', 'warning'] as const
 
@@ -571,20 +572,6 @@ function normalizeMediaUrlValue(value: unknown): string {
   const url = value.trim()
 
   return isAllowedMediaUrl(url) ? url : ''
-}
-
-function isAllowedMediaUrl(url: string): boolean {
-  return (
-    url.startsWith('https://') ||
-    url.startsWith('http://') ||
-    url.startsWith('blob:') ||
-    url.startsWith('data:image/svg+xml') ||
-    url.startsWith('data:image/') ||
-    url.startsWith('data:video/') ||
-    (url.startsWith('/') && !url.startsWith('//')) ||
-    url.startsWith('./') ||
-    url.startsWith('../')
-  )
 }
 
 function createMediaGalleryItemId(): string {

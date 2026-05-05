@@ -69,6 +69,7 @@ export {
   textColorInlineClassNames,
   textColorInlineOptions,
 } from './inline/text-color'
+export { isAllowedMediaUrl } from './entities/media'
 export {
   findValidationMessage,
   getValidationSummary,

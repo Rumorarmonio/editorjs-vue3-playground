@@ -86,61 +86,13 @@
   }
 }
 
-.success,
 .error {
   margin: 0;
   font-size: 0.9375rem;
 }
 
-.success {
-  color: var(--color-accent);
-}
-
 .error {
   color: var(--color-danger);
-}
-
-.importPanel {
-  display: grid;
-  gap: 12px;
-  padding: 20px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-}
-
-.importHeader,
-.importActions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-
-.importHeader {
-  justify-content: space-between;
-}
-
-.importTitle {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.3;
-}
-
-.importTextarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 12px;
-  font: 0.875rem/1.5 monospace;
-  color: var(--color-text);
-  resize: vertical;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-}
-
-.fileInput {
-  display: none;
 }
 
 .previewLayout {
@@ -180,12 +132,6 @@
   }
 
   .actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .importHeader,
-  .importActions {
     flex-direction: column;
     align-items: stretch;
   }

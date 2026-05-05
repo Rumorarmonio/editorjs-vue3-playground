@@ -28,7 +28,6 @@ const importMessage = ref<string | null>(null)
 const importError = ref<string | null>(null)
 const exportError = ref<string | null>(null)
 const navigationMode = ref<'labels' | 'headings'>('headings')
-const importFileInputRef = ref<HTMLInputElement | null>(null)
 const headingNavigationItems = computed(() =>
   buildHeadingNavigationItems(resolvedContent.value.data),
 )
@@ -112,25 +111,12 @@ function handleImportPastedJson(): void {
   handleImportJson(importJsonText.value)
 }
 
-function handleChooseJsonFile(): void {
-  importFileInputRef.value?.click()
-}
-
-async function handleImportFile(event: Event): Promise<void> {
-  const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
-
-  if (!file) {
-    return
-  }
-
+async function handleImportFile(file: File): Promise<void> {
   try {
     handleImportJson(await file.text())
   } catch {
     importMessage.value = null
     importError.value = t('app.common.importReadError')
-  } finally {
-    input.value = ''
   }
 }
 
@@ -258,70 +244,15 @@ onMounted(loadContent)
       </div>
     </section>
 
-    <section
-      :class="$style.importPanel"
-      aria-labelledby="import-json-title"
-    >
-      <div :class="$style.importHeader">
-        <h2
-          id="import-json-title"
-          :class="$style.importTitle"
-        >
-          {{ t('app.common.importJson') }}
-        </h2>
-
-        <button
-          :class="$style.secondaryButton"
-          type="button"
-          :disabled="!isReady"
-          @click="handleChooseJsonFile"
-        >
-          {{ t('app.common.chooseFile') }}
-        </button>
-      </div>
-
-      <textarea
-        v-model="importJsonText"
-        :class="$style.importTextarea"
-        rows="5"
-        spellcheck="false"
-        :placeholder="t('app.common.importPlaceholder')"
-      />
-
-      <input
-        ref="importFileInputRef"
-        :class="$style.fileInput"
-        type="file"
-        accept="application/json,.json"
-        @change="handleImportFile"
-      >
-
-      <div :class="$style.importActions">
-        <button
-          :class="$style.secondaryButton"
-          type="button"
-          :disabled="!isReady || importJsonText.trim().length === 0"
-          @click="handleImportPastedJson"
-        >
-          {{ t('app.common.importPastedJson') }}
-        </button>
-
-        <p
-          v-if="importMessage"
-          :class="$style.success"
-        >
-          {{ importMessage }}
-        </p>
-
-        <p
-          v-if="importError"
-          :class="$style.error"
-          role="alert"
-        >
-          {{ importError }}
-        </p>
-      </div>
-    </section>
+    <ImportJsonPanel
+      id="preview-import-json"
+      v-model="importJsonText"
+      :disabled="!isReady"
+      :error="importError"
+      :message="importMessage"
+      @import-file="handleImportFile"
+      @import-pasted="handleImportPastedJson"
+    />
   </main>
 </template>
 

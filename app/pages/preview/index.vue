@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer/EditorContentRenderer.vue'
-import EditorSidebarNavigation from '~~/editor/renderer/components/navigation/EditorSidebarNavigation/EditorSidebarNavigation.vue'
+import EditorSidebarNavigation from '~~/editor/renderer/components/EditorSidebarNavigation/EditorSidebarNavigation.vue'
 import {
   buildFlatNavigationItems,
   buildHeadingNavigationItems,

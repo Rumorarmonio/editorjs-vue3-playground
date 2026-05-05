@@ -9,32 +9,19 @@ import {
   useCssModule,
   watch,
 } from 'vue'
-import EditorContentList from '~~/editor/renderer/components/EditorContentList/EditorContentList.vue'
-import EditorMediaGalleryBlock from '~~/editor/renderer/components/EditorMediaGalleryBlock/EditorMediaGalleryBlock.vue'
-import {
-  getInlineText,
-  sanitizeInlineHtml,
-} from '~~/editor/renderer/helpers/sanitize-inline-html'
-import { normalizeRichParagraphContent } from '~~/editor/renderer/helpers/rich-field-content'
+import EditorContentBlock from '~~/editor/renderer/components/blocks/EditorContentBlock/EditorContentBlock.vue'
 import type {
-  EditorBlock,
-  EditorContentBlock,
+  EditorContentBlock as EditorContentBlockData,
   EditorContentData,
-  TwoColumnsContentData,
 } from '~~/editor/shared'
 import {
-  getAllowedEmbedIframeUrl,
   getBlockRenderedAnchorId,
   getKnownBlockTuneData,
-  normalizeMaskedFieldsDemoBlockData,
-  normalizeMediaGalleryBlockData,
-  normalizeNoticeBlockData,
-  normalizeSectionIntroBlockData,
-  normalizeTwoColumnsBlockData,
 } from '~~/editor/shared'
 
 const props = defineProps<{
   content: EditorContentData
+  variant?: 'default' | 'sectionIntro'
 }>()
 
 const style = useCssModule()
@@ -53,133 +40,18 @@ const spacingValueMap = {
   medium: '24px',
   large: '40px',
 } as const
-const nativeFancyboxVideoServices = new Set(['youtube', 'vimeo'])
 
-function isHeaderBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'header'> {
-  return block.type === 'header'
-}
-
-function isParagraphBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'paragraph'> {
-  return block.type === 'paragraph'
-}
-
-function isListBlock(block: EditorContentBlock): block is EditorBlock<'list'> {
-  return block.type === 'list'
-}
-
-function isQuoteBlock(block: EditorContentBlock): block is EditorBlock<'quote'> {
-  return block.type === 'quote'
-}
-
-function isDelimiterBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'delimiter'> {
-  return block.type === 'delimiter'
-}
-
-function isTableBlock(block: EditorContentBlock): block is EditorBlock<'table'> {
-  return block.type === 'table'
-}
-
-function isEmbedBlock(block: EditorContentBlock): block is EditorBlock<'embed'> {
-  return block.type === 'embed'
-}
-
-function isImageBlock(block: EditorContentBlock): block is EditorBlock<'image'> {
-  return block.type === 'image'
-}
-
-function isNoticeBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'notice'> {
-  return block.type === 'notice'
-}
-
-function isSectionIntroBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'sectionIntro'> {
-  return block.type === 'sectionIntro'
-}
-
-function isTwoColumnsBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'twoColumns'> {
-  return block.type === 'twoColumns'
-}
-
-function isMediaGalleryBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'mediaGallery'> {
-  return block.type === 'mediaGallery'
-}
-
-function isMaskedFieldsDemoBlock(
-  block: EditorContentBlock,
-): block is EditorBlock<'maskedFieldsDemo'> {
-  return block.type === 'maskedFieldsDemo'
-}
-
-function asEditorContentData(data: TwoColumnsContentData): EditorContentData {
-  return data as EditorContentData
-}
-
-function getTwoColumnsLayoutClass(
-  layout: EditorBlock<'twoColumns'>['data']['layout'],
-): string | undefined {
-  switch (layout) {
-    case 'leftWide':
-      return style.twoColumnsLeftWide
-    case 'rightWide':
-      return style.twoColumnsRightWide
-    default:
-      return undefined
-  }
-}
-
-function getHeaderTag(level: EditorBlock<'header'>['data']['level']): string {
-  return `h${level}`
-}
-
-function getBlockLabel(block: EditorContentBlock): string | undefined {
+function getBlockLabel(block: EditorContentBlockData): string | undefined {
   return getKnownBlockTuneData(block.tunes).label?.label
 }
 
-function getBlockAnimation(block: EditorContentBlock): string | undefined {
+function getBlockAnimation(block: EditorContentBlockData): string | undefined {
   const animation = getKnownBlockTuneData(block.tunes).animation?.type
 
   return animation && animation !== 'none' ? animation : undefined
 }
 
-function shouldOpenEmbedInFancybox(block: EditorBlock<'embed'>): boolean {
-  return (
-    getKnownBlockTuneData(block.tunes).embedDisplay?.mode === 'fancybox' &&
-    Boolean(getAllowedEmbedIframeUrl(block.data))
-  )
-}
-
-function getEmbedFancyboxCaption(block: EditorBlock<'embed'>): string {
-  return getInlineText(block.data.caption || block.data.source)
-}
-
-function isNativeFancyboxVideo(block: EditorBlock<'embed'>): boolean {
-  return nativeFancyboxVideoServices.has(block.data.service)
-}
-
-function getEmbedFancyboxUrl(block: EditorBlock<'embed'>): string {
-  return isNativeFancyboxVideo(block)
-    ? block.data.source
-    : (getAllowedEmbedIframeUrl(block.data) ?? block.data.source)
-}
-
-function getEmbedFancyboxType(block: EditorBlock<'embed'>): string | undefined {
-  return isNativeFancyboxVideo(block) ? undefined : 'iframe'
-}
-
-function getBlockClasses(block: EditorContentBlock): string[] {
+function getBlockClasses(block: EditorContentBlockData): string[] {
   const classes = style.block ? [style.block] : []
 
   if (getBlockAnimation(block) && animatedBlockClass && animationPreparedClass) {
@@ -191,8 +63,8 @@ function getBlockClasses(block: EditorContentBlock): string[] {
 }
 
 function getBlockStyle(
-  blocks: EditorContentBlock[],
-  block: EditorContentBlock,
+  blocks: EditorContentBlockData[],
+  block: EditorContentBlockData,
   index: number,
 ): Record<string, string> {
   if (index === 0) {
@@ -341,243 +213,11 @@ onBeforeUnmount(() => {
         :data-block-label="getBlockLabel(block)"
         :style="getBlockStyle(content.blocks, block, index)"
       >
-        <component
-          :is="getHeaderTag(block.data.level)"
-          v-if="isHeaderBlock(block)"
-          :class="$style.heading"
-        >
-          <span v-html="sanitizeInlineHtml(block.data.text)" />
-        </component>
-
-        <p
-          v-else-if="isParagraphBlock(block)"
-          :class="$style.paragraph"
-          v-html="sanitizeInlineHtml(block.data.text)"
+        <EditorContentBlock
+          :block="block"
+          :fallback-block-id="block.id ?? `${index}`"
+          :variant="variant ?? 'default'"
         />
-
-        <EditorContentList
-          v-else-if="isListBlock(block)"
-          :items="block.data.items"
-          :style="block.data.style"
-        />
-
-        <blockquote
-          v-else-if="isQuoteBlock(block)"
-          :class="$style.quote"
-        >
-          <p v-html="sanitizeInlineHtml(block.data.text)" />
-          <footer
-            v-if="block.data.caption"
-            v-html="sanitizeInlineHtml(block.data.caption)"
-          />
-        </blockquote>
-
-        <hr
-          v-else-if="isDelimiterBlock(block)"
-          :class="$style.delimiter"
-        />
-
-        <div
-          v-else-if="isTableBlock(block)"
-          :class="$style.tableWrap"
-        >
-          <table :class="$style.table">
-            <tbody>
-              <tr
-                v-for="(row, rowIndex) in block.data.content"
-                :key="rowIndex"
-              >
-                <component
-                  :is="block.data.withHeadings && rowIndex === 0 ? 'th' : 'td'"
-                  v-for="(cell, cellIndex) in row"
-                  :key="cellIndex"
-                >
-                  <span v-html="sanitizeInlineHtml(cell)" />
-                </component>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <figure
-          v-else-if="isEmbedBlock(block)"
-          :class="$style.embed"
-        >
-          <div
-            v-if="shouldOpenEmbedInFancybox(block)"
-            :class="$style.embedFancyboxPreview"
-          >
-            <iframe
-              :height="block.data.height ?? 320"
-              :src="getAllowedEmbedIframeUrl(block.data) ?? ''"
-              :title="getInlineText(block.data.caption || block.data.source)"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-              tabindex="-1"
-            />
-            <a
-              :aria-label="getEmbedFancyboxCaption(block)"
-              :class="$style.embedFancyboxOverlay"
-              :data-caption="getEmbedFancyboxCaption(block)"
-              data-aspect-ratio="16 / 9"
-              data-editor-embed-fancybox
-              data-fancybox="editor-embeds"
-              data-height="810"
-              :data-type="getEmbedFancyboxType(block)"
-              data-width="1440"
-              :href="getEmbedFancyboxUrl(block)"
-            />
-          </div>
-          <iframe
-            v-else-if="getAllowedEmbedIframeUrl(block.data)"
-            :height="block.data.height ?? 320"
-            :src="getAllowedEmbedIframeUrl(block.data) ?? ''"
-            :title="getInlineText(block.data.caption || block.data.source)"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-          />
-          <a
-            v-else
-            :href="block.data.source"
-            rel="noreferrer"
-            target="_blank"
-          >
-            {{ block.data.service || block.data.source }}
-          </a>
-          <figcaption
-            v-if="block.data.caption"
-            v-html="sanitizeInlineHtml(block.data.caption)"
-          />
-        </figure>
-
-        <figure
-          v-else-if="isImageBlock(block)"
-          :class="$style.image"
-        >
-          <img
-            :alt="block.data.alt ?? getInlineText(block.data.caption ?? '')"
-            :src="block.data.file.url"
-          />
-          <figcaption
-            v-if="block.data.caption"
-            v-html="sanitizeInlineHtml(block.data.caption)"
-          />
-        </figure>
-
-        <aside
-          v-else-if="isNoticeBlock(block)"
-          :class="[
-            $style.notice,
-            $style[`notice_${normalizeNoticeBlockData(block.data).type}`],
-          ]"
-        >
-          <p
-            v-if="normalizeNoticeBlockData(block.data).title"
-            :class="$style.noticeTitle"
-          >
-            {{ normalizeNoticeBlockData(block.data).title }}
-          </p>
-          <p
-            v-if="normalizeNoticeBlockData(block.data).text"
-            :class="$style.noticeText"
-          >
-            {{ normalizeNoticeBlockData(block.data).text }}
-          </p>
-        </aside>
-
-        <section
-          v-else-if="isSectionIntroBlock(block)"
-          :class="$style.sectionIntro"
-        >
-          <h2
-            v-if="normalizeSectionIntroBlockData(block.data).title"
-            :class="$style.sectionIntroTitle"
-          >
-            {{ normalizeSectionIntroBlockData(block.data).title }}
-          </h2>
-          <EditorContentRenderer
-            v-if="normalizeRichParagraphContent(normalizeSectionIntroBlockData(block.data).description).blocks.length"
-            :class="$style.sectionIntroContent"
-            :content="normalizeRichParagraphContent(normalizeSectionIntroBlockData(block.data).description)"
-          />
-        </section>
-
-        <section
-          v-else-if="isTwoColumnsBlock(block)"
-          :class="[
-            $style.twoColumns,
-            getTwoColumnsLayoutClass(normalizeTwoColumnsBlockData(block.data).layout),
-            normalizeTwoColumnsBlockData(block.data).isReversed
-              ? $style.twoColumnsReversed
-              : '',
-          ]"
-        >
-          <EditorContentRenderer
-            v-if="normalizeTwoColumnsBlockData(block.data).left.blocks.length"
-            :class="$style.twoColumnsColumn"
-            :content="asEditorContentData(normalizeTwoColumnsBlockData(block.data).left)"
-          />
-          <div
-            v-else
-            :class="$style.twoColumnsColumn"
-          />
-          <EditorContentRenderer
-            v-if="normalizeTwoColumnsBlockData(block.data).right.blocks.length"
-            :class="$style.twoColumnsColumn"
-            :content="asEditorContentData(normalizeTwoColumnsBlockData(block.data).right)"
-          />
-          <div
-            v-else
-            :class="$style.twoColumnsColumn"
-          />
-        </section>
-
-        <EditorMediaGalleryBlock
-          v-else-if="isMediaGalleryBlock(block)"
-          :data="normalizeMediaGalleryBlockData(block.data)"
-          :fallback-gallery-id="`media-gallery-${block.id ?? index}`"
-        />
-
-        <section
-          v-else-if="isMaskedFieldsDemoBlock(block)"
-          :class="$style.maskedFieldsDemo"
-        >
-          <dl :class="$style.maskedFieldsDemoList">
-            <div>
-              <dt>Phone</dt>
-              <dd>{{ normalizeMaskedFieldsDemoBlockData(block.data).phone || '-' }}</dd>
-            </div>
-            <div>
-              <dt>Date</dt>
-              <dd>{{ normalizeMaskedFieldsDemoBlockData(block.data).date || '-' }}</dd>
-            </div>
-            <div>
-              <dt>Time</dt>
-              <dd>{{ normalizeMaskedFieldsDemoBlockData(block.data).time || '-' }}</dd>
-            </div>
-            <div>
-              <dt>Price</dt>
-              <dd>{{ normalizeMaskedFieldsDemoBlockData(block.data).price || '-' }}</dd>
-            </div>
-            <div>
-              <dt>Card</dt>
-              <dd>{{ normalizeMaskedFieldsDemoBlockData(block.data).card || '-' }}</dd>
-            </div>
-            <div>
-              <dt>Email</dt>
-              <dd>{{ normalizeMaskedFieldsDemoBlockData(block.data).email || '-' }}</dd>
-            </div>
-          </dl>
-        </section>
-
-        <pre
-          v-else
-          :class="$style.unsupported"
-        >{{ block }}</pre>
       </div>
     </template>
   </article>

@@ -1,0 +1,47 @@
+.embed {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+
+  figcaption {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+
+  iframe {
+    width: 100%;
+    max-width: 100%;
+    background: var(--color-media-background);
+    border: 0;
+    border-radius: 6px;
+  }
+}
+
+.embedFancyboxPreview {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-media-background);
+  border-radius: 6px;
+
+  iframe {
+    pointer-events: none;
+  }
+}
+
+.embedFancyboxOverlay {
+  position: absolute;
+  inset: 0;
+  text-decoration: none;
+  background: transparent;
+  transition: background var(--transition-base);
+
+  &:hover,
+  &:focus-visible {
+    background: rgb(0 0 0 / 0.22);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}

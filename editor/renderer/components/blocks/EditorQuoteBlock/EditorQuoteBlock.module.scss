@@ -1,0 +1,17 @@
+.quote {
+  margin: 0;
+  padding: 4px 0 4px 20px;
+  color: var(--color-muted);
+  border-left: 4px solid var(--color-accent);
+
+  p,
+  footer {
+    margin: 0;
+  }
+
+  footer {
+    margin-top: 8px;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+  }
+}

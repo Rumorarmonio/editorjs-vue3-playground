@@ -1,0 +1,17 @@
+.image {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+
+  figcaption {
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+  }
+
+  img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+}

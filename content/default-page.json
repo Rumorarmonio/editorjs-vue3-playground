@@ -259,6 +259,11 @@
         "width": 580,
         "height": 326,
         "caption": "Embed block caption with <b>bold</b>, <u class=\"cdx-underline\">underline</u>, and <code class=\"inline-code\">inline code</code>"
+      },
+      "tunes": {
+        "embedDisplay": {
+          "mode": "fancybox"
+        }
       }
     },
     {
@@ -281,6 +286,9 @@
         "caption": "Vimeo embed example"
       },
       "tunes": {
+        "embedDisplay": {
+          "mode": "fancybox"
+        },
         "spacing": {
           "top": "large"
         }
@@ -306,6 +314,65 @@
         "caption": "Coub embed example"
       },
       "tunes": {
+        "embedDisplay": {
+          "mode": "fancybox"
+        },
+        "spacing": {
+          "top": "large"
+        }
+      }
+    },
+    {
+      "id": "embed-rutube-header",
+      "type": "header",
+      "data": {
+        "text": "Embed Rutube video",
+        "level": 3
+      }
+    },
+    {
+      "id": "embed-rutube",
+      "type": "embed",
+      "data": {
+        "service": "rutube",
+        "source": "https://rutube.ru/video/d743ef3185a1f4135926cdfe3697f1eb/",
+        "embed": "https://rutube.ru/play/embed/d743ef3185a1f4135926cdfe3697f1eb",
+        "width": 720,
+        "height": 405,
+        "caption": "Rutube Fancybox embed example"
+      },
+      "tunes": {
+        "embedDisplay": {
+          "mode": "fancybox"
+        },
+        "spacing": {
+          "top": "large"
+        }
+      }
+    },
+    {
+      "id": "embed-vk-header",
+      "type": "header",
+      "data": {
+        "text": "Embed VK Video in Fancybox",
+        "level": 3
+      }
+    },
+    {
+      "id": "embed-vk",
+      "type": "embed",
+      "data": {
+        "service": "vk",
+        "source": "https://vk.com/video_ext.php?oid=-227436825&id=456252525&hd=4",
+        "embed": "https://vk.com/video_ext.php?oid=-227436825&id=456252525&hd=4",
+        "width": 853,
+        "height": 480,
+        "caption": "VK Video Fancybox embed example"
+      },
+      "tunes": {
+        "embedDisplay": {
+          "mode": "fancybox"
+        },
         "spacing": {
           "top": "large"
         }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Fancybox } from '@fancyapps/ui'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
 import {
   nextTick,
   onBeforeUnmount,
@@ -42,6 +44,7 @@ let animationObserver: IntersectionObserver | null = null
 const animatedBlockClass = style.animatedBlock ?? ''
 const animationPreparedClass = style.animationPrepared ?? ''
 const animationVisibleClass = style.animationVisible ?? ''
+const embedFancyboxSelector = '[data-editor-embed-fancybox]'
 
 const defaultBlockSpacing = '18px'
 const spacingValueMap = {
@@ -50,6 +53,7 @@ const spacingValueMap = {
   medium: '24px',
   large: '40px',
 } as const
+const nativeFancyboxVideoServices = new Set(['youtube', 'vimeo'])
 
 function isHeaderBlock(
   block: EditorContentBlock,
@@ -150,6 +154,31 @@ function getBlockAnimation(block: EditorContentBlock): string | undefined {
   return animation && animation !== 'none' ? animation : undefined
 }
 
+function shouldOpenEmbedInFancybox(block: EditorBlock<'embed'>): boolean {
+  return (
+    getKnownBlockTuneData(block.tunes).embedDisplay?.mode === 'fancybox' &&
+    Boolean(getAllowedEmbedIframeUrl(block.data))
+  )
+}
+
+function getEmbedFancyboxCaption(block: EditorBlock<'embed'>): string {
+  return getInlineText(block.data.caption || block.data.source)
+}
+
+function isNativeFancyboxVideo(block: EditorBlock<'embed'>): boolean {
+  return nativeFancyboxVideoServices.has(block.data.service)
+}
+
+function getEmbedFancyboxUrl(block: EditorBlock<'embed'>): string {
+  return isNativeFancyboxVideo(block)
+    ? block.data.source
+    : (getAllowedEmbedIframeUrl(block.data) ?? block.data.source)
+}
+
+function getEmbedFancyboxType(block: EditorBlock<'embed'>): string | undefined {
+  return isNativeFancyboxVideo(block) ? undefined : 'iframe'
+}
+
 function getBlockClasses(block: EditorContentBlock): string[] {
   const classes = style.block ? [style.block] : []
 
@@ -242,19 +271,58 @@ function cleanupAnimationObserver(): void {
   animationObserver = null
 }
 
+function bindEmbedFancybox(): void {
+  if (!import.meta.client || !rendererRef.value) {
+    return
+  }
+
+  Fancybox.unbind(rendererRef.value, embedFancyboxSelector)
+  Fancybox.bind(rendererRef.value, embedFancyboxSelector, {
+    Hash: false,
+    hideClass: 'editor-embed-fancybox-slide-out-up',
+    mainStyle: {
+      '--f-html-padding': '0',
+      '--f-video-width': 'min(1440px, 96vw)',
+      '--f-video-height': 'min(810px, 88vh)',
+    },
+    showClass: 'editor-embed-fancybox-slide-in-up',
+    Carousel: {
+      Video: {
+        autoplay: true,
+      },
+    },
+  })
+}
+
+function cleanupEmbedFancybox(): void {
+  if (!import.meta.client || !rendererRef.value) {
+    return
+  }
+
+  Fancybox.unbind(rendererRef.value, embedFancyboxSelector)
+}
+
+function refreshRendererEnhancements(): void {
+  setupAnimationObserver()
+  bindEmbedFancybox()
+}
+
 onMounted(() => {
-  void nextTick(setupAnimationObserver)
+  void nextTick(refreshRendererEnhancements)
 })
 
 watch(
   () => props.content,
   () => {
-    void nextTick(setupAnimationObserver)
+    void nextTick(refreshRendererEnhancements)
   },
   { deep: true },
 )
 
-onBeforeUnmount(cleanupAnimationObserver)
+onBeforeUnmount(() => {
+  cleanupAnimationObserver()
+  cleanupEmbedFancybox()
+})
 </script>
 
 <template>
@@ -335,8 +403,35 @@ onBeforeUnmount(cleanupAnimationObserver)
           v-else-if="isEmbedBlock(block)"
           :class="$style.embed"
         >
+          <div
+            v-if="shouldOpenEmbedInFancybox(block)"
+            :class="$style.embedFancyboxPreview"
+          >
+            <iframe
+              :height="block.data.height ?? 320"
+              :src="getAllowedEmbedIframeUrl(block.data) ?? ''"
+              :title="getInlineText(block.data.caption || block.data.source)"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              tabindex="-1"
+            />
+            <a
+              :aria-label="getEmbedFancyboxCaption(block)"
+              :class="$style.embedFancyboxOverlay"
+              :data-caption="getEmbedFancyboxCaption(block)"
+              data-aspect-ratio="16 / 9"
+              data-editor-embed-fancybox
+              data-fancybox="editor-embeds"
+              data-height="810"
+              :data-type="getEmbedFancyboxType(block)"
+              data-width="1440"
+              :href="getEmbedFancyboxUrl(block)"
+            />
+          </div>
           <iframe
-            v-if="getAllowedEmbedIframeUrl(block.data)"
+            v-else-if="getAllowedEmbedIframeUrl(block.data)"
             :height="block.data.height ?? 320"
             :src="getAllowedEmbedIframeUrl(block.data) ?? ''"
             :title="getInlineText(block.data.caption || block.data.source)"

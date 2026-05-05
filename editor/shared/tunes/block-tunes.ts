@@ -5,7 +5,11 @@ export const editorBlockTuneNames = [
   'animation',
 ] as const
 
-export type EditorBlockTuneName = (typeof editorBlockTuneNames)[number]
+export const embedDisplayTuneName = 'embedDisplay' as const
+
+export type EditorBlockTuneName =
+  | (typeof editorBlockTuneNames)[number]
+  | typeof embedDisplayTuneName
 
 export interface AnchorTuneData {
   anchor?: string
@@ -28,11 +32,18 @@ export interface AnimationTuneData {
   type?: AnimationTuneValue
 }
 
+export type EmbedDisplayTuneMode = 'inline' | 'fancybox'
+
+export interface EmbedDisplayTuneData {
+  mode?: EmbedDisplayTuneMode
+}
+
 export interface KnownEditorBlockTuneData {
   anchor?: AnchorTuneData
   spacing?: SpacingTuneData
   label?: LabelTuneData
   animation?: AnimationTuneData
+  embedDisplay?: EmbedDisplayTuneData
 }
 
 export const spacingTuneValues = [
@@ -48,6 +59,11 @@ export const animationTuneValues = [
   'fade-left',
   'fade-right',
 ] as const satisfies readonly AnimationTuneValue[]
+
+export const embedDisplayTuneModes = [
+  'inline',
+  'fancybox',
+] as const satisfies readonly EmbedDisplayTuneMode[]
 
 const anchorMaxLength = 80
 const labelMaxLength = 120
@@ -93,6 +109,18 @@ export function normalizeAnimationTuneData(value: unknown): AnimationTuneData {
   }
 }
 
+export function normalizeEmbedDisplayTuneData(
+  value: unknown,
+): EmbedDisplayTuneData {
+  if (!isRecord(value)) {
+    return {}
+  }
+
+  return {
+    mode: normalizeEmbedDisplayTuneMode(value.mode),
+  }
+}
+
 export function getKnownBlockTuneData(
   tunes: Record<string, unknown> | undefined,
 ): KnownEditorBlockTuneData {
@@ -105,6 +133,7 @@ export function getKnownBlockTuneData(
     spacing: normalizeSpacingTuneData(tunes.spacing),
     label: normalizeLabelTuneData(tunes.label),
     animation: normalizeAnimationTuneData(tunes.animation),
+    embedDisplay: normalizeEmbedDisplayTuneData(tunes.embedDisplay),
   }
 }
 
@@ -141,7 +170,8 @@ export function isKnownBlockTuneData(value: unknown): boolean {
     isValidAnchorTuneData(value.anchor) &&
     isValidSpacingTuneData(value.spacing) &&
     isValidLabelTuneData(value.label) &&
-    isValidAnimationTuneData(value.animation)
+    isValidAnimationTuneData(value.animation) &&
+    isValidEmbedDisplayTuneData(value.embedDisplay)
   )
 }
 
@@ -228,6 +258,18 @@ function isValidAnimationTuneData(value: unknown): boolean {
   return value.type === undefined || isAnimationTuneValue(value.type)
 }
 
+function isValidEmbedDisplayTuneData(value: unknown): boolean {
+  if (value === undefined) {
+    return true
+  }
+
+  if (!isRecord(value)) {
+    return false
+  }
+
+  return value.mode === undefined || isEmbedDisplayTuneMode(value.mode)
+}
+
 function normalizeSpacingTuneValue(
   value: unknown,
 ): SpacingTuneValue | undefined {
@@ -240,12 +282,24 @@ function normalizeAnimationTuneValue(
   return isAnimationTuneValue(value) ? value : undefined
 }
 
+function normalizeEmbedDisplayTuneMode(
+  value: unknown,
+): EmbedDisplayTuneMode | undefined {
+  return isEmbedDisplayTuneMode(value) ? value : undefined
+}
+
 function isSpacingTuneValue(value: unknown): value is SpacingTuneValue {
   return spacingTuneValues.includes(value as SpacingTuneValue)
 }
 
 function isAnimationTuneValue(value: unknown): value is AnimationTuneValue {
   return animationTuneValues.includes(value as AnimationTuneValue)
+}
+
+function isEmbedDisplayTuneMode(
+  value: unknown,
+): value is EmbedDisplayTuneMode {
+  return embedDisplayTuneModes.includes(value as EmbedDisplayTuneMode)
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

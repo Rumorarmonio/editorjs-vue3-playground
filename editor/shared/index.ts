@@ -19,6 +19,7 @@ export {
 export {
   createEmbedDataFromSource,
   getAllowedEmbedIframeUrl,
+  getEmbedServiceLabel,
   supportedEmbedServiceLabels,
   supportedEmbedServices,
 } from './embeds/embed-services'
@@ -47,12 +48,15 @@ export {
 export {
   editorBlockTuneNames,
   animationTuneValues,
+  embedDisplayTuneModes,
+  embedDisplayTuneName,
   getDuplicateAnchorValues,
   getKnownBlockTuneData,
   isKnownBlockTuneData,
   normalizeAnimationTuneData,
   normalizeAnchorTuneData,
   normalizeAnchorValue,
+  normalizeEmbedDisplayTuneData,
   normalizeLabelTuneData,
   normalizeLabelValue,
   normalizeSpacingTuneData,
@@ -142,6 +146,8 @@ export type {
   AnchorTuneData,
   AnimationTuneData,
   AnimationTuneValue,
+  EmbedDisplayTuneData,
+  EmbedDisplayTuneMode,
   EditorBlockTuneName,
   KnownEditorBlockTuneData,
   LabelTuneData,

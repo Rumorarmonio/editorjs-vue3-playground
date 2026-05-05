@@ -15,6 +15,12 @@ export interface TuneSelectOptions {
   onChange: (value: string) => void
 }
 
+export interface TuneToggleOptions {
+  label: string
+  value: boolean
+  onChange: (value: boolean) => void
+}
+
 export function createTunePanel(title: string): HTMLDivElement {
   const panel = document.createElement('div')
   panel.className = 'editor-block-tune-panel'
@@ -88,4 +94,75 @@ export function createTuneSelectField({
   field.append(labelElement, select)
 
   return field
+}
+
+export function createTuneToggleField({
+  label,
+  value,
+  onChange,
+}: TuneToggleOptions): HTMLDivElement {
+  const field = document.createElement('div')
+  const button = document.createElement('button')
+  const track = document.createElement('span')
+  const thumb = document.createElement('span')
+  const labelElement = document.createElement('span')
+  let currentValue = value
+
+  field.className = 'editor-block-tune-field editor-block-tune-field--toggle'
+  field.contentEditable = 'false'
+  button.className = 'editor-block-tune-toggle'
+  button.type = 'button'
+  button.setAttribute('role', 'switch')
+  button.setAttribute('aria-label', label)
+  track.className = 'editor-plain-field__toggle-track'
+  thumb.className = 'editor-plain-field__toggle-thumb'
+  labelElement.className = 'editor-block-tune-field__label'
+  labelElement.textContent = label
+
+  syncTuneToggle(button, currentValue)
+
+  function toggleValue(): void {
+    currentValue = !currentValue
+    syncTuneToggle(button, currentValue)
+    onChange(currentValue)
+  }
+
+  field.addEventListener(
+    'click',
+    (event) => {
+      stopTuneEventPropagation(event)
+      toggleValue()
+    },
+    true,
+  )
+  stopTuneEvents(button)
+
+  track.append(thumb)
+  button.append(track)
+  field.append(labelElement, button)
+
+  return field
+}
+
+function stopTuneEventPropagation(event: Event): void {
+  event.stopImmediatePropagation()
+  event.stopPropagation()
+}
+
+function stopTuneEvents(element: HTMLElement): void {
+  ;[
+    'pointerdown',
+    'pointerup',
+    'mousedown',
+    'mouseup',
+    'keydown',
+    'keyup',
+  ].forEach((eventName) => {
+    element.addEventListener(eventName, stopTuneEventPropagation, true)
+  })
+}
+
+function syncTuneToggle(button: HTMLButtonElement, value: boolean): void {
+  button.setAttribute('aria-checked', String(value))
+  button.classList.toggle('editor-block-tune-toggle--checked', value)
 }

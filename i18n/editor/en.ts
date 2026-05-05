@@ -90,6 +90,7 @@ export const editorEn: EditorUiMessages = {
       urlPlaceholder: (services) => `Paste a ${services} URL`,
       hint: 'Press Enter to create an embed block.',
       supportedServices: (services) => `Supported services: ${services}.`,
+      captionPlaceholder: 'Caption',
       readError: 'Image file could not be read.',
     },
     quote: {
@@ -141,6 +142,14 @@ export const editorEn: EditorUiMessages = {
         'fade-up': 'Fade up',
         'fade-left': 'Fade from left',
         'fade-right': 'Fade from right',
+      },
+    },
+    embedDisplay: {
+      title: 'Embed display',
+      label: 'In Fancybox',
+      options: {
+        inline: 'On page',
+        fancybox: 'In Fancybox',
       },
     },
   },

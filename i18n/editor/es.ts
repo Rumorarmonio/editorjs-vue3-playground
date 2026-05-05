@@ -93,6 +93,7 @@ export const editorEs: EditorUiMessages = {
       urlPlaceholder: (services) => `Pegue una URL de ${services}`,
       hint: 'Pulse Enter para crear un bloque embed.',
       supportedServices: (services) => `Servicios compatibles: ${services}.`,
+      captionPlaceholder: 'Leyenda',
       readError: 'No se pudo leer el archivo de imagen.',
     },
     quote: {
@@ -144,6 +145,14 @@ export const editorEs: EditorUiMessages = {
         'fade-up': 'Aparecer hacia arriba',
         'fade-left': 'Desde la izquierda',
         'fade-right': 'Desde la derecha',
+      },
+    },
+    embedDisplay: {
+      title: 'Visualización embed',
+      label: 'En Fancybox',
+      options: {
+        inline: 'En la página',
+        fancybox: 'En Fancybox',
       },
     },
   },

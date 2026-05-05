@@ -7,6 +7,7 @@ import InlineCodeTool from '~~/editor/admin/tools/InlineCodeTool'
 import { TextColorToolConstructable } from '~~/editor/admin/tools/TextColorTool'
 import { AnchorTuneConstructable } from '~~/editor/admin/tunes/AnchorTune'
 import { AnimationTuneConstructable } from '~~/editor/admin/tunes/AnimationTune'
+import { EmbedDisplayTuneConstructable } from '~~/editor/admin/tunes/EmbedDisplayTune'
 import { LabelTuneConstructable } from '~~/editor/admin/tunes/LabelTune'
 import { SpacingTuneConstructable } from '~~/editor/admin/tunes/SpacingTune'
 import { NoticeToolConstructable } from '~~/editor/admin/tools/blocks/NoticeTool'
@@ -14,7 +15,7 @@ import { SectionIntroToolConstructable } from '~~/editor/admin/tools/blocks/Sect
 import { TwoColumnsToolConstructable } from '~~/editor/admin/tools/blocks/TwoColumnsTool'
 import { MediaGalleryToolConstructable } from '~~/editor/admin/tools/blocks/MediaGalleryTool'
 import { MaskedFieldsDemoToolConstructable } from '~~/editor/admin/tools/blocks/MaskedFieldsDemoTool'
-import { editorBlockTuneNames } from '~~/editor/shared'
+import { editorBlockTuneNames, embedDisplayTuneName } from '~~/editor/shared'
 import {
   getCurrentEditorMessages,
   setCurrentEditorMessages,
@@ -33,6 +34,7 @@ export const editorInlineToolbar = [
 ] satisfies NonNullable<EditorConfig['inlineToolbar']>
 
 export const editorBlockTunes = [...editorBlockTuneNames]
+const editorEmbedBlockTunes = [...editorBlockTunes, embedDisplayTuneName]
 
 export async function createEditorTools(
   messages: EditorUiMessages,
@@ -97,11 +99,14 @@ export async function createEditorTools(
     embed: {
       class: ManualEmbedToolConstructable,
       inlineToolbar: editorInlineToolbar,
+      tunes: editorEmbedBlockTunes,
       config: {
         services: {
           youtube: true,
           vimeo: true,
           coub: true,
+          rutube: true,
+          vk: true,
         },
       },
     },
@@ -135,6 +140,7 @@ export async function createEditorTools(
     spacing: SpacingTuneConstructable,
     label: LabelTuneConstructable,
     animation: AnimationTuneConstructable,
+    embedDisplay: EmbedDisplayTuneConstructable,
   }
 }
 

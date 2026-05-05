@@ -7,6 +7,8 @@ import type {
 } from '@editorjs/editorjs/types'
 import {
   createEmbedDataFromSource,
+  getAllowedEmbedIframeUrl,
+  getEmbedServiceLabel,
   supportedEmbedServiceLabels,
   type EmbedBlockData,
 } from '~~/editor/shared'
@@ -28,6 +30,7 @@ const BaseEmbedTool = Embed as unknown as EmbedToolConstructor
 
 export default class ManualEmbedTool extends BaseEmbedTool {
   private readonly isReadOnlyMode: boolean
+  private captionElement: HTMLElement | null = null
 
   static get toolbox(): ToolboxConfig {
     const messages = getCurrentEditorMessages()
@@ -44,11 +47,24 @@ export default class ManualEmbedTool extends BaseEmbedTool {
   }
 
   override render(): HTMLElement {
-    if (this.data.service) {
+    if (isCompleteEmbedData(this.data)) {
+      const iframeUrl = getAllowedEmbedIframeUrl(this.data)
+
+      if (iframeUrl) {
+        return this.renderManualEmbedPreview(this.data, iframeUrl)
+      }
+
       return super.render() as HTMLElement
     }
 
     return this.renderManualInput()
+  }
+
+  override save(): PartialEmbedBlockData {
+    return {
+      ...this.data,
+      caption: this.captionElement?.innerHTML ?? this.data.caption ?? '',
+    }
   }
 
   override validate(data: PartialEmbedBlockData): boolean {
@@ -95,6 +111,37 @@ export default class ManualEmbedTool extends BaseEmbedTool {
     return wrapper
   }
 
+  private renderManualEmbedPreview(
+    data: EmbedBlockData,
+    iframeUrl: string,
+  ): HTMLElement {
+    const wrapper = document.createElement('figure')
+    const iframe = document.createElement('iframe')
+    const caption = document.createElement('figcaption')
+
+    wrapper.classList.add('editor-embed-preview')
+    iframe.classList.add('editor-embed-preview__iframe')
+    iframe.src = iframeUrl
+    iframe.height = String(data.height ?? 320)
+    iframe.title = data.caption || getEmbedServiceLabel(data.service)
+    iframe.allow =
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+    iframe.allowFullscreen = true
+    iframe.loading = 'lazy'
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin'
+
+    caption.classList.add('editor-embed-preview__caption')
+    caption.contentEditable = String(!this.isReadOnlyMode)
+    caption.dataset.placeholder = getCurrentEditorMessages().tools.embed.captionPlaceholder
+    caption.innerHTML = data.caption ?? ''
+    this.captionElement = caption
+
+    wrapper.append(iframe, caption)
+    ;(this as unknown as { element: HTMLElement }).element = wrapper
+
+    return wrapper
+  }
+
   private applyEmbedUrl(value: string, error: HTMLElement): void {
     const embedData = createEmbedDataFromSource(value)
 
@@ -110,6 +157,10 @@ export default class ManualEmbedTool extends BaseEmbedTool {
     error.textContent = ''
     this.data = embedData
   }
+}
+
+function isCompleteEmbedData(data: PartialEmbedBlockData): data is EmbedBlockData {
+  return Boolean(data.service && data.source && data.embed)
 }
 
 export const ManualEmbedToolConstructable =

@@ -1,4 +1,8 @@
-import type { AnimationTuneValue, SpacingTuneValue } from '~~/editor/shared'
+import type {
+  AnimationTuneValue,
+  EmbedDisplayTuneMode,
+  SpacingTuneValue,
+} from '~~/editor/shared'
 
 export type SupportedLocale = 'ru' | 'en' | 'es'
 export type AppLocalePreference = 'system' | SupportedLocale
@@ -115,6 +119,7 @@ export interface EditorUiMessages {
       urlPlaceholder: (services: string) => string
       hint: string
       supportedServices: (services: string) => string
+      captionPlaceholder: string
       readError: string
     }
     quote: {
@@ -157,6 +162,11 @@ export interface EditorUiMessages {
       title: string
       label: string
       options: Record<AnimationTuneValue, string>
+    }
+    embedDisplay: {
+      title: string
+      label: string
+      options: Record<EmbedDisplayTuneMode, string>
     }
   }
   validation: EditorValidationMessages

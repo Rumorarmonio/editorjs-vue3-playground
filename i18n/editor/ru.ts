@@ -92,6 +92,7 @@ export const editorRu: EditorUiMessages = {
       urlPlaceholder: (services) => `Вставьте URL ${services}`,
       hint: 'Нажмите Enter, чтобы создать embed-блок.',
       supportedServices: (services) => `Поддерживаемые сервисы: ${services}.`,
+      captionPlaceholder: 'Подпись',
       readError: 'Не удалось прочитать файл изображения.',
     },
     quote: {
@@ -143,6 +144,14 @@ export const editorRu: EditorUiMessages = {
         'fade-up': 'Снизу вверх',
         'fade-left': 'Слева направо',
         'fade-right': 'Справа налево',
+      },
+    },
+    embedDisplay: {
+      title: 'Отображение embed',
+      label: 'В Fancybox',
+      options: {
+        inline: 'На странице',
+        fancybox: 'В Fancybox',
       },
     },
   },

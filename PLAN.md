@@ -27,6 +27,7 @@ deployment.
 - Первое optional improvement активного этапа реализовано: выбор языка переведён на dropdown по аналогии с темой, добавлены auto preference и испанский интерфейс.
 - Второе optional improvement активного этапа реализовано: preview sidebar получил временный demo-переключатель между navigation по заголовкам и старой navigation по `AnchorTune` / `LabelTune`.
 - Третье optional improvement активного этапа реализовано: добавлен `AnimationTune` для простых reveal-анимаций блоков в renderer.
+- Четвёртое optional improvement активного этапа реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube и VK Video.
 
 ## Активный этап
 
@@ -58,8 +59,8 @@ deployment.
 
 1. Составить короткий список optional improvements, которые реально повышают качество демо и не раздувают scope — выполнено для language switcher improvement.
 2. Выбрать первый небольшой improvement и зафиксировать ожидаемое поведение — выполнено: language preference `system | ru | en | es`, browser/OS detection, dropdown UI.
-3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — в работе; выполнены language switcher, heading-based sidebar navigation и block reveal animations.
-4. После каждого значимого изменения запускать соразмерные проверки — выполнено для language switcher и heading navigation; для block reveal animations проверки запускаются после реализации.
+3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — в работе; выполнены language switcher, heading-based sidebar navigation, block reveal animations и embed Fancybox display.
+4. После каждого значимого изменения запускать соразмерные проверки — выполнено для language switcher, heading navigation и block reveal animations; для embed Fancybox display проверки запускаются после реализации.
 5. Перед завершением этапа пройти smoke-check основных editor/preview сценариев.
 
 ## Критерии готовности этапа

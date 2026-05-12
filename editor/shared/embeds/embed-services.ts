@@ -7,6 +7,7 @@ interface EmbedServiceDefinition {
   height: number
   createEmbedUrl(sourceUrl: URL): string | null
   isAllowedEmbedUrl(embedUrl: URL): boolean
+  getAllowedEmbedUrl?(embedUrl: URL): string | null
 }
 
 export const supportedEmbedServices = [
@@ -121,6 +122,27 @@ export const supportedEmbedServices = [
       )
     },
   },
+  {
+    service: 'twitch',
+    label: 'Twitch',
+    width: 640,
+    height: 360,
+    createEmbedUrl(sourceUrl) {
+      const embedUrl = getTwitchEmbedUrl(sourceUrl)
+
+      return embedUrl ? addTwitchParentParam(embedUrl).toString() : null
+    },
+    isAllowedEmbedUrl(embedUrl) {
+      return Boolean(getTwitchEmbedUrl(embedUrl))
+    },
+    getAllowedEmbedUrl(embedUrl) {
+      const twitchEmbedUrl = getTwitchEmbedUrl(embedUrl)
+
+      return twitchEmbedUrl
+        ? addTwitchParentParam(twitchEmbedUrl).toString()
+        : null
+    },
+  },
 ] satisfies EmbedServiceDefinition[]
 
 export const supportedEmbedServiceLabels = supportedEmbedServices
@@ -175,6 +197,10 @@ export function getAllowedEmbedIframeUrl(
 
   try {
     const embedUrl = new URL(data.embed)
+
+    if (service.getAllowedEmbedUrl) {
+      return service.getAllowedEmbedUrl(embedUrl)
+    }
 
     return service.isAllowedEmbedUrl(embedUrl) ? embedUrl.toString() : null
   } catch {
@@ -313,6 +339,191 @@ function isVkVideoHostname(hostname: string): boolean {
     hostname === 'vk.ru' ||
     hostname === 'vkvideo.ru'
   )
+}
+
+function getTwitchEmbedUrl(sourceUrl: URL): URL | null {
+  const twitchVideoId = getTwitchVideoId(sourceUrl)
+
+  if (twitchVideoId) {
+    const embedUrl = new URL('https://player.twitch.tv/')
+
+    embedUrl.searchParams.set('video', `v${twitchVideoId}`)
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'autoplay')
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'muted')
+
+    return embedUrl
+  }
+
+  const twitchChannel = getTwitchChannel(sourceUrl)
+
+  if (twitchChannel) {
+    const embedUrl = new URL('https://player.twitch.tv/')
+
+    embedUrl.searchParams.set('channel', twitchChannel)
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'autoplay')
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'muted')
+
+    return embedUrl
+  }
+
+  const twitchCollection = getTwitchCollection(sourceUrl)
+
+  if (twitchCollection) {
+    const embedUrl = new URL('https://player.twitch.tv/')
+
+    embedUrl.searchParams.set('collection', twitchCollection)
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'autoplay')
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'muted')
+
+    return embedUrl
+  }
+
+  const twitchClip = getTwitchClipSlug(sourceUrl)
+
+  if (twitchClip) {
+    const embedUrl = new URL('https://clips.twitch.tv/embed')
+
+    embedUrl.searchParams.set('clip', twitchClip)
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'autoplay')
+    copyBooleanSearchParam(sourceUrl, embedUrl, 'muted')
+
+    return embedUrl
+  }
+
+  return null
+}
+
+function getTwitchVideoId(sourceUrl: URL): string | null {
+  if (sourceUrl.hostname === 'player.twitch.tv') {
+    return normalizeTwitchVideoId(sourceUrl.searchParams.get('video'))
+  }
+
+  if (!isHostnameOrSubdomain(sourceUrl.hostname, 'twitch.tv')) {
+    return null
+  }
+
+  const pathMatch = sourceUrl.pathname.match(/^\/videos\/(v?\d+)\/?$/)
+
+  return pathMatch?.[1] ? normalizeTwitchVideoId(pathMatch[1]) : null
+}
+
+function getTwitchChannel(sourceUrl: URL): string | null {
+  if (sourceUrl.hostname === 'player.twitch.tv') {
+    return normalizeTwitchChannel(sourceUrl.searchParams.get('channel'))
+  }
+
+  if (!isTwitchWatchHostname(sourceUrl.hostname)) {
+    return null
+  }
+
+  const pathMatch = sourceUrl.pathname.match(/^\/([a-zA-Z0-9_]{4,25})\/?$/)
+  const channel = pathMatch?.[1] ?? null
+
+  if (!channel || isReservedTwitchPath(channel)) {
+    return null
+  }
+
+  return normalizeTwitchChannel(channel)
+}
+
+function getTwitchCollection(sourceUrl: URL): string | null {
+  if (sourceUrl.hostname !== 'player.twitch.tv') {
+    return null
+  }
+
+  const collection = sourceUrl.searchParams.get('collection')
+
+  return collection && /^[a-zA-Z0-9_-]+$/.test(collection) ? collection : null
+}
+
+function getTwitchClipSlug(sourceUrl: URL): string | null {
+  if (sourceUrl.hostname === 'clips.twitch.tv') {
+    if (sourceUrl.pathname === '/embed') {
+      return normalizeTwitchClipSlug(sourceUrl.searchParams.get('clip'))
+    }
+
+    return normalizeTwitchClipSlug(sourceUrl.pathname.slice(1))
+  }
+
+  if (!isTwitchWatchHostname(sourceUrl.hostname)) {
+    return null
+  }
+
+  const pathMatch = sourceUrl.pathname.match(
+    /^\/(?:[a-zA-Z0-9_]{4,25}\/)?clip\/([a-zA-Z0-9_-]+)\/?$/,
+  )
+
+  return pathMatch?.[1] ? normalizeTwitchClipSlug(pathMatch[1]) : null
+}
+
+function addTwitchParentParam(embedUrl: URL): URL {
+  const parent = getTwitchParentValue()
+  const nextEmbedUrl = new URL(embedUrl)
+
+  nextEmbedUrl.searchParams.delete('parent')
+
+  if (parent) {
+    nextEmbedUrl.searchParams.set('parent', parent)
+  }
+
+  return nextEmbedUrl
+}
+
+function getTwitchParentValue(): string | null {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  return window.location.hostname || null
+}
+
+function copyBooleanSearchParam(
+  sourceUrl: URL,
+  targetUrl: URL,
+  paramName: string,
+): void {
+  const value = sourceUrl.searchParams.get(paramName)
+
+  if (value === 'true' || value === 'false') {
+    targetUrl.searchParams.set(paramName, value)
+  }
+}
+
+function normalizeTwitchVideoId(value: string | null): string | null {
+  if (!value) {
+    return null
+  }
+
+  const videoId = value.startsWith('v') ? value.slice(1) : value
+
+  return /^\d+$/.test(videoId) ? videoId : null
+}
+
+function normalizeTwitchChannel(value: string | null): string | null {
+  return value && /^[a-zA-Z0-9_]{4,25}$/.test(value) ? value : null
+}
+
+function normalizeTwitchClipSlug(value: string | null): string | null {
+  return value && /^[a-zA-Z0-9_-]+$/.test(value) ? value : null
+}
+
+function isTwitchWatchHostname(hostname: string): boolean {
+  return hostname === 'twitch.tv' || hostname === 'www.twitch.tv'
+}
+
+function isReservedTwitchPath(path: string): boolean {
+  return [
+    'directory',
+    'downloads',
+    'inventory',
+    'jobs',
+    'p',
+    'settings',
+    'subscriptions',
+    'turbo',
+    'videos',
+    'wallet',
+  ].includes(path.toLowerCase())
 }
 
 function isSignedInteger(value: string | null | undefined): value is string {

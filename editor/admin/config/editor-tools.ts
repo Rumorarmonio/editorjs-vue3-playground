@@ -106,6 +106,7 @@ export async function createEditorTools(
           vimeo: true,
           coub: true,
           rutube: true,
+          twitch: true,
           vk: true,
         },
       },

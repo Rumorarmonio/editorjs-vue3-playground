@@ -27,7 +27,7 @@ deployment.
 - Первое optional improvement активного этапа реализовано: выбор языка переведён на dropdown по аналогии с темой, добавлены auto preference и испанский интерфейс.
 - Второе optional improvement активного этапа реализовано: preview sidebar получил временный demo-переключатель между navigation по заголовкам и старой navigation по `AnchorTune` / `LabelTune`.
 - Третье optional improvement активного этапа реализовано: добавлен `AnimationTune` для простых reveal-анимаций блоков в renderer.
-- Четвёртое optional improvement активного этапа реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube и VK Video.
+- Четвёртое optional improvement активного этапа реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube, VK Video и Twitch.
 - Точечное UX-улучшение embed-блока реализовано: существующий `ManualEmbedTool` позволяет редактировать URL уже созданного embed без удаления блока.
 - Style-architecture improvement активного этапа реализован: глобальные Editor.js/custom tool стили вынесены из CSS Module в `editor/admin/styles/editor.scss`.
 

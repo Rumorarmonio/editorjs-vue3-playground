@@ -379,6 +379,37 @@
       }
     },
     {
+      "id": "embed-twitch-header",
+      "type": "header",
+      "data": {
+        "text": "Embed Twitch video in Fancybox",
+        "level": 3
+      }
+    },
+    {
+      "id": "embed-twitch",
+      "type": "embed",
+      "data": {
+        "service": "twitch",
+        "source": "https://www.twitch.tv/quzm1ch/clip/TenaciousWildOrangeTriHard-qbZVAVpOW9xa0Zr_",
+        "embed": "https://clips.twitch.tv/embed?clip=TenaciousWildOrangeTriHard-qbZVAVpOW9xa0Zr_&amp;parent=localhost",
+        "width": 640,
+        "height": 360,
+        "caption": "Twitch Fancybox embed example"
+      },
+      "tunes": {
+        "anchor": {},
+        "spacing": {
+          "top": "large"
+        },
+        "label": {},
+        "animation": {},
+        "embedDisplay": {
+          "mode": "fancybox"
+        }
+      }
+    },
+    {
       "id": "images-header",
       "type": "header",
       "data": {

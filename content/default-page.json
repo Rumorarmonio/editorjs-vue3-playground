@@ -254,11 +254,32 @@
       "type": "embed",
       "data": {
         "service": "youtube",
-        "source": "https://youtu.be/smnZAYTp1ME?si=rNPpEuEnsZzydMJU",
-        "embed": "https://www.youtube.com/embed/smnZAYTp1ME",
+        "source": "https://youtu.be/EWQvbyhDhaA?si=rple_5iWwYhcfWIT",
+        "embed": "https://www.youtube.com/embed/EWQvbyhDhaA",
+        "width": 580,
+        "height": 320,
+        "caption": "Embed block caption with <b>bold</b>, <u class=\"cdx-underline\">underline</u>, and <code class=\"inline-code\">inline code</code>"
+      },
+      "tunes": {
+        "anchor": {},
+        "spacing": {},
+        "label": {},
+        "animation": {},
+        "embedDisplay": {
+          "mode": "fancybox"
+        }
+      }
+    },
+    {
+      "id": "embed-youtube-live",
+      "type": "embed",
+      "data": {
+        "service": "youtube",
+        "source": "https://www.youtube.com/live/7wMpOt-5X0Q?si=5Dn4QMp5e_kyX0z7",
+        "embed": "https://www.youtube.com/embed/7wMpOt-5X0Q",
         "width": 580,
         "height": 326,
-        "caption": "Embed block caption with <b>bold</b>, <u class=\"cdx-underline\">underline</u>, and <code class=\"inline-code\">inline code</code>"
+        "caption": "YouTube live stream opened in Fancybox"
       },
       "tunes": {
         "embedDisplay": {

@@ -13,8 +13,6 @@ const props = defineProps<{
   block: EditorBlock<'embed'>
 }>()
 
-const nativeFancyboxVideoServices = new Set(['youtube', 'vimeo'])
-
 function shouldOpenEmbedInFancybox(): boolean {
   return (
     getKnownBlockTuneData(props.block.tunes).embedDisplay?.mode ===
@@ -26,18 +24,37 @@ function getEmbedFancyboxCaption(): string {
   return getInlineText(props.block.data.caption || props.block.data.source)
 }
 
-function isNativeFancyboxVideo(): boolean {
-  return nativeFancyboxVideoServices.has(props.block.data.service)
-}
-
 function getEmbedFancyboxUrl(): string {
-  return isNativeFancyboxVideo()
-    ? props.block.data.source
-    : (getAllowedEmbedIframeUrl(props.block.data) ?? props.block.data.source)
+  const embedUrl = getAllowedEmbedIframeUrl(props.block.data)
+
+  return embedUrl ? getAutoplayEmbedUrl(embedUrl) : props.block.data.source
 }
 
-function getEmbedFancyboxType(): string | undefined {
-  return isNativeFancyboxVideo() ? undefined : 'iframe'
+function getAutoplayEmbedUrl(value: string): string {
+  try {
+    const url = new URL(value.replaceAll('&amp;', '&'))
+
+    if (isYoutubeEmbedUrl(url) || isVimeoEmbedUrl(url)) {
+      url.searchParams.set('autoplay', '1')
+    }
+
+    return url.toString()
+  } catch {
+    return value
+  }
+}
+
+function isYoutubeEmbedUrl(url: URL): boolean {
+  return (
+    url.hostname === 'www.youtube.com' &&
+    /^\/embed\/[a-zA-Z0-9_-]{11}$/.test(url.pathname)
+  )
+}
+
+function isVimeoEmbedUrl(url: URL): boolean {
+  return (
+    url.hostname === 'player.vimeo.com' && /^\/video\/\d+$/.test(url.pathname)
+  )
 }
 </script>
 
@@ -65,7 +82,7 @@ function getEmbedFancyboxType(): string | undefined {
         data-editor-embed-fancybox
         data-fancybox="editor-embeds"
         data-height="810"
-        :data-type="getEmbedFancyboxType()"
+        data-type="iframe"
         data-width="1440"
         :href="getEmbedFancyboxUrl()"
       />

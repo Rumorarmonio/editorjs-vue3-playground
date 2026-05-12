@@ -205,7 +205,7 @@ function getYoutubeVideoId(sourceUrl: URL): string | null {
   }
 
   const pathMatch = sourceUrl.pathname.match(
-    /^\/(?:embed|shorts|v)\/([a-zA-Z0-9_-]{11})/,
+    /^\/(?:embed|live|shorts|v)\/([a-zA-Z0-9_-]{11})/,
   )
 
   return pathMatch?.[1] ? normalizeYoutubeVideoId(pathMatch[1]) : null

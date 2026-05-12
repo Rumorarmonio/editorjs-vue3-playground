@@ -330,7 +330,11 @@
   .cdx-textarea:focus,
   .editor-plain-field__control:focus,
   .editor-block-tune-field__control:focus,
-  .editor-embed-input__field:focus {
+  .editor-embed-input__field:focus,
+  .editor-embed-input__button:focus,
+  .editor-embed-input__button:focus-visible,
+  .editor-embed-preview__button:focus,
+  .editor-embed-preview__button:focus-visible {
     outline: 2px solid var(--color-focus-ring);
     outline-offset: 1px;
   }
@@ -383,6 +387,43 @@
     margin: 0;
     font-size: 0.875rem;
     color: var(--color-danger);
+  }
+
+  .editor-embed-input__actions,
+  .editor-embed-preview__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .editor-embed-preview__actions {
+    justify-content: flex-end;
+  }
+
+  .editor-embed-input__button,
+  .editor-embed-preview__button {
+    min-height: 34px;
+    padding: 7px 12px;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+
+  .editor-embed-input__button:hover,
+  .editor-embed-preview__button:hover {
+    background: var(--color-control-hover);
+  }
+
+  .editor-embed-input__button:disabled,
+  .editor-embed-preview__button:disabled {
+    color: var(--color-muted);
+    cursor: not-allowed;
+    background: var(--color-surface-muted);
   }
 
   .editor-embed-preview {

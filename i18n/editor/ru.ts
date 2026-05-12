@@ -93,6 +93,9 @@ export const editorRu: EditorUiMessages = {
       hint: 'Нажмите Enter, чтобы создать embed-блок.',
       supportedServices: (services) => `Поддерживаемые сервисы: ${services}.`,
       captionPlaceholder: 'Подпись',
+      editUrlButton: 'Изменить ссылку',
+      applyUrlButton: 'Применить',
+      cancelEditButton: 'Отмена',
       readError: 'Не удалось прочитать файл изображения.',
     },
     quote: {

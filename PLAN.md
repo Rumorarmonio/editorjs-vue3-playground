@@ -28,6 +28,7 @@ deployment.
 - Второе optional improvement активного этапа реализовано: preview sidebar получил временный demo-переключатель между navigation по заголовкам и старой navigation по `AnchorTune` / `LabelTune`.
 - Третье optional improvement активного этапа реализовано: добавлен `AnimationTune` для простых reveal-анимаций блоков в renderer.
 - Четвёртое optional improvement активного этапа реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube и VK Video.
+- Точечное UX-улучшение embed-блока реализовано: существующий `ManualEmbedTool` позволяет редактировать URL уже созданного embed без удаления блока.
 - Style-architecture improvement активного этапа реализован: глобальные Editor.js/custom tool стили вынесены из CSS Module в `editor/admin/styles/editor.scss`.
 
 ## Активный этап
@@ -60,7 +61,7 @@ deployment.
 
 1. Составить короткий список optional improvements, которые реально повышают качество демо и не раздувают scope — выполнено для language switcher improvement.
 2. Выбрать первый небольшой improvement и зафиксировать ожидаемое поведение — выполнено: language preference `system | ru | en | es`, browser/OS detection, dropdown UI.
-3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — в работе; выполнены language switcher, heading-based sidebar navigation, block reveal animations, embed Fancybox display и вынос admin editor skin в глобальный stylesheet.
+3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — в работе; выполнены language switcher, heading-based sidebar navigation, block reveal animations, embed Fancybox display, редактирование URL существующего embed-блока и вынос admin editor skin в глобальный stylesheet.
 4. После каждого значимого изменения запускать соразмерные проверки — выполнено для language switcher, heading navigation и block reveal animations; для embed Fancybox display и style-architecture изменений проверки запускаются после реализации.
 5. Перед завершением этапа пройти smoke-check основных editor/preview сценариев.
 

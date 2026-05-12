@@ -91,6 +91,9 @@ export const editorEn: EditorUiMessages = {
       hint: 'Press Enter to create an embed block.',
       supportedServices: (services) => `Supported services: ${services}.`,
       captionPlaceholder: 'Caption',
+      editUrlButton: 'Edit URL',
+      applyUrlButton: 'Apply',
+      cancelEditButton: 'Cancel',
       readError: 'Image file could not be read.',
     },
     quote: {

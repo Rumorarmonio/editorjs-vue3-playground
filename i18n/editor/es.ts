@@ -94,6 +94,9 @@ export const editorEs: EditorUiMessages = {
       hint: 'Pulse Enter para crear un bloque embed.',
       supportedServices: (services) => `Servicios compatibles: ${services}.`,
       captionPlaceholder: 'Leyenda',
+      editUrlButton: 'Editar URL',
+      applyUrlButton: 'Aplicar',
+      cancelEditButton: 'Cancelar',
       readError: 'No se pudo leer el archivo de imagen.',
     },
     quote: {

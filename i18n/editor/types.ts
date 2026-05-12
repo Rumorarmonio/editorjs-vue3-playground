@@ -120,6 +120,9 @@ export interface EditorUiMessages {
       hint: string
       supportedServices: (services: string) => string
       captionPlaceholder: string
+      editUrlButton: string
+      applyUrlButton: string
+      cancelEditButton: string
       readError: string
     }
     quote: {

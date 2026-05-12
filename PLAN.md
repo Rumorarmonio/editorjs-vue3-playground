@@ -30,6 +30,7 @@ deployment.
 - Четвёртое optional improvement активного этапа реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube, VK Video и Twitch.
 - Точечное UX-улучшение embed-блока реализовано: существующий `ManualEmbedTool` позволяет редактировать URL уже созданного embed без удаления блока.
 - Style-architecture improvement активного этапа реализован: глобальные Editor.js/custom tool стили вынесены из CSS Module в `editor/admin/styles/editor.scss`.
+- Следующий крупный этап после некритичных улучшений уточнён: расширение набора контентных блоков и plugins как отдельный research/decision этап.
 
 ## Активный этап
 
@@ -71,7 +72,52 @@ deployment.
 - Save/load, Import JSON, validation, masks, localization, theme, preview, `Reset draft` и `Export JSON` остаются работоспособными.
 - `npm run check` проходит; `npm run build` запускается при необходимости после runtime/style изменений.
 
-Следующий крупный этап после завершения некритичных улучшений: финальная стабилизация / подготовка к следующему fullstack-проекту.
+Следующий крупный этап после завершения некритичных улучшений: расширение набора контентных блоков и plugins.
+
+## Следующий запланированный этап
+
+### Расширение набора контентных блоков и plugins
+
+Статус: запланирован.
+
+Цель этапа: осознанно выбрать и реализовать минимальный набор дополнительных content blocks/plugins, которые дают новый полезный сценарий и не ломают frontend-only
+архитектуру, typed content schema, renderer и текущие save/load workflows.
+
+В scope входят:
+
+1. Research официальных и community Editor.js plugins на предмет реальной пользы для текущего проекта.
+2. Проектирование кастомного `CTA/Button` block для крупных ссылок/кнопок с `variant` и явным target contract.
+3. Решение по `Raw HTML`: trusted/admin-only escape hatch с sanitizer/allowlist и renderer contract либо отказ от добавления.
+4. Решение по code block: `@editorjs/code` как простой ввод кода либо custom code block с language field и renderer-side syntax highlighting.
+5. Решение по link preview: отложить `@editorjs/link`, пока в проекте нет backend/server route для metadata fetching.
+6. Решение по `@editorjs/warning`: не добавлять, если текущий `NoticeTool` покрывает warning/info/success лучше и без дублирования.
+7. Проверка, какие новые blocks допустимы только в основном editor, а какие действительно нужны во вложенных editor whitelist'ах.
+
+Вне scope этапа:
+
+- полноценный backend endpoint для link preview metadata;
+- production-ready upload/file workflow;
+- добавление plugins только из-за их наличия без renderer/validation/i18n/theme/accessibility контракта;
+- массовое расширение вложенных editor whitelist'ов без отдельного UX-сценария;
+- произвольный JavaScript execution из content JSON или Raw HTML.
+
+## План этапа
+
+1. Зафиксировать shortlist кандидатов: custom `CTA/Button`, `Raw HTML`, code block, link preview, warning replacement/duplication.
+2. Для каждого кандидата принять решение: добавить сейчас, отложить, заменить кастомным typed block или отказаться.
+3. Для выбранного первого блока описать data contract, renderer behavior, validation, i18n strings, theme/accessibility требования и whitelist policy.
+4. Реализовывать выбранные blocks/plugins по одному, с узким diff и отдельной проверкой save/load/render/import/export/reset.
+5. После каждого значимого изменения обновлять `NOTES.md` и при необходимости demo content.
+
+## Критерии готовности этапа
+
+- Решения по `CTA/Button`, `Raw HTML`, code block, link preview и warning зафиксированы явно.
+- Реализованы только те blocks/plugins, которые дают новый сценарий и имеют полный editor/renderer/shared contract.
+- Новые blocks не нарушают frontend-only ограничения проекта.
+- Save/load, Import JSON, validation, localization, theme, keyboard scenarios, preview, `Reset draft` и `Export JSON` остаются работоспособными.
+- `npm run check` проходит; `npm run build` запускается при runtime/style изменениях.
+
+Следующий крупный этап после расширения набора контентных блоков и plugins: финальная стабилизация / подготовка к следующему fullstack-проекту.
 
 ## Последний завершённый этап
 

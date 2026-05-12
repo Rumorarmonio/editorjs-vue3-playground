@@ -146,6 +146,7 @@
 - поддержки тёмной/светлой темы;
 - использования community CSS-решений для Editor.js dark theme как основы для собственной темы;
 - усиленной клавиатурной навигации и улучшений accessibility.
+- расширения набора контентных блоков и Editor.js plugins после отдельного research/decision этапа.
 
 ---
 
@@ -189,6 +190,12 @@
 - `Swiper` — обязательно для слайдерных сценариев;
 - `@fancyapps/ui` — для просмотра медиа в popup/viewer-режиме;
 - community/official plugins Editor.js — по необходимости.
+
+Примечания по поздним Editor.js plugins:
+
+- backend-dependent plugins, например link preview tools с server-side metadata fetching, не являются обязательными для текущего frontend-only проекта;
+- plugins, сохраняющие произвольный HTML, могут добавляться только после отдельного решения по trusted/admin-only режиму, sanitizer policy и renderer contract;
+- для CTA/button-like сценариев предпочтителен typed custom block с явными вариантами отображения и target contract, если готовый plugin не даёт нужную модель данных.
 
 ### 6.3. Базовые зависимости проекта
 
@@ -416,6 +423,7 @@
 22. Поддержка light/dark theme.
 23. Клавиатурная навигация и accessibility polish.
 24. Некритичные улучшения.
+25. Расширение набора контентных блоков и plugins.
 
 ### 8.3. Принцип кастомизации
 
@@ -2423,6 +2431,31 @@ Strikethrough следует сначала пробовать как готов
 Критерий готовности:
 
 - проект доведён до расширенной версии без разрушения базовой архитектуры.
+
+---
+
+### Этап 25. Расширение набора контентных блоков и plugins
+
+Содержимое этапа:
+
+- research и выбор дополнительных block tools/plugins только после завершения текущих optional improvements;
+- проектирование typed `CTA/Button` block, если нужен крупный link/action-сценарий с вариантами отображения;
+- отдельное решение по `Raw HTML` как trusted/admin-only инструменту или отказ от него в пользу typed custom blocks;
+- отдельное решение по code block: официальный `@editorjs/code` или custom code block с сохранением языка и renderer-side syntax highlighting;
+- отказ или отложенное решение по backend-dependent link preview tools до появления backend/server route;
+- отказ от дублирующих plugins, если текущий custom block уже покрывает сценарий лучше, например `NoticeTool` вместо отдельного `@editorjs/warning`.
+
+Проверка:
+
+- каждый выбранный block/plugin имеет typed data contract, renderer, validation/guard, i18n, theme и accessibility-сценарии;
+- новые blocks не добавляются во вложенные editor whitelist'ы без отдельного сценария использования;
+- frontend-only ограничения проекта не нарушаются backend-dependent функциональностью.
+
+Критерий готовности:
+
+- выбран минимальный набор реально полезных новых content blocks/plugins;
+- каждый реализованный блок проходит save/load/render/import/export/reset сценарии;
+- рискованные escape hatch инструменты вроде Raw HTML либо явно ограничены trusted/admin-only правилами, либо остаются вне проекта.
 
 ---
 

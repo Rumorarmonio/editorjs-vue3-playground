@@ -574,6 +574,50 @@
       }
     },
     {
+      "id": "cta-block-secondary",
+      "type": "cta",
+      "data": {
+        "label": "Read Editor.js docs",
+        "url": "https://editorjs.io/",
+        "description": "Secondary CTA variant opens an external documentation link in a new tab.",
+        "variant": "secondary",
+        "target": "newTab"
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "External CTA"
+        },
+        "animation": {
+          "type": "fade-left"
+        }
+      }
+    },
+    {
+      "id": "cta-block-ghost",
+      "type": "cta",
+      "data": {
+        "label": "Jump to media examples",
+        "url": "#media-blocks",
+        "description": "Ghost CTA variant can also point to an in-page anchor without leaving the current document.",
+        "variant": "ghost",
+        "target": "sameTab"
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "Anchor CTA"
+        },
+        "animation": {
+          "type": "fade-right"
+        }
+      }
+    },
+    {
       "id": "code-snippet-header",
       "type": "header",
       "data": {
@@ -586,7 +630,7 @@
       "type": "codeSnippet",
       "data": {
         "language": "typescript",
-        "code": "type CtaBlockTarget = 'sameTab' | 'newTab'\\n\\ninterface CtaBlockData {\\n  label: string\\n  url: string\\n  description: string\\n  variant: 'primary' | 'secondary' | 'ghost'\\n  target: CtaBlockTarget\\n}",
+        "code": "type CtaBlockTarget = 'sameTab' | 'newTab'\n\ninterface CtaBlockData {\n  label: string\n  url: string\n  description: string\n  variant: 'primary' | 'secondary' | 'ghost'\n  target: CtaBlockTarget\n}",
         "caption": "Custom blocks keep explicit typed JSON contracts for editor and renderer layers."
       },
       "tunes": {
@@ -601,6 +645,43 @@
         },
         "animation": {
           "type": "fade-right"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-json-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "json",
+        "code": "{\n  \"type\": \"cta\",\n  \"data\": {\n    \"label\": \"Open preview workflow\",\n    \"url\": \"/preview\",\n    \"variant\": \"primary\",\n    \"target\": \"sameTab\"\n  }\n}",
+        "caption": "The same CTA block remains portable as plain Editor.js JSON."
+      },
+      "tunes": {
+        "spacing": {
+          "top": "medium"
+        },
+        "label": {
+          "label": "CTA JSON"
+        },
+        "animation": {
+          "type": "fade-up"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-bash-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "bash",
+        "code": "npm run check\nnpm run build",
+        "caption": "Code snippets can also store shell commands without invoking any syntax highlighter yet."
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "Shell commands"
         }
       }
     },

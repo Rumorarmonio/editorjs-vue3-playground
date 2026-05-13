@@ -17,8 +17,11 @@ export interface EditorValidationMessages {
     mediaCaption: string
     ctaLabel: string
     ctaDescription: string
+    ctaEventName: string
     codeSnippetCode: string
     codeSnippetCaption: string
+    rawHtml: string
+    rawHtmlCaption: string
   }
   contentValidationFallback: string
   contentValidationSummary: (count: number) => string
@@ -33,7 +36,10 @@ export interface EditorValidationMessages {
   ctaLabelRequired: string
   ctaUrlRequired: string
   ctaUrlInvalid: string
+  ctaEventNameRequired: string
+  ctaEventNameInvalid: string
   codeSnippetCodeRequired: string
+  rawHtmlRequired: string
   maxLength: (label: string, maxLength: number) => string
 }
 
@@ -132,10 +138,17 @@ export interface EditorUiMessages {
       descriptionPlaceholder: string
       variantLabel: string
       targetLabel: string
+      actionTypeLabel: string
+      eventNameLabel: string
+      eventNamePlaceholder: string
       variantOptions: {
         primary: string
         secondary: string
         ghost: string
+      }
+      actionTypeOptions: {
+        link: string
+        event: string
       }
       targetOptions: {
         sameTab: string
@@ -150,6 +163,14 @@ export interface EditorUiMessages {
       captionLabel: string
       captionPlaceholder: string
       languageOptions: Record<string, string>
+    }
+    rawHtml: {
+      toolboxTitle: string
+      htmlLabel: string
+      htmlPlaceholder: string
+      captionLabel: string
+      captionPlaceholder: string
+      securityHint: string
     }
     embed: {
       toolboxTitle: string

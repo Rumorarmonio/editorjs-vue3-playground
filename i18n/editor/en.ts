@@ -95,10 +95,17 @@ export const editorEn: EditorUiMessages = {
       descriptionPlaceholder: 'Optional short supporting text',
       variantLabel: 'Variant',
       targetLabel: 'Target',
+      actionTypeLabel: 'Action',
+      eventNameLabel: 'Event name',
+      eventNamePlaceholder: 'open-demo-modal',
       variantOptions: {
         primary: 'Primary',
         secondary: 'Secondary',
         ghost: 'Ghost',
+      },
+      actionTypeOptions: {
+        link: 'Open link',
+        event: 'Emit event',
       },
       targetOptions: {
         sameTab: 'Same tab',
@@ -122,6 +129,15 @@ export const editorEn: EditorUiMessages = {
         json: 'JSON',
         bash: 'Bash',
       },
+    },
+    rawHtml: {
+      toolboxTitle: 'Raw HTML',
+      htmlLabel: 'HTML',
+      htmlPlaceholder: '<section><h3>Custom markup</h3><p>Trusted HTML.</p></section>',
+      captionLabel: 'Caption',
+      captionPlaceholder: 'Optional admin-only note',
+      securityHint:
+        'Only trusted HTML is supported. Scripts, event handlers, iframes, styles, and unsafe attributes are removed in the renderer.',
     },
     embed: {
       toolboxTitle: 'Embed',
@@ -204,8 +220,11 @@ export const editorEn: EditorUiMessages = {
       mediaCaption: 'Caption',
       ctaLabel: 'Button label',
       ctaDescription: 'Description',
+      ctaEventName: 'Event name',
       codeSnippetCode: 'Code',
       codeSnippetCaption: 'Caption',
+      rawHtml: 'HTML',
+      rawHtmlCaption: 'Caption',
     },
     contentValidationFallback: 'Content has validation errors.',
     contentValidationSummary: (count) => `Content has ${count} validation errors.`,
@@ -222,7 +241,11 @@ export const editorEn: EditorUiMessages = {
     ctaUrlRequired: 'URL is required.',
     ctaUrlInvalid:
       'Use an http, https, mailto, root-relative, or anchor URL.',
+    ctaEventNameRequired: 'Event name is required.',
+    ctaEventNameInvalid:
+      'Use only letters, numbers, dashes, underscores, and colons.',
     codeSnippetCodeRequired: 'Code is required.',
+    rawHtmlRequired: 'HTML is required.',
     maxLength: (label, maxLength) =>
       `${label} must be ${maxLength} characters or fewer.`,
   },

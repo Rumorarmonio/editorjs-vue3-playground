@@ -618,6 +618,30 @@
       }
     },
     {
+      "id": "cta-block-event",
+      "type": "cta",
+      "data": {
+        "label": "Open demo modal",
+        "url": "",
+        "description": "Event CTA variant emits a typed renderer event instead of navigating to a URL.",
+        "variant": "primary",
+        "target": "sameTab",
+        "actionType": "event",
+        "eventName": "open-demo-modal"
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "Event CTA"
+        },
+        "animation": {
+          "type": "fade-up"
+        }
+      }
+    },
+    {
       "id": "code-snippet-header",
       "type": "header",
       "data": {
@@ -682,6 +706,36 @@
         },
         "label": {
           "label": "Shell commands"
+        }
+      }
+    },
+    {
+      "id": "raw-html-header",
+      "type": "header",
+      "data": {
+        "text": "Raw HTML",
+        "level": 3
+      }
+    },
+    {
+      "id": "raw-html-block",
+      "type": "rawHtml",
+      "data": {
+        "html": "<section aria-label=\"Trusted raw HTML example\"><h3>Trusted raw HTML</h3><p>This block keeps controlled markup for one-off content pieces.</p><ul><li><strong>Allowed:</strong> headings, paragraphs, lists, links, tables, code.</li><li><strong>Removed:</strong> scripts, inline handlers, iframes, styles, and unsafe attributes.</li></ul><p><a href=\"https://editorjs.io/\" target=\"_blank\">Editor.js documentation</a></p><script>alert('removed')</script></section>",
+        "caption": "Renderer sanitizes this trusted/admin-only HTML before insertion."
+      },
+      "tunes": {
+        "anchor": {
+          "anchor": "raw-html"
+        },
+        "spacing": {
+          "top": "medium"
+        },
+        "label": {
+          "label": "Raw HTML"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },

@@ -17,6 +17,7 @@ import { MediaGalleryToolConstructable } from '~~/editor/admin/tools/blocks/Medi
 import { MaskedFieldsDemoToolConstructable } from '~~/editor/admin/tools/blocks/MaskedFieldsDemoTool'
 import { CtaToolConstructable } from '~~/editor/admin/tools/blocks/CtaTool'
 import { CodeSnippetToolConstructable } from '~~/editor/admin/tools/blocks/CodeSnippetTool'
+import { RawHtmlToolConstructable } from '~~/editor/admin/tools/blocks/RawHtmlTool'
 import { editorBlockTuneNames, embedDisplayTuneName } from '~~/editor/shared'
 import {
   getCurrentEditorMessages,
@@ -130,6 +131,7 @@ export async function createEditorTools(
     maskedFieldsDemo: MaskedFieldsDemoToolConstructable,
     cta: CtaToolConstructable,
     codeSnippet: CodeSnippetToolConstructable,
+    rawHtml: RawHtmlToolConstructable,
     marker: {
       class: Marker as unknown as ToolConstructable,
       shortcut: 'CMD+SHIFT+M',

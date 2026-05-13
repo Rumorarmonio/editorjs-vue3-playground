@@ -19,6 +19,19 @@ const rel = computed(() => {
   return props.data.target === 'newTab' ? 'noreferrer' : undefined
 })
 
+function handleEventAction(): void {
+  const eventName = props.data.eventName
+
+  window.dispatchEvent(
+    new CustomEvent('editor:cta-action', {
+      detail: {
+        eventName,
+        data: props.data,
+      },
+    }),
+  )
+}
+
 function resolveCtaHref(url: string, baseURL: string): string {
   if (!url.startsWith('/') || url.startsWith('//')) {
     return url
@@ -39,13 +52,22 @@ function resolveCtaHref(url: string, baseURL: string): string {
       {{ data.description }}
     </p>
     <a
-      :class="$style.ctaLink"
+      v-if="data.actionType === 'link'"
+      :class="$style.ctaAction"
       :href="href"
       :target="target"
       :rel="rel"
     >
       {{ data.label }}
     </a>
+    <button
+      v-else
+      type="button"
+      :class="$style.ctaAction"
+      @click="handleEventAction"
+    >
+      {{ data.label }}
+    </button>
   </aside>
 </template>
 

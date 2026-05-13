@@ -44,6 +44,8 @@ export const ctaBlockVariants = ['primary', 'secondary', 'ghost'] as const
 
 export const ctaBlockTargets = ['sameTab', 'newTab'] as const
 
+export const ctaBlockActionTypes = ['link', 'event'] as const
+
 export const codeSnippetLanguages = [
   'plain',
   'typescript',
@@ -65,6 +67,8 @@ export type MediaGalleryItemType = (typeof mediaGalleryItemTypes)[number]
 export type CtaBlockVariant = (typeof ctaBlockVariants)[number]
 
 export type CtaBlockTarget = (typeof ctaBlockTargets)[number]
+
+export type CtaBlockActionType = (typeof ctaBlockActionTypes)[number]
 
 export type CodeSnippetLanguage = (typeof codeSnippetLanguages)[number]
 
@@ -125,11 +129,18 @@ export interface CtaBlockData {
   description: string
   variant: CtaBlockVariant
   target: CtaBlockTarget
+  actionType: CtaBlockActionType
+  eventName: string
 }
 
 export interface CodeSnippetBlockData {
   language: CodeSnippetLanguage
   code: string
+  caption: string
+}
+
+export interface RawHtmlBlockData {
+  html: string
   caption: string
 }
 
@@ -141,6 +152,7 @@ export interface CustomBlockDataMap {
   maskedFieldsDemo: MaskedFieldsDemoBlockData
   cta: CtaBlockData
   codeSnippet: CodeSnippetBlockData
+  rawHtml: RawHtmlBlockData
 }
 
 export function normalizeNoticeBlockData(value: unknown): NoticeBlockData {
@@ -303,6 +315,10 @@ export function normalizeCtaBlockData(value: unknown): CtaBlockData {
     description: normalizeMultilineValue(value.description),
     variant: isCtaBlockVariant(value.variant) ? value.variant : 'primary',
     target: isCtaBlockTarget(value.target) ? value.target : 'sameTab',
+    actionType: isCtaBlockActionType(value.actionType)
+      ? value.actionType
+      : 'link',
+    eventName: normalizeEventNameValue(value.eventName),
   }
 }
 
@@ -316,6 +332,17 @@ export function normalizeCodeSnippetBlockData(
   return {
     language: isCodeSnippetLanguage(value.language) ? value.language : 'plain',
     code: normalizeCodeValue(value.code),
+    caption: normalizeMultilineValue(value.caption),
+  }
+}
+
+export function normalizeRawHtmlBlockData(value: unknown): RawHtmlBlockData {
+  if (!isRecord(value)) {
+    return createDefaultRawHtmlBlockData()
+  }
+
+  return {
+    html: normalizeHtmlValue(value.html),
     caption: normalizeMultilineValue(value.caption),
   }
 }
@@ -429,14 +456,26 @@ export function isMaskedFieldsDemoBlockData(
 }
 
 export function isCtaBlockData(value: unknown): value is CtaBlockData {
+  if (!isRecord(value)) {
+    return false
+  }
+
+  const actionType = isCtaBlockActionType(value.actionType)
+    ? value.actionType
+    : 'link'
+
   return (
-    isRecord(value) &&
     typeof value.label === 'string' &&
     typeof value.url === 'string' &&
-    (value.url === '' || isAllowedCtaUrl(value.url)) &&
+    (actionType === 'event' ||
+      value.url === '' ||
+      isAllowedCtaUrl(value.url)) &&
     typeof value.description === 'string' &&
     isCtaBlockVariant(value.variant) &&
-    isCtaBlockTarget(value.target)
+    isCtaBlockTarget(value.target) &&
+    (value.actionType === undefined ||
+      isCtaBlockActionType(value.actionType)) &&
+    (value.eventName === undefined || typeof value.eventName === 'string')
   )
 }
 
@@ -447,6 +486,14 @@ export function isCodeSnippetBlockData(
     isRecord(value) &&
     isCodeSnippetLanguage(value.language) &&
     typeof value.code === 'string' &&
+    typeof value.caption === 'string'
+  )
+}
+
+export function isRawHtmlBlockData(value: unknown): value is RawHtmlBlockData {
+  return (
+    isRecord(value) &&
+    typeof value.html === 'string' &&
     typeof value.caption === 'string'
   )
 }
@@ -536,6 +583,8 @@ function createDefaultCtaBlockData(): CtaBlockData {
     description: '',
     variant: 'primary',
     target: 'sameTab',
+    actionType: 'link',
+    eventName: '',
   }
 }
 
@@ -543,6 +592,13 @@ function createDefaultCodeSnippetBlockData(): CodeSnippetBlockData {
   return {
     language: 'plain',
     code: '',
+    caption: '',
+  }
+}
+
+function createDefaultRawHtmlBlockData(): RawHtmlBlockData {
+  return {
+    html: '',
     caption: '',
   }
 }
@@ -573,6 +629,10 @@ function isCtaBlockVariant(value: unknown): value is CtaBlockVariant {
 
 function isCtaBlockTarget(value: unknown): value is CtaBlockTarget {
   return ctaBlockTargets.includes(value as CtaBlockTarget)
+}
+
+function isCtaBlockActionType(value: unknown): value is CtaBlockActionType {
+  return ctaBlockActionTypes.includes(value as CtaBlockActionType)
 }
 
 function isCodeSnippetLanguage(
@@ -706,6 +766,16 @@ function normalizeCodeValue(value: unknown): string {
   return typeof value === 'string'
     ? value.replaceAll('\r\n', '\n').replaceAll('\r', '\n')
     : ''
+}
+
+function normalizeHtmlValue(value: unknown): string {
+  return typeof value === 'string'
+    ? value.replaceAll('\r\n', '\n').replaceAll('\r', '\n').trim()
+    : ''
+}
+
+function normalizeEventNameValue(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : ''
 }
 
 export function isAllowedCtaUrl(value: string): boolean {

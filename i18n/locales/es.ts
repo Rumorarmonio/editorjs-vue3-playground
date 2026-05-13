@@ -53,6 +53,9 @@ export const es = {
       exportJson: 'Exportar JSON',
       resetDraft: 'Restablecer borrador',
       backToEditor: 'Volver al editor',
+      ctaDemoModalTitle: 'Evento CTA',
+      ctaDemoModalText: 'El renderer emitió el evento {eventName}.',
+      ctaDemoModalClose: 'Cerrar',
     },
   },
 }

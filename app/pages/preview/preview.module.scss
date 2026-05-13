@@ -124,6 +124,55 @@
   border-radius: 8px;
 }
 
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(0 0 0 / 0.45);
+}
+
+.modal {
+  display: grid;
+  gap: 12px;
+  width: min(420px, 100%);
+  padding: 20px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  box-shadow: var(--shadow-control);
+}
+
+.modalTitle,
+.modalText {
+  margin: 0;
+}
+
+.modalTitle {
+  font-weight: 700;
+}
+
+.modalButton {
+  justify-self: end;
+  min-height: 36px;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-text);
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modalButton:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
 @media (width <= 760px) {
   .header {
     flex-direction: column;

@@ -68,6 +68,10 @@ export const editorBlockRegistry = {
     type: 'codeSnippet',
     title: 'Code snippet',
   },
+  rawHtml: {
+    type: 'rawHtml',
+    title: 'Raw HTML',
+  },
 } as const satisfies EditorBlockRegistry<keyof EditorBlockDataMap & string>
 
 export type EditorBlockType = keyof typeof editorBlockRegistry

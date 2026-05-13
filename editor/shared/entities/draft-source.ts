@@ -3,6 +3,7 @@ import {
   isNoticeBlockData,
   isCtaBlockData,
   isCodeSnippetBlockData,
+  isRawHtmlBlockData,
   isMaskedFieldsDemoBlockData,
   isMediaGalleryBlockData,
   isSectionIntroBlockData,
@@ -164,6 +165,8 @@ function isKnownEditorContentBlock(
       return isCtaBlockData(block.data)
     case 'codeSnippet':
       return isCodeSnippetBlockData(block.data)
+    case 'rawHtml':
+      return isRawHtmlBlockData(block.data)
     default:
       return false
   }

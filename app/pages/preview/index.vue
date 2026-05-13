@@ -31,6 +31,7 @@ const exportError = ref<string | null>(null)
 const navigationMode = ref<'labels' | 'headings'>('headings')
 const activeAnchor = ref<string | null>(null)
 const previewPanelRef = ref<HTMLElement | null>(null)
+const demoCtaEventName = ref<string | null>(null)
 const headingNavigationItems = computed(() =>
   buildHeadingNavigationItems(resolvedContent.value.data),
 )
@@ -55,6 +56,10 @@ const translatedSourceLabel = computed(() =>
 )
 let activeAnchorAnimationFrame = 0
 let activeAnchorResizeObserver: ResizeObserver | null = null
+
+interface CtaActionEventDetail {
+  eventName?: string
+}
 
 function getFlattenedNavigationItems(items: NavigationItem[]): NavigationItem[] {
   return items.flatMap((item) => [
@@ -228,8 +233,23 @@ function handleSetNavigationMode(event: Event): void {
   navigationMode.value = nextMode
 }
 
+function handleCtaAction(event: Event): void {
+  const detail = (event as CustomEvent<CtaActionEventDetail>).detail
+
+  if (detail?.eventName !== 'open-demo-modal') {
+    return
+  }
+
+  demoCtaEventName.value = detail.eventName
+}
+
+function closeDemoModal(): void {
+  demoCtaEventName.value = null
+}
+
 onMounted(() => {
   loadContent()
+  window.addEventListener('editor:cta-action', handleCtaAction)
   window.addEventListener('scroll', scheduleActiveAnchorUpdate, { passive: true })
   window.addEventListener('resize', scheduleActiveAnchorUpdate)
   void nextTick(() => {
@@ -247,7 +267,10 @@ watch(
   { deep: true },
 )
 
-onBeforeUnmount(cleanupActiveAnchorTracking)
+onBeforeUnmount(() => {
+  window.removeEventListener('editor:cta-action', handleCtaAction)
+  cleanupActiveAnchorTracking()
+})
 </script>
 
 <template>
@@ -363,6 +386,38 @@ onBeforeUnmount(cleanupActiveAnchorTracking)
       @import-file="handleImportFile"
       @import-pasted="handleImportPastedJson"
     />
+
+    <Teleport to="body">
+      <div
+        v-if="demoCtaEventName"
+        :class="$style.modalBackdrop"
+        @click.self="closeDemoModal"
+      >
+        <dialog
+          :class="$style.modal"
+          aria-modal="true"
+          open
+        >
+          <p :class="$style.modalTitle">
+            {{ t('app.previewPage.ctaDemoModalTitle') }}
+          </p>
+          <p :class="$style.modalText">
+            {{
+              t('app.previewPage.ctaDemoModalText', {
+                eventName: demoCtaEventName,
+              })
+            }}
+          </p>
+          <button
+            type="button"
+            :class="$style.modalButton"
+            @click="closeDemoModal"
+          >
+            {{ t('app.previewPage.ctaDemoModalClose') }}
+          </button>
+        </dialog>
+      </div>
+    </Teleport>
   </main>
 </template>
 

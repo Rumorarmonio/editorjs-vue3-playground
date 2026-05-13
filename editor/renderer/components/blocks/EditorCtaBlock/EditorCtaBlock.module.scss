@@ -15,40 +15,43 @@
   color: var(--color-muted);
 }
 
-.ctaLink {
+.ctaAction {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 42px;
   padding: 10px 16px;
+  font: inherit;
   font-weight: 700;
   line-height: 1.2;
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 6px;
+  cursor: pointer;
 }
 
-.cta_primary .ctaLink {
+.cta_primary .ctaAction {
   color: var(--color-on-accent);
   background: var(--color-accent);
 }
 
-.cta_secondary .ctaLink {
+.cta_secondary .ctaAction {
   color: var(--color-text);
   background: var(--color-surface);
   border-color: var(--color-border);
 }
 
-.cta_ghost .ctaLink {
+.cta_ghost .ctaAction {
   color: var(--color-accent);
   background: transparent;
   border-color: color-mix(in srgb, var(--color-accent) 38%, transparent);
 }
 
-.ctaLink:hover {
+.ctaAction:hover {
   filter: brightness(0.96);
 }
 
-.ctaLink:focus-visible {
+.ctaAction:focus-visible {
   outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;
 }

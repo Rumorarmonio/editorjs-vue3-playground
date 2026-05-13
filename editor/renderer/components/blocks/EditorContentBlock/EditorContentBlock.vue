@@ -11,6 +11,7 @@ import EditorMediaGalleryBlock from '~~/editor/renderer/components/blocks/Editor
 import EditorNoticeBlock from '~~/editor/renderer/components/blocks/EditorNoticeBlock/EditorNoticeBlock.vue'
 import EditorParagraphBlock from '~~/editor/renderer/components/blocks/EditorParagraphBlock/EditorParagraphBlock.vue'
 import EditorQuoteBlock from '~~/editor/renderer/components/blocks/EditorQuoteBlock/EditorQuoteBlock.vue'
+import EditorRawHtmlBlock from '~~/editor/renderer/components/blocks/EditorRawHtmlBlock/EditorRawHtmlBlock.vue'
 import EditorSectionIntroBlock from '~~/editor/renderer/components/blocks/EditorSectionIntroBlock/EditorSectionIntroBlock.vue'
 import EditorTableBlock from '~~/editor/renderer/components/blocks/EditorTableBlock/EditorTableBlock.vue'
 import EditorTwoColumnsBlock from '~~/editor/renderer/components/blocks/EditorTwoColumnsBlock/EditorTwoColumnsBlock.vue'
@@ -22,6 +23,7 @@ import {
   normalizeNoticeBlockData,
   normalizeCtaBlockData,
   normalizeCodeSnippetBlockData,
+  normalizeRawHtmlBlockData,
   normalizeSectionIntroBlockData,
   normalizeTwoColumnsBlockData,
 } from '~~/editor/shared'
@@ -93,6 +95,10 @@ defineProps<{
   <EditorCodeSnippetBlock
     v-else-if="block.type === 'codeSnippet'"
     :data="normalizeCodeSnippetBlockData(block.data)"
+  />
+  <EditorRawHtmlBlock
+    v-else-if="block.type === 'rawHtml'"
+    :data="normalizeRawHtmlBlockData(block.data)"
   />
   <EditorUnsupportedBlock
     v-else

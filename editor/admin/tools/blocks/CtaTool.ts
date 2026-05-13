@@ -13,10 +13,12 @@ import {
   type PlainFieldControl,
 } from '~~/editor/admin/fields'
 import {
+  ctaBlockActionTypes,
   ctaBlockTargets,
   ctaBlockVariants,
   normalizeCtaBlockData,
   validateCtaBlockData,
+  type CtaBlockActionType,
   type CtaBlockData,
   type CtaBlockTarget,
   type CtaBlockVariant,
@@ -39,10 +41,16 @@ export default class CtaTool implements BlockTool {
     CtaBlockVariant,
     HTMLSelectElement
   > | null = null
+  private actionTypeField: PlainFieldControl<
+    CtaBlockActionType,
+    HTMLSelectElement
+  > | null = null
   private targetField: PlainFieldControl<
     CtaBlockTarget,
     HTMLSelectElement
   > | null = null
+  private eventNameField: PlainFieldControl<string, HTMLInputElement> | null =
+    null
 
   static get toolbox(): ToolboxConfig {
     const messages = getCurrentEditorMessages()
@@ -120,6 +128,24 @@ export default class CtaTool implements BlockTool {
       },
     })
 
+    this.actionTypeField = createPlainSelectField<CtaBlockActionType>({
+      name: 'cta-action-type',
+      label: messages.tools.cta.actionTypeLabel,
+      value: this.data.actionType,
+      options: ctaBlockActionTypes.map((actionType) => ({
+        value: actionType,
+        label: messages.tools.cta.actionTypeOptions[actionType],
+      })),
+      readOnly: this.readOnly,
+      onChange: (value) => {
+        this.data.actionType = value
+        this.eventNameField?.setError(undefined)
+        this.urlField?.setError(undefined)
+        this.updateActionFields()
+        this.dispatchChange()
+      },
+    })
+
     this.targetField = createPlainSelectField<CtaBlockTarget>({
       name: 'cta-target',
       label: messages.tools.cta.targetLabel,
@@ -135,16 +161,35 @@ export default class CtaTool implements BlockTool {
       },
     })
 
+    this.eventNameField = createPlainTextField({
+      name: 'cta-event-name',
+      label: messages.tools.cta.eventNameLabel,
+      value: this.data.eventName,
+      placeholder: messages.tools.cta.eventNamePlaceholder,
+      readOnly: this.readOnly,
+      onChange: (value) => {
+        this.data.eventName = value
+        this.eventNameField?.setError(undefined)
+        this.dispatchChange()
+      },
+    })
+
     const settings = document.createElement('div')
 
     settings.className = 'editor-cta-tool__settings'
-    settings.append(this.variantField.root, this.targetField.root)
+    settings.append(
+      this.variantField.root,
+      this.actionTypeField.root,
+      this.targetField.root,
+      this.eventNameField.root,
+    )
     wrapper.append(
       this.labelField.root,
       this.urlField.root,
       this.descriptionField.root,
       settings,
     )
+    this.updateActionFields()
 
     return wrapper
   }
@@ -170,7 +215,10 @@ export default class CtaTool implements BlockTool {
       description:
         this.descriptionField?.getValue() ?? this.data.description,
       variant: this.variantField?.getValue() ?? this.data.variant,
+      actionType:
+        this.actionTypeField?.getValue() ?? this.data.actionType,
       target: this.targetField?.getValue() ?? this.data.target,
+      eventName: this.eventNameField?.getValue() ?? this.data.eventName,
     })
   }
 
@@ -186,8 +234,31 @@ export default class CtaTool implements BlockTool {
     this.descriptionField?.setError(
       result.issues.find((issue) => issue.path === 'description')?.message,
     )
+    this.eventNameField?.setError(
+      result.issues.find((issue) => issue.path === 'eventName')?.message,
+    )
 
     return result.valid
+  }
+
+  private updateActionFields(): void {
+    const actionType = this.actionTypeField?.getValue() ?? this.data.actionType
+    const isLinkAction = actionType === 'link'
+
+    if (this.urlField) {
+      this.urlField.root.hidden = !isLinkAction
+      this.urlField.setDisabled(!isLinkAction)
+    }
+
+    if (this.targetField) {
+      this.targetField.root.hidden = !isLinkAction
+      this.targetField.setDisabled(!isLinkAction)
+    }
+
+    if (this.eventNameField) {
+      this.eventNameField.root.hidden = isLinkAction
+      this.eventNameField.setDisabled(isLinkAction)
+    }
   }
 
   private dispatchChange(): void {

@@ -53,6 +53,9 @@ export const ru = {
       exportJson: 'Экспорт JSON',
       resetDraft: 'Сбросить черновик',
       backToEditor: 'Назад к редактору',
+      ctaDemoModalTitle: 'Событие CTA',
+      ctaDemoModalText: 'Renderer отправил событие {eventName}.',
+      ctaDemoModalClose: 'Закрыть',
     },
   },
 }

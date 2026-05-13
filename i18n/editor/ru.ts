@@ -97,10 +97,17 @@ export const editorRu: EditorUiMessages = {
       descriptionPlaceholder: 'Короткий дополнительный текст',
       variantLabel: 'Вариант',
       targetLabel: 'Открывать',
+      actionTypeLabel: 'Действие',
+      eventNameLabel: 'Имя события',
+      eventNamePlaceholder: 'open-demo-modal',
       variantOptions: {
         primary: 'Основная',
         secondary: 'Вторичная',
         ghost: 'Текстовая',
+      },
+      actionTypeOptions: {
+        link: 'Открыть ссылку',
+        event: 'Отправить событие',
       },
       targetOptions: {
         sameTab: 'В этой вкладке',
@@ -124,6 +131,15 @@ export const editorRu: EditorUiMessages = {
         json: 'JSON',
         bash: 'Bash',
       },
+    },
+    rawHtml: {
+      toolboxTitle: 'Raw HTML',
+      htmlLabel: 'HTML',
+      htmlPlaceholder: '<section><h3>Своя разметка</h3><p>Доверенный HTML.</p></section>',
+      captionLabel: 'Подпись',
+      captionPlaceholder: 'Необязательная admin-only заметка',
+      securityHint:
+        'Поддерживается только доверенный HTML. Scripts, event handlers, iframes, styles и unsafe attributes удаляются в renderer.',
     },
     embed: {
       toolboxTitle: 'Встраивание',
@@ -206,8 +222,11 @@ export const editorRu: EditorUiMessages = {
       mediaCaption: 'Подпись',
       ctaLabel: 'Текст кнопки',
       ctaDescription: 'Описание',
+      ctaEventName: 'Имя события',
       codeSnippetCode: 'Код',
       codeSnippetCaption: 'Подпись',
+      rawHtml: 'HTML',
+      rawHtmlCaption: 'Подпись',
     },
     contentValidationFallback: 'В контенте есть ошибки валидации.',
     contentValidationSummary: (count) =>
@@ -226,7 +245,11 @@ export const editorRu: EditorUiMessages = {
     ctaUrlRequired: 'URL обязателен.',
     ctaUrlInvalid:
       'Используйте http, https, mailto, ссылку от корня или якорь.',
+    ctaEventNameRequired: 'Имя события обязательно.',
+    ctaEventNameInvalid:
+      'Используйте только буквы, цифры, дефисы, подчёркивания и двоеточия.',
     codeSnippetCodeRequired: 'Код обязателен.',
+    rawHtmlRequired: 'HTML обязателен.',
     maxLength: (label, maxLength) =>
       `${label}: не больше ${maxLength} символов.`,
   },

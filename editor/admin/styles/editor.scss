@@ -721,7 +721,8 @@
   }
 
   .editor-cta-tool,
-  .editor-code-snippet-tool {
+  .editor-code-snippet-tool,
+  .editor-raw-html-tool {
     display: grid;
     gap: 14px;
     padding: 16px;
@@ -744,6 +745,14 @@
     font-size: 0.9375rem;
     line-height: 1.55;
     white-space: pre;
+  }
+
+  .editor-raw-html-tool__html-control {
+    min-height: 240px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono',
+      monospace;
+    font-size: 0.9375rem;
+    line-height: 1.55;
   }
 
   .editor-section-intro-tool {

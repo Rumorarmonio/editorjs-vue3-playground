@@ -39,3 +39,25 @@
   border: 1px solid var(--color-border);
   border-radius: 999px;
 }
+
+.codeSnippetCode :global(.hljs-keyword),
+.codeSnippetCode :global(.hljs-selector-tag),
+.codeSnippetCode :global(.hljs-title) {
+  color: var(--color-accent);
+}
+
+.codeSnippetCode :global(.hljs-string),
+.codeSnippetCode :global(.hljs-attr),
+.codeSnippetCode :global(.hljs-template-variable) {
+  color: var(--color-success);
+}
+
+.codeSnippetCode :global(.hljs-number),
+.codeSnippetCode :global(.hljs-literal),
+.codeSnippetCode :global(.hljs-built_in) {
+  color: var(--color-warning);
+}
+
+.codeSnippetCode :global(.hljs-comment) {
+  color: var(--color-muted);
+}

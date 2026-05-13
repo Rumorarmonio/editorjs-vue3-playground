@@ -3,11 +3,13 @@ import {
   normalizeNoticeBlockData,
   normalizeCtaBlockData,
   normalizeCodeSnippetBlockData,
+  normalizeRawHtmlBlockData,
   isAllowedCtaUrl,
   normalizeSectionIntroBlockData,
   normalizeTwoColumnsBlockData,
   type CtaBlockData,
   type CodeSnippetBlockData,
+  type RawHtmlBlockData,
   type MediaGalleryBlockData,
   type MediaGalleryItemData,
   type NoticeBlockData,
@@ -44,7 +46,11 @@ const maxCtaLabelLength = 80
 const maxCtaDescriptionLength = 240
 const maxCodeCaptionLength = 160
 const maxCodeLength = 12000
+const maxRawHtmlLength = 12000
+const maxRawHtmlCaptionLength = 160
+const maxCtaEventNameLength = 80
 const galleryIdPattern = /^[a-z0-9_-]+$/i
+const ctaEventNamePattern = /^[a-z0-9:_-]+$/i
 
 export function validateEditorContentData(
   content: EditorContentData,
@@ -81,6 +87,11 @@ export function validateEditorContentData(
       case 'codeSnippet':
         return prefixValidationIssues(
           validateCodeSnippetBlockData(block.data).issues,
+          blockPath,
+        )
+      case 'rawHtml':
+        return prefixValidationIssues(
+          validateRawHtmlBlockData(block.data).issues,
           blockPath,
         )
       default:
@@ -233,15 +244,30 @@ export function validateCtaBlockData(
     })
   }
 
-  if (!hasText(data.url)) {
+  if (data.actionType === 'link' && !hasText(data.url)) {
     issues.push({
       path: 'url',
       message: messages.ctaUrlRequired,
     })
-  } else if (!isAllowedCtaUrl(data.url)) {
+  } else if (data.actionType === 'link' && !isAllowedCtaUrl(data.url)) {
     issues.push({
       path: 'url',
       message: messages.ctaUrlInvalid,
+    })
+  }
+
+  if (data.actionType === 'event' && !hasText(data.eventName)) {
+    issues.push({
+      path: 'eventName',
+      message: messages.ctaEventNameRequired,
+    })
+  } else if (
+    data.actionType === 'event' &&
+    !ctaEventNamePattern.test(data.eventName)
+  ) {
+    issues.push({
+      path: 'eventName',
+      message: messages.ctaEventNameInvalid,
     })
   }
 
@@ -259,6 +285,48 @@ export function validateCtaBlockData(
     data.description,
     maxCtaDescriptionLength,
     messages.fieldLabels.ctaDescription,
+    messages,
+  )
+  pushMaxLengthIssue(
+    issues,
+    'eventName',
+    data.eventName,
+    maxCtaEventNameLength,
+    messages.fieldLabels.ctaEventName,
+    messages,
+  )
+
+  return createValidationResult(issues)
+}
+
+export function validateRawHtmlBlockData(
+  value: Partial<RawHtmlBlockData>,
+  messages: EditorValidationMessages = getCurrentEditorMessages().validation,
+): ValidationResult {
+  const data = normalizeRawHtmlBlockData(value)
+  const issues: ValidationIssue[] = []
+
+  if (!hasText(data.html)) {
+    issues.push({
+      path: 'html',
+      message: messages.rawHtmlRequired,
+    })
+  }
+
+  pushMaxLengthIssue(
+    issues,
+    'html',
+    data.html,
+    maxRawHtmlLength,
+    messages.fieldLabels.rawHtml,
+    messages,
+  )
+  pushMaxLengthIssue(
+    issues,
+    'caption',
+    data.caption,
+    maxRawHtmlCaptionLength,
+    messages.fieldLabels.rawHtmlCaption,
     messages,
   )
 

@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import { highlightCode } from '~~/editor/renderer/helpers/highlight-code'
 import type { CodeSnippetBlockData } from '~~/editor/shared'
 
-defineProps<{
+const props = defineProps<{
   data: CodeSnippetBlockData
 }>()
+
+const highlightedCode = computed(() => {
+  return highlightCode(props.data.code, props.data.language)
+})
 </script>
 
 <template>
@@ -14,7 +19,10 @@ defineProps<{
     >
       {{ data.caption }}
     </figcaption>
-    <pre :class="$style.codeSnippetPre"><code :class="$style.codeSnippetCode">{{ data.code }}</code></pre>
+    <pre :class="$style.codeSnippetPre"><code
+      :class="$style.codeSnippetCode"
+      v-html="highlightedCode"
+    /></pre>
     <span :class="$style.codeSnippetLanguage">
       {{ data.language }}
     </span>

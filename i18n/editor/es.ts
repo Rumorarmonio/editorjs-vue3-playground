@@ -98,10 +98,17 @@ export const editorEs: EditorUiMessages = {
       descriptionPlaceholder: 'Texto breve opcional',
       variantLabel: 'Variante',
       targetLabel: 'Destino',
+      actionTypeLabel: 'Acción',
+      eventNameLabel: 'Nombre del evento',
+      eventNamePlaceholder: 'open-demo-modal',
       variantOptions: {
         primary: 'Principal',
         secondary: 'Secundario',
         ghost: 'Discreto',
+      },
+      actionTypeOptions: {
+        link: 'Abrir enlace',
+        event: 'Emitir evento',
       },
       targetOptions: {
         sameTab: 'Misma pestaña',
@@ -125,6 +132,15 @@ export const editorEs: EditorUiMessages = {
         json: 'JSON',
         bash: 'Bash',
       },
+    },
+    rawHtml: {
+      toolboxTitle: 'Raw HTML',
+      htmlLabel: 'HTML',
+      htmlPlaceholder: '<section><h3>Marcado propio</h3><p>HTML confiable.</p></section>',
+      captionLabel: 'Leyenda',
+      captionPlaceholder: 'Nota admin-only opcional',
+      securityHint:
+        'Solo se admite HTML confiable. Scripts, event handlers, iframes, styles y unsafe attributes se eliminan en el renderer.',
     },
     embed: {
       toolboxTitle: 'Insertar',
@@ -207,8 +223,11 @@ export const editorEs: EditorUiMessages = {
       mediaCaption: 'Leyenda',
       ctaLabel: 'Texto del botón',
       ctaDescription: 'Descripción',
+      ctaEventName: 'Nombre del evento',
       codeSnippetCode: 'Código',
       codeSnippetCaption: 'Leyenda',
+      rawHtml: 'HTML',
+      rawHtmlCaption: 'Leyenda',
     },
     contentValidationFallback: 'El contenido tiene errores de validación.',
     contentValidationSummary: (count) =>
@@ -226,7 +245,11 @@ export const editorEs: EditorUiMessages = {
     ctaUrlRequired: 'La URL es obligatoria.',
     ctaUrlInvalid:
       'Use una URL http, https, mailto, relativa a la raíz o de ancla.',
+    ctaEventNameRequired: 'El nombre del evento es obligatorio.',
+    ctaEventNameInvalid:
+      'Use solo letras, números, guiones, guiones bajos y dos puntos.',
     codeSnippetCodeRequired: 'El código es obligatorio.',
+    rawHtmlRequired: 'El HTML es obligatorio.',
     maxLength: (label, maxLength) =>
       `${label} debe tener ${maxLength} caracteres o menos.`,
   },

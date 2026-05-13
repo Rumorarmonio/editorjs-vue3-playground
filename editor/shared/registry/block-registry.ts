@@ -60,6 +60,14 @@ export const editorBlockRegistry = {
     type: 'maskedFieldsDemo',
     title: 'Masked fields demo',
   },
+  cta: {
+    type: 'cta',
+    title: 'CTA',
+  },
+  codeSnippet: {
+    type: 'codeSnippet',
+    title: 'Code snippet',
+  },
 } as const satisfies EditorBlockRegistry<keyof EditorBlockDataMap & string>
 
 export type EditorBlockType = keyof typeof editorBlockRegistry

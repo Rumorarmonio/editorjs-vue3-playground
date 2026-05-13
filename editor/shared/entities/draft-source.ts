@@ -1,6 +1,8 @@
 import { EDITOR_DRAFT_STORAGE_KEY } from '~~/editor/shared/constants/draft-storage'
 import {
   isNoticeBlockData,
+  isCtaBlockData,
+  isCodeSnippetBlockData,
   isMaskedFieldsDemoBlockData,
   isMediaGalleryBlockData,
   isSectionIntroBlockData,
@@ -158,6 +160,10 @@ function isKnownEditorContentBlock(
       return isMediaGalleryBlockData(block.data)
     case 'maskedFieldsDemo':
       return isMaskedFieldsDemoBlockData(block.data)
+    case 'cta':
+      return isCtaBlockData(block.data)
+    case 'codeSnippet':
+      return isCodeSnippetBlockData(block.data)
     default:
       return false
   }

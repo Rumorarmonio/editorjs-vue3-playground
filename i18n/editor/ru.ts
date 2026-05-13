@@ -87,6 +87,44 @@ export const editorRu: EditorUiMessages = {
         email: 'Email',
       },
     },
+    cta: {
+      toolboxTitle: 'CTA-кнопка',
+      labelLabel: 'Текст кнопки',
+      labelPlaceholder: 'Начать проект',
+      urlLabel: 'URL',
+      urlPlaceholder: 'https://example.com/contact',
+      descriptionLabel: 'Описание',
+      descriptionPlaceholder: 'Короткий дополнительный текст',
+      variantLabel: 'Вариант',
+      targetLabel: 'Открывать',
+      variantOptions: {
+        primary: 'Основная',
+        secondary: 'Вторичная',
+        ghost: 'Текстовая',
+      },
+      targetOptions: {
+        sameTab: 'В этой вкладке',
+        newTab: 'В новой вкладке',
+      },
+    },
+    codeSnippet: {
+      toolboxTitle: 'Фрагмент кода',
+      languageLabel: 'Язык',
+      codeLabel: 'Код',
+      codePlaceholder: 'Вставьте пример кода',
+      captionLabel: 'Подпись',
+      captionPlaceholder: 'Необязательная подпись к коду',
+      languageOptions: {
+        plain: 'Простой текст',
+        typescript: 'TypeScript',
+        javascript: 'JavaScript',
+        vue: 'Vue',
+        html: 'HTML',
+        css: 'CSS',
+        json: 'JSON',
+        bash: 'Bash',
+      },
+    },
     embed: {
       toolboxTitle: 'Встраивание',
       urlPlaceholder: (services) => `Вставьте URL ${services}`,
@@ -166,6 +204,10 @@ export const editorRu: EditorUiMessages = {
       galleryId: 'ID галереи',
       mediaAlt: 'Alt-текст',
       mediaCaption: 'Подпись',
+      ctaLabel: 'Текст кнопки',
+      ctaDescription: 'Описание',
+      codeSnippetCode: 'Код',
+      codeSnippetCaption: 'Подпись',
     },
     contentValidationFallback: 'В контенте есть ошибки валидации.',
     contentValidationSummary: (count) =>
@@ -180,6 +222,11 @@ export const editorRu: EditorUiMessages = {
     mediaUrlInvalid:
       'Используйте корректный http, относительный, blob, image data или video data URL.',
     mediaAltRequired: 'Alt-текст обязателен для изображений.',
+    ctaLabelRequired: 'Текст кнопки обязателен.',
+    ctaUrlRequired: 'URL обязателен.',
+    ctaUrlInvalid:
+      'Используйте http, https, mailto, ссылку от корня или якорь.',
+    codeSnippetCodeRequired: 'Код обязателен.',
     maxLength: (label, maxLength) =>
       `${label}: не больше ${maxLength} символов.`,
   },

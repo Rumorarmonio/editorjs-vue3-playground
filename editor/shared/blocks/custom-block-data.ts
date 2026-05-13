@@ -40,12 +40,33 @@ export const mediaGalleryModes = ['gallery', 'slider'] as const
 
 export const mediaGalleryItemTypes = ['image', 'video'] as const
 
+export const ctaBlockVariants = ['primary', 'secondary', 'ghost'] as const
+
+export const ctaBlockTargets = ['sameTab', 'newTab'] as const
+
+export const codeSnippetLanguages = [
+  'plain',
+  'typescript',
+  'javascript',
+  'vue',
+  'html',
+  'css',
+  'json',
+  'bash',
+] as const
+
 export type TwoColumnsLayoutVariant =
   (typeof twoColumnsLayoutVariants)[number]
 
 export type MediaGalleryMode = (typeof mediaGalleryModes)[number]
 
 export type MediaGalleryItemType = (typeof mediaGalleryItemTypes)[number]
+
+export type CtaBlockVariant = (typeof ctaBlockVariants)[number]
+
+export type CtaBlockTarget = (typeof ctaBlockTargets)[number]
+
+export type CodeSnippetLanguage = (typeof codeSnippetLanguages)[number]
 
 export type TwoColumnsContentBlock =
   | EditorOutputBlock<'paragraph', ParagraphBlockData>
@@ -98,12 +119,28 @@ export interface MaskedFieldsDemoBlockData {
   email: string
 }
 
+export interface CtaBlockData {
+  label: string
+  url: string
+  description: string
+  variant: CtaBlockVariant
+  target: CtaBlockTarget
+}
+
+export interface CodeSnippetBlockData {
+  language: CodeSnippetLanguage
+  code: string
+  caption: string
+}
+
 export interface CustomBlockDataMap {
   notice: NoticeBlockData
   sectionIntro: SectionIntroBlockData
   twoColumns: TwoColumnsBlockData
   mediaGallery: MediaGalleryBlockData
   maskedFieldsDemo: MaskedFieldsDemoBlockData
+  cta: CtaBlockData
+  codeSnippet: CodeSnippetBlockData
 }
 
 export function normalizeNoticeBlockData(value: unknown): NoticeBlockData {
@@ -255,6 +292,34 @@ export function normalizeMaskedFieldsDemoBlockData(
   }
 }
 
+export function normalizeCtaBlockData(value: unknown): CtaBlockData {
+  if (!isRecord(value)) {
+    return createDefaultCtaBlockData()
+  }
+
+  return {
+    label: normalizePlainValue(value.label),
+    url: normalizeCtaUrlValue(value.url),
+    description: normalizeMultilineValue(value.description),
+    variant: isCtaBlockVariant(value.variant) ? value.variant : 'primary',
+    target: isCtaBlockTarget(value.target) ? value.target : 'sameTab',
+  }
+}
+
+export function normalizeCodeSnippetBlockData(
+  value: unknown,
+): CodeSnippetBlockData {
+  if (!isRecord(value)) {
+    return createDefaultCodeSnippetBlockData()
+  }
+
+  return {
+    language: isCodeSnippetLanguage(value.language) ? value.language : 'plain',
+    code: normalizeCodeValue(value.code),
+    caption: normalizeMultilineValue(value.caption),
+  }
+}
+
 export function isSectionIntroBlockData(
   value: unknown,
 ): value is SectionIntroBlockData {
@@ -363,6 +428,29 @@ export function isMaskedFieldsDemoBlockData(
   )
 }
 
+export function isCtaBlockData(value: unknown): value is CtaBlockData {
+  return (
+    isRecord(value) &&
+    typeof value.label === 'string' &&
+    typeof value.url === 'string' &&
+    (value.url === '' || isAllowedCtaUrl(value.url)) &&
+    typeof value.description === 'string' &&
+    isCtaBlockVariant(value.variant) &&
+    isCtaBlockTarget(value.target)
+  )
+}
+
+export function isCodeSnippetBlockData(
+  value: unknown,
+): value is CodeSnippetBlockData {
+  return (
+    isRecord(value) &&
+    isCodeSnippetLanguage(value.language) &&
+    typeof value.code === 'string' &&
+    typeof value.caption === 'string'
+  )
+}
+
 function createDefaultNoticeBlockData(): NoticeBlockData {
   return {
     title: '',
@@ -441,6 +529,24 @@ function createDefaultMaskedFieldsDemoBlockData(): MaskedFieldsDemoBlockData {
   }
 }
 
+function createDefaultCtaBlockData(): CtaBlockData {
+  return {
+    label: '',
+    url: '',
+    description: '',
+    variant: 'primary',
+    target: 'sameTab',
+  }
+}
+
+function createDefaultCodeSnippetBlockData(): CodeSnippetBlockData {
+  return {
+    language: 'plain',
+    code: '',
+    caption: '',
+  }
+}
+
 function isNoticeBlockType(value: unknown): value is NoticeBlockType {
   return noticeBlockTypes.includes(value as NoticeBlockType)
 }
@@ -459,6 +565,20 @@ function isMediaGalleryItemType(
   value: unknown,
 ): value is MediaGalleryItemType {
   return mediaGalleryItemTypes.includes(value as MediaGalleryItemType)
+}
+
+function isCtaBlockVariant(value: unknown): value is CtaBlockVariant {
+  return ctaBlockVariants.includes(value as CtaBlockVariant)
+}
+
+function isCtaBlockTarget(value: unknown): value is CtaBlockTarget {
+  return ctaBlockTargets.includes(value as CtaBlockTarget)
+}
+
+function isCodeSnippetLanguage(
+  value: unknown,
+): value is CodeSnippetLanguage {
+  return codeSnippetLanguages.includes(value as CodeSnippetLanguage)
 }
 
 function isRichParagraphFieldBlock(
@@ -572,6 +692,30 @@ function normalizeMediaUrlValue(value: unknown): string {
   const url = value.trim()
 
   return isAllowedMediaUrl(url) ? url : ''
+}
+
+function normalizeCtaUrlValue(value: unknown): string {
+  if (typeof value !== 'string') {
+    return ''
+  }
+
+  return value.trim()
+}
+
+function normalizeCodeValue(value: unknown): string {
+  return typeof value === 'string'
+    ? value.replaceAll('\r\n', '\n').replaceAll('\r', '\n')
+    : ''
+}
+
+export function isAllowedCtaUrl(value: string): boolean {
+  return (
+    value.startsWith('https://') ||
+    value.startsWith('http://') ||
+    value.startsWith('mailto:') ||
+    (value.startsWith('/') && !value.startsWith('//')) ||
+    value.startsWith('#')
+  )
 }
 
 function createMediaGalleryItemId(): string {

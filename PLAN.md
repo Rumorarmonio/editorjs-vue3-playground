@@ -23,20 +23,21 @@ deployment.
 - Локализация UI редактора завершена.
 - Light/Dark theme завершён.
 - Клавиатурная навигация и accessibility polish завершён.
-- Этап Некритичные улучшения временно закрыт после серии optional improvements; к нему планируется вернуться после реализации следующего этапа.
+- Этап Некритичные улучшения снова временно закрыт: нужно добавить `Raw HTML` в рамках этапа расширения набора контентных блоков и plugins.
 - Первое optional improvement этапа Некритичные улучшения реализовано: выбор языка переведён на dropdown по аналогии с темой, добавлены auto preference и испанский интерфейс.
 - Второе optional improvement этапа Некритичные улучшения реализовано: preview sidebar получил временный demo-переключатель между navigation по заголовкам и старой navigation по `AnchorTune` / `LabelTune`.
 - Третье optional improvement этапа Некритичные улучшения реализовано: добавлен `AnimationTune` для простых reveal-анимаций блоков в renderer.
 - Четвёртое optional improvement этапа Некритичные улучшения реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube, VK Video и Twitch.
 - Точечное UX-улучшение embed-блока реализовано: существующий `ManualEmbedTool` позволяет редактировать URL уже созданного embed без удаления блока.
 - Style-architecture improvement этапа Некритичные улучшения реализован: глобальные Editor.js/custom tool стили вынесены из CSS Module в `editor/admin/styles/editor.scss`.
-- Активный этап: расширение набора контентных блоков и plugins как отдельный research/decision этап.
+- Этап расширения набора контентных блоков и plugins снова активен: реализованы typed `CTA/Button` и `Code snippet`, следующим выбран `Raw HTML`.
+- Активный этап: расширение набора контентных блоков и plugins.
 
 ## Временно закрытый этап
 
 ### Некритичные улучшения
 
-Статус: временно закрыт.
+Статус: временно закрыт повторно.
 
 Цель этапа: довести проект до более аккуратной расширенной версии через небольшие optional improvements, не ломая уже стабильную архитектуру, content JSON schema и
 базовые editor/renderer сценарии.
@@ -64,7 +65,7 @@ deployment.
 2. Выбрать первый небольшой improvement и зафиксировать ожидаемое поведение — выполнено: language preference `system | ru | en | es`, browser/OS detection, dropdown UI.
 3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — выполнены language switcher, heading-based sidebar navigation, block reveal animations, embed Fancybox display, редактирование URL существующего embed-блока и вынос admin editor skin в глобальный stylesheet.
 4. После каждого значимого изменения запускать соразмерные проверки — выполнено для language switcher, heading navigation и block reveal animations; для embed Fancybox display и style-architecture изменений проверки остаются частью ближайшего smoke-check.
-5. Перед возвращением к этапу пройти smoke-check основных editor/preview сценариев и выбрать следующий небольшой improvement.
+5. После возврата к этапу пройти smoke-check основных editor/preview сценариев и выбрать следующий небольшой improvement.
 
 ## Критерии готовности этапа
 
@@ -72,7 +73,7 @@ deployment.
 - Save/load, Import JSON, validation, masks, localization, theme, preview, `Reset draft` и `Export JSON` остаются работоспособными.
 - `npm run check` проходит; `npm run build` запускается при необходимости после runtime/style изменений.
 
-Этап временно закрыт, потому что список улучшений пополняется постоянно. После реализации следующего этапа к нему планируется вернуться.
+Этап снова временно закрыт до завершения `Raw HTML` в рамках расширения набора blocks/plugins.
 
 ## Активный этап
 
@@ -86,12 +87,12 @@ deployment.
 В scope входят:
 
 1. Research официальных и community Editor.js plugins на предмет реальной пользы для текущего проекта.
-2. Проектирование кастомного `CTA/Button` block для крупных ссылок/кнопок с `variant` и явным target contract.
-3. Решение по `Raw HTML`: trusted/admin-only escape hatch с sanitizer/allowlist и renderer contract либо отказ от добавления.
-4. Решение по code block: `@editorjs/code` как простой ввод кода либо custom code block с language field и renderer-side syntax highlighting.
-5. Решение по link preview: отложить `@editorjs/link`, пока в проекте нет backend/server route для metadata fetching.
-6. Решение по `@editorjs/warning`: не добавлять, если текущий `NoticeTool` покрывает warning/info/success лучше и без дублирования.
-7. Проверка, какие новые blocks допустимы только в основном editor, а какие действительно нужны во вложенных editor whitelist'ах.
+2. Проектирование кастомного `CTA/Button` block для крупных ссылок/кнопок с `variant` и явным target contract — выполнено.
+3. Решение по `Raw HTML`: добавить на текущем этапе как trusted/admin-only block с явным sanitizer/allowlist и renderer contract.
+4. Решение по code block: вместо `@editorjs/code` реализован custom typed `Code snippet` с language field и renderer contract без новых зависимостей.
+5. Решение по link preview: `@editorjs/link` отложен, пока в проекте нет backend/server route для metadata fetching.
+6. Решение по `@editorjs/warning`: не добавлять, потому что текущий `NoticeTool` покрывает warning/info/success без дублирования.
+7. Проверка whitelist policy: новые blocks добавлены только в основной editor; вложенные editor whitelist'ы не расширялись без отдельного UX-сценария.
 
 Вне scope этапа:
 
@@ -103,21 +104,23 @@ deployment.
 
 ## План этапа
 
-1. Зафиксировать shortlist кандидатов: custom `CTA/Button`, `Raw HTML`, code block, link preview, warning replacement/duplication.
-2. Для каждого кандидата принять решение: добавить сейчас, отложить, заменить кастомным typed block или отказаться.
-3. Для выбранного первого блока описать data contract, renderer behavior, validation, i18n strings, theme/accessibility требования и whitelist policy.
-4. Реализовывать выбранные blocks/plugins по одному, с узким diff и отдельной проверкой save/load/render/import/export/reset.
-5. После каждого значимого изменения обновлять `NOTES.md` и при необходимости demo content.
+1. Зафиксировать shortlist кандидатов: custom `CTA/Button`, `Raw HTML`, code block, link preview, warning replacement/duplication — выполнено.
+2. Для каждого кандидата принять решение: добавить сейчас, отложить, заменить кастомным typed block или отказаться — выполнено.
+3. Для выбранных блоков описать data contract, renderer behavior, validation, i18n strings, theme/accessibility требования и whitelist policy — выполнено для `CTA/Button` и `Code snippet`; следующий контракт нужен для `Raw HTML`.
+4. Реализовывать выбранные blocks/plugins по одному, с узким diff и отдельной проверкой save/load/render/import/export/reset — выполнено для `CTA/Button` и `Code snippet`; следующим реализуется `Raw HTML`.
+5. После каждого значимого изменения обновлять `NOTES.md` и при необходимости demo content — выполнено для `CTA/Button` и `Code snippet`; повторить после `Raw HTML`.
 
 ## Критерии готовности этапа
 
-- Решения по `CTA/Button`, `Raw HTML`, code block, link preview и warning зафиксированы явно.
+- Решения по `CTA/Button`, code block, link preview и warning зафиксированы явно; `Raw HTML` выбран к реализации с отдельным security/renderer contract.
 - Реализованы только те blocks/plugins, которые дают новый сценарий и имеют полный editor/renderer/shared contract.
 - Новые blocks не нарушают frontend-only ограничения проекта.
 - Save/load, Import JSON, validation, localization, theme, keyboard scenarios, preview, `Reset draft` и `Export JSON` остаются работоспособными.
 - `npm run check` проходит; `npm run build` запускается при runtime/style изменениях.
 
 Следующий крупный этап после расширения набора контентных блоков и plugins: финальная стабилизация / подготовка к следующему fullstack-проекту.
+
+Промежуточный итог: добавлены custom blocks `cta` и `codeSnippet` с typed shared contracts, guards, validation, localized editor UI, main editor toolbox integration, renderer components, theme-aware styles и demo content. Link preview отложен до появления backend metadata endpoint, `Warning` не добавлен из-за дублирования `NoticeTool`. После ручной проверки `CTA/Button` и `Code snippet` подтверждены как рабочие. Post-review fixes для CTA URL и сохранения code whitespace внесены. Следующий шаг этапа: реализовать `Raw HTML` как trusted/admin-only block без произвольного JavaScript execution.
 
 ## Последний завершённый этап
 

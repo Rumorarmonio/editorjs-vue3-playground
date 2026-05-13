@@ -1,8 +1,13 @@
 import {
   normalizeMediaGalleryBlockData,
   normalizeNoticeBlockData,
+  normalizeCtaBlockData,
+  normalizeCodeSnippetBlockData,
+  isAllowedCtaUrl,
   normalizeSectionIntroBlockData,
   normalizeTwoColumnsBlockData,
+  type CtaBlockData,
+  type CodeSnippetBlockData,
   type MediaGalleryBlockData,
   type MediaGalleryItemData,
   type NoticeBlockData,
@@ -35,6 +40,10 @@ const maxSectionIntroTitleLength = 120
 const maxGalleryIdLength = 80
 const maxMediaAltLength = 160
 const maxMediaCaptionLength = 300
+const maxCtaLabelLength = 80
+const maxCtaDescriptionLength = 240
+const maxCodeCaptionLength = 160
+const maxCodeLength = 12000
 const galleryIdPattern = /^[a-z0-9_-]+$/i
 
 export function validateEditorContentData(
@@ -62,6 +71,16 @@ export function validateEditorContentData(
       case 'mediaGallery':
         return prefixValidationIssues(
           validateMediaGalleryBlockData(block.data).issues,
+          blockPath,
+        )
+      case 'cta':
+        return prefixValidationIssues(
+          validateCtaBlockData(block.data).issues,
+          blockPath,
+        )
+      case 'codeSnippet':
+        return prefixValidationIssues(
+          validateCodeSnippetBlockData(block.data).issues,
           blockPath,
         )
       default:
@@ -196,6 +215,86 @@ export function validateMediaGalleryBlockData(
   data.items.forEach((item, index) => {
     issues.push(...validateMediaGalleryItem(item, index, messages))
   })
+
+  return createValidationResult(issues)
+}
+
+export function validateCtaBlockData(
+  value: Partial<CtaBlockData>,
+  messages: EditorValidationMessages = getCurrentEditorMessages().validation,
+): ValidationResult {
+  const data = normalizeCtaBlockData(value)
+  const issues: ValidationIssue[] = []
+
+  if (!hasText(data.label)) {
+    issues.push({
+      path: 'label',
+      message: messages.ctaLabelRequired,
+    })
+  }
+
+  if (!hasText(data.url)) {
+    issues.push({
+      path: 'url',
+      message: messages.ctaUrlRequired,
+    })
+  } else if (!isAllowedCtaUrl(data.url)) {
+    issues.push({
+      path: 'url',
+      message: messages.ctaUrlInvalid,
+    })
+  }
+
+  pushMaxLengthIssue(
+    issues,
+    'label',
+    data.label,
+    maxCtaLabelLength,
+    messages.fieldLabels.ctaLabel,
+    messages,
+  )
+  pushMaxLengthIssue(
+    issues,
+    'description',
+    data.description,
+    maxCtaDescriptionLength,
+    messages.fieldLabels.ctaDescription,
+    messages,
+  )
+
+  return createValidationResult(issues)
+}
+
+export function validateCodeSnippetBlockData(
+  value: Partial<CodeSnippetBlockData>,
+  messages: EditorValidationMessages = getCurrentEditorMessages().validation,
+): ValidationResult {
+  const data = normalizeCodeSnippetBlockData(value)
+  const issues: ValidationIssue[] = []
+
+  if (!hasText(data.code)) {
+    issues.push({
+      path: 'code',
+      message: messages.codeSnippetCodeRequired,
+    })
+  }
+
+  pushMaxLengthIssue(
+    issues,
+    'code',
+    data.code,
+    maxCodeLength,
+    messages.fieldLabels.codeSnippetCode,
+    messages,
+  )
+  pushMaxLengthIssue(
+    issues,
+    'caption',
+    data.caption,
+    maxCodeCaptionLength,
+    messages.fieldLabels.codeSnippetCaption,
+    messages,
+  )
 
   return createValidationResult(issues)
 }

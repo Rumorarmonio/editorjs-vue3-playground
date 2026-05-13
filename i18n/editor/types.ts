@@ -15,6 +15,10 @@ export interface EditorValidationMessages {
     galleryId: string
     mediaAlt: string
     mediaCaption: string
+    ctaLabel: string
+    ctaDescription: string
+    codeSnippetCode: string
+    codeSnippetCaption: string
   }
   contentValidationFallback: string
   contentValidationSummary: (count: number) => string
@@ -26,6 +30,10 @@ export interface EditorValidationMessages {
   mediaUrlRequired: string
   mediaUrlInvalid: string
   mediaAltRequired: string
+  ctaLabelRequired: string
+  ctaUrlRequired: string
+  ctaUrlInvalid: string
+  codeSnippetCodeRequired: string
   maxLength: (label: string, maxLength: number) => string
 }
 
@@ -113,6 +121,35 @@ export interface EditorUiMessages {
         card: string
         email: string
       }
+    }
+    cta: {
+      toolboxTitle: string
+      labelLabel: string
+      labelPlaceholder: string
+      urlLabel: string
+      urlPlaceholder: string
+      descriptionLabel: string
+      descriptionPlaceholder: string
+      variantLabel: string
+      targetLabel: string
+      variantOptions: {
+        primary: string
+        secondary: string
+        ghost: string
+      }
+      targetOptions: {
+        sameTab: string
+        newTab: string
+      }
+    }
+    codeSnippet: {
+      toolboxTitle: string
+      languageLabel: string
+      codeLabel: string
+      codePlaceholder: string
+      captionLabel: string
+      captionPlaceholder: string
+      languageOptions: Record<string, string>
     }
     embed: {
       toolboxTitle: string

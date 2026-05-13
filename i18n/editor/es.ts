@@ -88,6 +88,44 @@ export const editorEs: EditorUiMessages = {
         email: 'Email',
       },
     },
+    cta: {
+      toolboxTitle: 'Botón CTA',
+      labelLabel: 'Texto del botón',
+      labelPlaceholder: 'Iniciar un proyecto',
+      urlLabel: 'URL',
+      urlPlaceholder: 'https://example.com/contact',
+      descriptionLabel: 'Descripción',
+      descriptionPlaceholder: 'Texto breve opcional',
+      variantLabel: 'Variante',
+      targetLabel: 'Destino',
+      variantOptions: {
+        primary: 'Principal',
+        secondary: 'Secundario',
+        ghost: 'Discreto',
+      },
+      targetOptions: {
+        sameTab: 'Misma pestaña',
+        newTab: 'Nueva pestaña',
+      },
+    },
+    codeSnippet: {
+      toolboxTitle: 'Fragmento de código',
+      languageLabel: 'Lenguaje',
+      codeLabel: 'Código',
+      codePlaceholder: 'Pegue un ejemplo de código',
+      captionLabel: 'Leyenda',
+      captionPlaceholder: 'Leyenda opcional del código',
+      languageOptions: {
+        plain: 'Texto plano',
+        typescript: 'TypeScript',
+        javascript: 'JavaScript',
+        vue: 'Vue',
+        html: 'HTML',
+        css: 'CSS',
+        json: 'JSON',
+        bash: 'Bash',
+      },
+    },
     embed: {
       toolboxTitle: 'Insertar',
       urlPlaceholder: (services) => `Pegue una URL de ${services}`,
@@ -167,6 +205,10 @@ export const editorEs: EditorUiMessages = {
       galleryId: 'ID de galería',
       mediaAlt: 'Texto alt',
       mediaCaption: 'Leyenda',
+      ctaLabel: 'Texto del botón',
+      ctaDescription: 'Descripción',
+      codeSnippetCode: 'Código',
+      codeSnippetCaption: 'Leyenda',
     },
     contentValidationFallback: 'El contenido tiene errores de validación.',
     contentValidationSummary: (count) =>
@@ -180,6 +222,11 @@ export const editorEs: EditorUiMessages = {
     mediaUrlInvalid:
       'Use una URL http, relativa, blob, data image o data video válida.',
     mediaAltRequired: 'El texto alt es obligatorio para imágenes.',
+    ctaLabelRequired: 'El texto del botón es obligatorio.',
+    ctaUrlRequired: 'La URL es obligatoria.',
+    ctaUrlInvalid:
+      'Use una URL http, https, mailto, relativa a la raíz o de ancla.',
+    codeSnippetCodeRequired: 'El código es obligatorio.',
     maxLength: (label, maxLength) =>
       `${label} debe tener ${maxLength} caracteres o menos.`,
   },

@@ -4,6 +4,8 @@ import EditorEmbedBlock from '~~/editor/renderer/components/blocks/EditorEmbedBl
 import EditorHeadingBlock from '~~/editor/renderer/components/blocks/EditorHeadingBlock/EditorHeadingBlock.vue'
 import EditorImageBlock from '~~/editor/renderer/components/blocks/EditorImageBlock/EditorImageBlock.vue'
 import EditorContentList from '~~/editor/renderer/components/blocks/EditorContentList/EditorContentList.vue'
+import EditorCodeSnippetBlock from '~~/editor/renderer/components/blocks/EditorCodeSnippetBlock/EditorCodeSnippetBlock.vue'
+import EditorCtaBlock from '~~/editor/renderer/components/blocks/EditorCtaBlock/EditorCtaBlock.vue'
 import EditorMaskedFieldsDemoBlock from '~~/editor/renderer/components/blocks/EditorMaskedFieldsDemoBlock/EditorMaskedFieldsDemoBlock.vue'
 import EditorMediaGalleryBlock from '~~/editor/renderer/components/blocks/EditorMediaGalleryBlock/EditorMediaGalleryBlock.vue'
 import EditorNoticeBlock from '~~/editor/renderer/components/blocks/EditorNoticeBlock/EditorNoticeBlock.vue'
@@ -18,6 +20,8 @@ import {
   normalizeMaskedFieldsDemoBlockData,
   normalizeMediaGalleryBlockData,
   normalizeNoticeBlockData,
+  normalizeCtaBlockData,
+  normalizeCodeSnippetBlockData,
   normalizeSectionIntroBlockData,
   normalizeTwoColumnsBlockData,
 } from '~~/editor/shared'
@@ -81,6 +85,14 @@ defineProps<{
   <EditorMaskedFieldsDemoBlock
     v-else-if="block.type === 'maskedFieldsDemo'"
     :data="normalizeMaskedFieldsDemoBlockData(block.data)"
+  />
+  <EditorCtaBlock
+    v-else-if="block.type === 'cta'"
+    :data="normalizeCtaBlockData(block.data)"
+  />
+  <EditorCodeSnippetBlock
+    v-else-if="block.type === 'codeSnippet'"
+    :data="normalizeCodeSnippetBlockData(block.data)"
   />
   <EditorUnsupportedBlock
     v-else

@@ -15,6 +15,8 @@ import { SectionIntroToolConstructable } from '~~/editor/admin/tools/blocks/Sect
 import { TwoColumnsToolConstructable } from '~~/editor/admin/tools/blocks/TwoColumnsTool'
 import { MediaGalleryToolConstructable } from '~~/editor/admin/tools/blocks/MediaGalleryTool'
 import { MaskedFieldsDemoToolConstructable } from '~~/editor/admin/tools/blocks/MaskedFieldsDemoTool'
+import { CtaToolConstructable } from '~~/editor/admin/tools/blocks/CtaTool'
+import { CodeSnippetToolConstructable } from '~~/editor/admin/tools/blocks/CodeSnippetTool'
 import { editorBlockTuneNames, embedDisplayTuneName } from '~~/editor/shared'
 import {
   getCurrentEditorMessages,
@@ -126,6 +128,8 @@ export async function createEditorTools(
     twoColumns: TwoColumnsToolConstructable,
     mediaGallery: MediaGalleryToolConstructable,
     maskedFieldsDemo: MaskedFieldsDemoToolConstructable,
+    cta: CtaToolConstructable,
+    codeSnippet: CodeSnippetToolConstructable,
     marker: {
       class: Marker as unknown as ToolConstructable,
       shortcut: 'CMD+SHIFT+M',

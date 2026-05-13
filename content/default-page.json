@@ -541,6 +541,70 @@
       }
     },
     {
+      "id": "cta-header",
+      "type": "header",
+      "data": {
+        "text": "CTA button",
+        "level": 3
+      }
+    },
+    {
+      "id": "cta-block",
+      "type": "cta",
+      "data": {
+        "label": "Open preview workflow",
+        "url": "/preview",
+        "description": "A typed CTA block stores the visible button text, safe URL, visual variant, and explicit target behavior.",
+        "variant": "primary",
+        "target": "sameTab"
+      },
+      "tunes": {
+        "anchor": {
+          "anchor": "cta-button"
+        },
+        "spacing": {
+          "top": "medium"
+        },
+        "label": {
+          "label": "CTA button"
+        },
+        "animation": {
+          "type": "fade-up"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-header",
+      "type": "header",
+      "data": {
+        "text": "Code snippet",
+        "level": 3
+      }
+    },
+    {
+      "id": "code-snippet-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "typescript",
+        "code": "type CtaBlockTarget = 'sameTab' | 'newTab'\\n\\ninterface CtaBlockData {\\n  label: string\\n  url: string\\n  description: string\\n  variant: 'primary' | 'secondary' | 'ghost'\\n  target: CtaBlockTarget\\n}",
+        "caption": "Custom blocks keep explicit typed JSON contracts for editor and renderer layers."
+      },
+      "tunes": {
+        "anchor": {
+          "anchor": "code-snippet"
+        },
+        "spacing": {
+          "top": "medium"
+        },
+        "label": {
+          "label": "Code snippet"
+        },
+        "animation": {
+          "type": "fade-right"
+        }
+      }
+    },
+    {
       "id": "nested-fields-header",
       "type": "header",
       "data": {

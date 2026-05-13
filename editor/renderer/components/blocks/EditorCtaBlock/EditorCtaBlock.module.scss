@@ -1,0 +1,54 @@
+.cta {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 18px;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.ctaDescription {
+  max-width: 62ch;
+  margin: 0;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+
+.ctaLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 10px 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.cta_primary .ctaLink {
+  color: var(--color-on-accent);
+  background: var(--color-accent);
+}
+
+.cta_secondary .ctaLink {
+  color: var(--color-text);
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.cta_ghost .ctaLink {
+  color: var(--color-accent);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--color-accent) 38%, transparent);
+}
+
+.ctaLink:hover {
+  filter: brightness(0.96);
+}
+
+.ctaLink:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}

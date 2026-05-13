@@ -5,6 +5,9 @@ export {
   normalizeMediaGalleryBlockData,
   normalizeMediaGalleryItemData,
   normalizeMaskedFieldsDemoBlockData,
+  normalizeCtaBlockData,
+  normalizeCodeSnippetBlockData,
+  isAllowedCtaUrl,
   normalizeRichHeaderFieldData,
   normalizeRichParagraphFieldData,
   normalizeSectionIntroBlockData,
@@ -14,6 +17,9 @@ export {
   mediaGalleryItemTypes,
   mediaGalleryModes,
   noticeBlockTypes,
+  ctaBlockTargets,
+  ctaBlockVariants,
+  codeSnippetLanguages,
   twoColumnsLayoutVariants,
 } from './blocks/custom-block-data'
 export {
@@ -74,6 +80,8 @@ export {
   findValidationMessage,
   getValidationSummary,
   validateEditorContentData,
+  validateCtaBlockData,
+  validateCodeSnippetBlockData,
   validateMediaGalleryBlockData,
   validateNoticeBlockData,
   validateSectionIntroBlockData,
@@ -93,6 +101,11 @@ export type {
 } from './blocks/standard-block-data'
 export type {
   CustomBlockDataMap,
+  CtaBlockData,
+  CtaBlockTarget,
+  CtaBlockVariant,
+  CodeSnippetBlockData,
+  CodeSnippetLanguage,
   MaskedFieldsDemoBlockData,
   MediaGalleryBlockData,
   MediaGalleryItemData,

@@ -23,20 +23,20 @@ deployment.
 - Локализация UI редактора завершена.
 - Light/Dark theme завершён.
 - Клавиатурная навигация и accessibility polish завершён.
-- Активный этап: Некритичные улучшения.
-- Первое optional improvement активного этапа реализовано: выбор языка переведён на dropdown по аналогии с темой, добавлены auto preference и испанский интерфейс.
-- Второе optional improvement активного этапа реализовано: preview sidebar получил временный demo-переключатель между navigation по заголовкам и старой navigation по `AnchorTune` / `LabelTune`.
-- Третье optional improvement активного этапа реализовано: добавлен `AnimationTune` для простых reveal-анимаций блоков в renderer.
-- Четвёртое optional improvement активного этапа реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube, VK Video и Twitch.
+- Этап Некритичные улучшения временно закрыт после серии optional improvements; к нему планируется вернуться после реализации следующего этапа.
+- Первое optional improvement этапа Некритичные улучшения реализовано: выбор языка переведён на dropdown по аналогии с темой, добавлены auto preference и испанский интерфейс.
+- Второе optional improvement этапа Некритичные улучшения реализовано: preview sidebar получил временный demo-переключатель между navigation по заголовкам и старой navigation по `AnchorTune` / `LabelTune`.
+- Третье optional improvement этапа Некритичные улучшения реализовано: добавлен `AnimationTune` для простых reveal-анимаций блоков в renderer.
+- Четвёртое optional improvement этапа Некритичные улучшения реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube, VK Video и Twitch.
 - Точечное UX-улучшение embed-блока реализовано: существующий `ManualEmbedTool` позволяет редактировать URL уже созданного embed без удаления блока.
-- Style-architecture improvement активного этапа реализован: глобальные Editor.js/custom tool стили вынесены из CSS Module в `editor/admin/styles/editor.scss`.
-- Следующий крупный этап после некритичных улучшений уточнён: расширение набора контентных блоков и plugins как отдельный research/decision этап.
+- Style-architecture improvement этапа Некритичные улучшения реализован: глобальные Editor.js/custom tool стили вынесены из CSS Module в `editor/admin/styles/editor.scss`.
+- Активный этап: расширение набора контентных блоков и plugins как отдельный research/decision этап.
 
-## Активный этап
+## Временно закрытый этап
 
 ### Некритичные улучшения
 
-Статус: активен.
+Статус: временно закрыт.
 
 Цель этапа: довести проект до более аккуратной расширенной версии через небольшие optional improvements, не ломая уже стабильную архитектуру, content JSON schema и
 базовые editor/renderer сценарии.
@@ -62,9 +62,9 @@ deployment.
 
 1. Составить короткий список optional improvements, которые реально повышают качество демо и не раздувают scope — выполнено для language switcher improvement.
 2. Выбрать первый небольшой improvement и зафиксировать ожидаемое поведение — выполнено: language preference `system | ru | en | es`, browser/OS detection, dropdown UI.
-3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — в работе; выполнены language switcher, heading-based sidebar navigation, block reveal animations, embed Fancybox display, редактирование URL существующего embed-блока и вынос admin editor skin в глобальный stylesheet.
-4. После каждого значимого изменения запускать соразмерные проверки — выполнено для language switcher, heading navigation и block reveal animations; для embed Fancybox display и style-architecture изменений проверки запускаются после реализации.
-5. Перед завершением этапа пройти smoke-check основных editor/preview сценариев.
+3. Реализовывать улучшения по одному, с узкими изменениями и проверкой связанных сценариев — выполнены language switcher, heading-based sidebar navigation, block reveal animations, embed Fancybox display, редактирование URL существующего embed-блока и вынос admin editor skin в глобальный stylesheet.
+4. После каждого значимого изменения запускать соразмерные проверки — выполнено для language switcher, heading navigation и block reveal animations; для embed Fancybox display и style-architecture изменений проверки остаются частью ближайшего smoke-check.
+5. Перед возвращением к этапу пройти smoke-check основных editor/preview сценариев и выбрать следующий небольшой improvement.
 
 ## Критерии готовности этапа
 
@@ -72,13 +72,13 @@ deployment.
 - Save/load, Import JSON, validation, masks, localization, theme, preview, `Reset draft` и `Export JSON` остаются работоспособными.
 - `npm run check` проходит; `npm run build` запускается при необходимости после runtime/style изменений.
 
-Следующий крупный этап после завершения некритичных улучшений: расширение набора контентных блоков и plugins.
+Этап временно закрыт, потому что список улучшений пополняется постоянно. После реализации следующего этапа к нему планируется вернуться.
 
-## Следующий запланированный этап
+## Активный этап
 
 ### Расширение набора контентных блоков и plugins
 
-Статус: запланирован.
+Статус: активен.
 
 Цель этапа: осознанно выбрать и реализовать минимальный набор дополнительных content blocks/plugins, которые дают новый полезный сценарий и не ломают frontend-only
 архитектуру, typed content schema, renderer и текущие save/load workflows.

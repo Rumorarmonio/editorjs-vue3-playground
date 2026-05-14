@@ -9,15 +9,26 @@
   color: var(--color-muted);
 }
 
-.codeSnippetPre {
+.codeSnippetFrame {
+  position: relative;
   max-width: 100%;
+}
+
+.codeSnippetPre {
   margin: 0;
-  padding: 18px;
-  overflow: auto;
-  color: var(--color-text);
+  padding: 0;
+  overflow: hidden;
   background: var(--color-code-background);
   border: 1px solid var(--color-border);
   border-radius: 6px;
+}
+
+.codeSnippetPre :global(code.hljs) {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 18px;
+  overflow-x: auto;
 }
 
 .codeSnippetCode {
@@ -26,6 +37,7 @@
   font-size: 0.9375rem;
   line-height: 1.65;
   white-space: pre;
+  border-radius: inherit;
 }
 
 .codeSnippetLanguage {
@@ -34,30 +46,10 @@
   right: 10px;
   padding: 2px 7px;
   font-size: 0.75rem;
+  line-height: 1.3;
+  white-space: nowrap;
   color: var(--color-muted);
-  background: var(--color-surface);
+  background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
   border-radius: 999px;
-}
-
-.codeSnippetCode :global(.hljs-keyword),
-.codeSnippetCode :global(.hljs-selector-tag),
-.codeSnippetCode :global(.hljs-title) {
-  color: var(--color-accent);
-}
-
-.codeSnippetCode :global(.hljs-string),
-.codeSnippetCode :global(.hljs-attr),
-.codeSnippetCode :global(.hljs-template-variable) {
-  color: var(--color-success);
-}
-
-.codeSnippetCode :global(.hljs-number),
-.codeSnippetCode :global(.hljs-literal),
-.codeSnippetCode :global(.hljs-built_in) {
-  color: var(--color-warning);
-}
-
-.codeSnippetCode :global(.hljs-comment) {
-  color: var(--color-muted);
 }

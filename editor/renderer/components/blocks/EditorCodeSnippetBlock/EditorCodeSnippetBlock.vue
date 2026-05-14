@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import './EditorCodeSnippetBlock.highlight.scss'
 import { highlightCode } from '~~/editor/renderer/helpers/highlight-code'
 import type { CodeSnippetBlockData } from '~~/editor/shared'
 
@@ -19,13 +20,13 @@ const highlightedCode = computed(() => {
     >
       {{ data.caption }}
     </figcaption>
-    <pre :class="$style.codeSnippetPre"><code
-      :class="$style.codeSnippetCode"
-      v-html="highlightedCode"
-    /></pre>
-    <span :class="$style.codeSnippetLanguage">
-      {{ data.language }}
-    </span>
+    <div :class="$style.codeSnippetFrame">
+      <pre :class="$style.codeSnippetPre"><code
+        :class="[$style.codeSnippetCode, 'hljs', `language-${data.language}`]"
+        v-html="highlightedCode"
+      /></pre>
+      <span :class="$style.codeSnippetLanguage">{{ data.language }}</span>
+    </div>
   </figure>
 </template>
 

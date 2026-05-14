@@ -654,8 +654,8 @@
       "type": "codeSnippet",
       "data": {
         "language": "typescript",
-        "code": "type CtaBlockTarget = 'sameTab' | 'newTab'\n\ninterface CtaBlockData {\n  label: string\n  url: string\n  description: string\n  variant: 'primary' | 'secondary' | 'ghost'\n  target: CtaBlockTarget\n}",
-        "caption": "Custom blocks keep explicit typed JSON contracts for editor and renderer layers."
+        "code": "import type { EditorOutputBlock } from './types'\n\ntype CtaBlockTarget = 'sameTab' | 'newTab'\ntype CtaVariant = 'primary' | 'secondary' | 'ghost'\n\ninterface CtaBlockData<TMeta extends Record<string, unknown> = {}> {\n  label: string\n  url: `/${string}` | `https://${string}`\n  variant: CtaVariant\n  target: CtaBlockTarget\n  meta?: TMeta\n}\n\nconst ctaDefaults = {\n  variant: 'primary',\n  target: 'sameTab',\n} satisfies Pick<CtaBlockData, 'variant' | 'target'>\n\nexport function normalizeCtaBlock(\n  block: EditorOutputBlock<'cta', Partial<CtaBlockData>>,\n): CtaBlockData {\n  // Keep admin-entered labels readable in the renderer.\n  const label = block.data.label?.trim() || 'Open preview'\n  const url = /^https?:\\/\\//.test(block.data.url ?? '') ? block.data.url! : '/preview'\n\n  return { ...ctaDefaults, ...block.data, label, url }\n}",
+        "caption": "TypeScript example covers imports, generics, unions, template literal types, satisfies, comments, regex and object spreads."
       },
       "tunes": {
         "anchor": {
@@ -677,8 +677,8 @@
       "type": "codeSnippet",
       "data": {
         "language": "json",
-        "code": "{\n  \"type\": \"cta\",\n  \"data\": {\n    \"label\": \"Open preview workflow\",\n    \"url\": \"/preview\",\n    \"variant\": \"primary\",\n    \"target\": \"sameTab\"\n  }\n}",
-        "caption": "The same CTA block remains portable as plain Editor.js JSON."
+        "code": "{\n  \"time\": 1747324800000,\n  \"blocks\": [\n    {\n      \"id\": \"cta-block-event\",\n      \"type\": \"cta\",\n      \"data\": {\n        \"label\": \"Open preview workflow\",\n        \"url\": \"/preview\",\n        \"variant\": \"primary\",\n        \"target\": \"sameTab\",\n        \"enabled\": true,\n        \"analytics\": null,\n        \"priority\": 2\n      }\n    }\n  ],\n  \"version\": \"2.31.0\"\n}",
+        "caption": "JSON example covers nested arrays and objects, strings, numbers, booleans and null."
       },
       "tunes": {
         "spacing": {
@@ -697,8 +697,8 @@
       "type": "codeSnippet",
       "data": {
         "language": "bash",
-        "code": "npm run check\nnpm run build",
-        "caption": "Code snippets can also store shell commands without invoking any syntax highlighter yet."
+        "code": "# Run focused checks before publishing\nset -euo pipefail\n\nTARGET=\"content/default-page.json\"\nnode -e \"JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))\" \"$TARGET\"\n\nif npm run build; then\n  printf 'Build finished for %s\\n' \"$TARGET\"\nelse\n  echo \"Build failed\" >&2\n  exit 1\nfi",
+        "caption": "Shell example covers comments, variables, strings, conditionals, commands and redirects."
       },
       "tunes": {
         "spacing": {
@@ -706,6 +706,91 @@
         },
         "label": {
           "label": "Shell commands"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-javascript-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "javascript",
+        "code": "const listeners = new Map()\nconst eventPattern = /^(open|close|toggle):[a-z-]+$/\n\nexport async function emitEditorEvent(name, payload = {}) {\n  if (!eventPattern.test(name)) {\n    throw new TypeError(`Unsupported event: ${name}`)\n  }\n\n  const handlers = listeners.get(name) ?? []\n  const context = { name, payload, timestamp: Date.now() }\n\n  try {\n    await Promise.all(handlers.map((handler) => handler(context)))\n  } catch (error) {\n    console.error('Editor event failed', { name, error })\n  }\n}",
+        "caption": "JavaScript example covers async functions, regex, template strings, errors, objects and Promise APIs."
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "JavaScript"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-vue-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "vue",
+        "code": "<script setup lang=\"ts\">\nconst props = withDefaults(defineProps<{\n  title: string\n  items: Array<{ id: string; label: string; active?: boolean }>\n}>(), {\n  title: 'Renderer blocks',\n})\n\nconst emit = defineEmits<{\n  select: [id: string]\n}>()\n</script>\n\n<template>\n  <section class=\"feature-list\" :aria-label=\"props.title\">\n    <h2>{{ props.title }}</h2>\n    <button\n      v-for=\"item in props.items\"\n      :key=\"item.id\"\n      :class=\"['feature-list__item', { 'is-active': item.active }]\"\n      type=\"button\"\n      @click=\"emit('select', item.id)\"\n    >\n      <slot name=\"icon\" :item=\"item\" />\n      {{ item.label }}\n    </button>\n  </section>\n</template>\n\n<style scoped>\n.feature-list__item.is-active {\n  color: var(--color-accent);\n}\n</style>",
+        "caption": "Vue example covers script setup, typed props/emits, directives, events, slots, bindings and scoped styles."
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "Vue"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-html-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "html",
+        "code": "<article class=\"notice\" aria-labelledby=\"notice-title\" data-variant=\"info\">\n  <!-- The renderer only receives trusted block data. -->\n  <header class=\"notice__header\">\n    <h3 id=\"notice-title\">Renderer contract</h3>\n    <time datetime=\"2026-05-15\">May 15, 2026</time>\n  </header>\n\n  <p>Only validated Editor.js data reaches the public preview.</p>\n  <a href=\"/preview\" rel=\"noopener\" data-track=\"preview-link\">Open preview</a>\n</article>",
+        "caption": "HTML example covers comments, semantic tags, attributes, data attributes, entities and nested structure."
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "HTML"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-css-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "css",
+        "code": "@layer components {\n  .notice {\n    display: grid;\n    grid-template-columns: minmax(0, 1fr) auto;\n    gap: clamp(8px, 2vw, 16px);\n    padding: 16px;\n    color: var(--color-text);\n    background: color-mix(in srgb, var(--color-accent) 12%, transparent);\n    border: 1px solid var(--color-border);\n  }\n\n  .notice:has(a:hover) {\n    border-color: var(--color-accent);\n  }\n\n  @media (max-width: 640px) {\n    .notice {\n      grid-template-columns: 1fr;\n    }\n  }\n}",
+        "caption": "CSS example covers at-rules, selectors, pseudo-classes, functions, custom properties and media queries."
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "CSS"
+        }
+      }
+    },
+    {
+      "id": "code-snippet-plain-block",
+      "type": "codeSnippet",
+      "data": {
+        "language": "plain",
+        "code": "Renderer smoke checklist\n\n[ ] Save the draft\n[ ] Reload the page\n[ ] Compare light and dark themes\n[ ] Check long lines and horizontal scroll\n[ ] Confirm that <script>alert('escaped')</script> is displayed as text\n\nExpected result: code remains readable even without syntax highlighting.",
+        "caption": "Plain text demonstrates escaped markup, checklists, punctuation and unhighlighted fallback content."
+      },
+      "tunes": {
+        "spacing": {
+          "top": "small"
+        },
+        "label": {
+          "label": "Plain text"
         }
       }
     },

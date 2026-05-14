@@ -721,8 +721,7 @@
   }
 
   .editor-cta-tool,
-  .editor-code-snippet-tool,
-  .editor-raw-html-tool {
+  .editor-code-snippet-tool {
     display: grid;
     gap: 14px;
     padding: 16px;
@@ -747,12 +746,17 @@
     white-space: pre;
   }
 
-  .editor-raw-html-tool__html-control {
+  .ce-rawtool .ce-rawtool__textarea {
     min-height: 240px;
     font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono',
       monospace;
     font-size: 0.9375rem;
     line-height: 1.55;
+    letter-spacing: 0;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
   }
 
   .editor-section-intro-tool {

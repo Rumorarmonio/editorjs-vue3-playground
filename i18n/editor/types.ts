@@ -21,7 +21,6 @@ export interface EditorValidationMessages {
     codeSnippetCode: string
     codeSnippetCaption: string
     rawHtml: string
-    rawHtmlCaption: string
   }
   contentValidationFallback: string
   contentValidationSummary: (count: number) => string
@@ -166,11 +165,7 @@ export interface EditorUiMessages {
     }
     rawHtml: {
       toolboxTitle: string
-      htmlLabel: string
       htmlPlaceholder: string
-      captionLabel: string
-      captionPlaceholder: string
-      securityHint: string
     }
     embed: {
       toolboxTitle: string

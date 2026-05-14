@@ -13,3 +13,11 @@ declare module '@sotaproject/strikethrough' {
 
   export default Strikethrough
 }
+
+declare module '@editorjs/raw' {
+  import type { ToolConstructable } from '@editorjs/editorjs/types'
+
+  const RawTool: ToolConstructable
+
+  export default RawTool
+}

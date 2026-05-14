@@ -141,7 +141,6 @@ export interface CodeSnippetBlockData {
 
 export interface RawHtmlBlockData {
   html: string
-  caption: string
 }
 
 export interface CustomBlockDataMap {
@@ -343,7 +342,6 @@ export function normalizeRawHtmlBlockData(value: unknown): RawHtmlBlockData {
 
   return {
     html: normalizeHtmlValue(value.html),
-    caption: normalizeMultilineValue(value.caption),
   }
 }
 
@@ -491,11 +489,7 @@ export function isCodeSnippetBlockData(
 }
 
 export function isRawHtmlBlockData(value: unknown): value is RawHtmlBlockData {
-  return (
-    isRecord(value) &&
-    typeof value.html === 'string' &&
-    typeof value.caption === 'string'
-  )
+  return isRecord(value) && typeof value.html === 'string'
 }
 
 function createDefaultNoticeBlockData(): NoticeBlockData {
@@ -599,7 +593,6 @@ function createDefaultCodeSnippetBlockData(): CodeSnippetBlockData {
 function createDefaultRawHtmlBlockData(): RawHtmlBlockData {
   return {
     html: '',
-    caption: '',
   }
 }
 

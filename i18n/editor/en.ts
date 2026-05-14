@@ -132,12 +132,8 @@ export const editorEn: EditorUiMessages = {
     },
     rawHtml: {
       toolboxTitle: 'Raw HTML',
-      htmlLabel: 'HTML',
-      htmlPlaceholder: '<section><h3>Custom markup</h3><p>Trusted HTML.</p></section>',
-      captionLabel: 'Caption',
-      captionPlaceholder: 'Optional admin-only note',
-      securityHint:
-        'Only trusted HTML is supported. Scripts, event handlers, iframes, styles, and unsafe attributes are removed in the renderer.',
+      htmlPlaceholder:
+        '<section><h3>Custom markup</h3><p>Trusted HTML.</p></section>',
     },
     embed: {
       toolboxTitle: 'Embed',
@@ -224,7 +220,6 @@ export const editorEn: EditorUiMessages = {
       codeSnippetCode: 'Code',
       codeSnippetCaption: 'Caption',
       rawHtml: 'HTML',
-      rawHtmlCaption: 'Caption',
     },
     contentValidationFallback: 'Content has validation errors.',
     contentValidationSummary: (count) => `Content has ${count} validation errors.`,
@@ -281,6 +276,7 @@ export const editorEn: EditorUiMessages = {
         Table: 'Table',
         Image: 'Image',
         Embed: 'Embed',
+        'Raw HTML': 'Raw HTML',
       },
       tools: {
         warning: {

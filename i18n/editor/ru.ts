@@ -134,12 +134,8 @@ export const editorRu: EditorUiMessages = {
     },
     rawHtml: {
       toolboxTitle: 'Raw HTML',
-      htmlLabel: 'HTML',
-      htmlPlaceholder: '<section><h3>Своя разметка</h3><p>Доверенный HTML.</p></section>',
-      captionLabel: 'Подпись',
-      captionPlaceholder: 'Необязательная admin-only заметка',
-      securityHint:
-        'Поддерживается только доверенный HTML. Scripts, event handlers, iframes, styles и unsafe attributes удаляются в renderer.',
+      htmlPlaceholder:
+        '<section><h3>Своя разметка</h3><p>Доверенный HTML.</p></section>',
     },
     embed: {
       toolboxTitle: 'Встраивание',
@@ -226,7 +222,6 @@ export const editorRu: EditorUiMessages = {
       codeSnippetCode: 'Код',
       codeSnippetCaption: 'Подпись',
       rawHtml: 'HTML',
-      rawHtmlCaption: 'Подпись',
     },
     contentValidationFallback: 'В контенте есть ошибки валидации.',
     contentValidationSummary: (count) =>
@@ -285,6 +280,7 @@ export const editorRu: EditorUiMessages = {
         Table: 'Таблица',
         Image: 'Изображение',
         Embed: 'Встраивание',
+        'Raw HTML': 'HTML-код',
       },
       tools: {
         warning: {

@@ -17,7 +17,6 @@ import { MediaGalleryToolConstructable } from '~~/editor/admin/tools/blocks/Medi
 import { MaskedFieldsDemoToolConstructable } from '~~/editor/admin/tools/blocks/MaskedFieldsDemoTool'
 import { CtaToolConstructable } from '~~/editor/admin/tools/blocks/CtaTool'
 import { CodeSnippetToolConstructable } from '~~/editor/admin/tools/blocks/CodeSnippetTool'
-import { RawHtmlToolConstructable } from '~~/editor/admin/tools/blocks/RawHtmlTool'
 import { editorBlockTuneNames, embedDisplayTuneName } from '~~/editor/shared'
 import {
   getCurrentEditorMessages,
@@ -54,6 +53,7 @@ export async function createEditorTools(
     { default: Marker },
     { default: Underline },
     { default: Strikethrough },
+    { default: RawTool },
   ] = await Promise.all([
     import('@editorjs/header'),
     import('@editorjs/list'),
@@ -64,6 +64,7 @@ export async function createEditorTools(
     import('@editorjs/marker'),
     import('@editorjs/underline'),
     import('@sotaproject/strikethrough'),
+    import('@editorjs/raw'),
   ])
 
   return {
@@ -131,7 +132,12 @@ export async function createEditorTools(
     maskedFieldsDemo: MaskedFieldsDemoToolConstructable,
     cta: CtaToolConstructable,
     codeSnippet: CodeSnippetToolConstructable,
-    rawHtml: RawHtmlToolConstructable,
+    rawHtml: {
+      class: RawTool as unknown as ToolConstructable,
+      config: {
+        placeholder: messages.tools.rawHtml.htmlPlaceholder,
+      },
+    },
     marker: {
       class: Marker as unknown as ToolConstructable,
       shortcut: 'CMD+SHIFT+M',

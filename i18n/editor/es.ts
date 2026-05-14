@@ -135,12 +135,8 @@ export const editorEs: EditorUiMessages = {
     },
     rawHtml: {
       toolboxTitle: 'Raw HTML',
-      htmlLabel: 'HTML',
-      htmlPlaceholder: '<section><h3>Marcado propio</h3><p>HTML confiable.</p></section>',
-      captionLabel: 'Leyenda',
-      captionPlaceholder: 'Nota admin-only opcional',
-      securityHint:
-        'Solo se admite HTML confiable. Scripts, event handlers, iframes, styles y unsafe attributes se eliminan en el renderer.',
+      htmlPlaceholder:
+        '<section><h3>Marcado propio</h3><p>HTML confiable.</p></section>',
     },
     embed: {
       toolboxTitle: 'Insertar',
@@ -227,7 +223,6 @@ export const editorEs: EditorUiMessages = {
       codeSnippetCode: 'Código',
       codeSnippetCaption: 'Leyenda',
       rawHtml: 'HTML',
-      rawHtmlCaption: 'Leyenda',
     },
     contentValidationFallback: 'El contenido tiene errores de validación.',
     contentValidationSummary: (count) =>
@@ -285,6 +280,7 @@ export const editorEs: EditorUiMessages = {
         Table: 'Tabla',
         Image: 'Imagen',
         Embed: 'Insertar',
+        'Raw HTML': 'HTML sin procesar',
       },
       tools: {
         warning: {

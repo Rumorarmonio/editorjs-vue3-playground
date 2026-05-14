@@ -33,6 +33,36 @@ const allowedTags = new Set([
 
 const allowedGlobalAttributes = new Set(['aria-label', 'title'])
 
+export type RawHtmlRenderMode = 'safe' | 'unsafe'
+
+export const rawHtmlRenderMode: RawHtmlRenderMode = 'unsafe'
+
+export function renderRawHtml(
+  container: HTMLElement,
+  html: string,
+  baseURL = '/',
+): void {
+  if (rawHtmlRenderMode === 'unsafe') {
+    renderUnsafeRawHtml(container, html)
+    return
+  }
+
+  cleanupRawHtml(container)
+  container.innerHTML = sanitizeRawHtml(html, baseURL)
+}
+
+export function cleanupRawHtml(container: HTMLElement): void {
+  container.dispatchEvent(
+    new CustomEvent('editor:raw-html-cleanup', {
+      bubbles: false,
+      detail: {
+        container,
+      },
+    }),
+  )
+  container.replaceChildren()
+}
+
 export function sanitizeRawHtml(html: string, baseURL = '/'): string {
   if (!import.meta.client) {
     return escapeHtml(html)
@@ -44,6 +74,28 @@ export function sanitizeRawHtml(html: string, baseURL = '/'): string {
   sanitizeNode(template.content, baseURL)
 
   return template.innerHTML
+}
+
+function renderUnsafeRawHtml(container: HTMLElement, html: string): void {
+  cleanupRawHtml(container)
+  container.innerHTML = html
+
+  executeScripts(container)
+}
+
+function executeScripts(container: HTMLElement): void {
+  const scripts = Array.from(container.querySelectorAll('script'))
+
+  scripts.forEach((script) => {
+    const executableScript = document.createElement('script')
+
+    Array.from(script.attributes).forEach((attribute) => {
+      executableScript.setAttribute(attribute.name, attribute.value)
+    })
+
+    executableScript.textContent = script.textContent
+    script.replaceWith(executableScript)
+  })
 }
 
 function sanitizeNode(node: Node, baseURL: string): void {

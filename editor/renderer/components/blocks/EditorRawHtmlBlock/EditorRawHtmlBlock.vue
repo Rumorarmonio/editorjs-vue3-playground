@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { sanitizeRawHtml } from '~~/editor/renderer/helpers/sanitize-raw-html'
+import {
+  cleanupRawHtml,
+  renderRawHtml,
+} from '~~/editor/renderer/helpers/sanitize-raw-html'
 import type { RawHtmlBlockData } from '~~/editor/shared'
 
 const props = defineProps<{
@@ -7,24 +10,37 @@ const props = defineProps<{
 }>()
 
 const runtimeConfig = useRuntimeConfig()
-const sanitizedHtml = computed(() => {
-  return sanitizeRawHtml(props.data.html, runtimeConfig.app.baseURL)
+const rawHtmlElement = ref<HTMLElement | null>(null)
+
+function syncRawHtml(): void {
+  if (!rawHtmlElement.value) {
+    return
+  }
+
+  renderRawHtml(rawHtmlElement.value, props.data.html, runtimeConfig.app.baseURL)
+}
+
+onMounted(syncRawHtml)
+
+onBeforeUnmount(() => {
+  if (rawHtmlElement.value) {
+    cleanupRawHtml(rawHtmlElement.value)
+  }
 })
+
+watch(
+  () => props.data.html,
+  () => {
+    void nextTick(syncRawHtml)
+  },
+)
 </script>
 
 <template>
-  <figure :class="$style.rawHtml">
-    <div
-      :class="$style.rawHtmlContent"
-      v-html="sanitizedHtml"
-    />
-    <figcaption
-      v-if="data.caption"
-      :class="$style.rawHtmlCaption"
-    >
-      {{ data.caption }}
-    </figcaption>
-  </figure>
+  <div
+    ref="rawHtmlElement"
+    :class="$style.rawHtml"
+  />
 </template>
 
 <style module lang="scss" src="./EditorRawHtmlBlock.module.scss" />

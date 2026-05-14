@@ -721,8 +721,7 @@
       "id": "raw-html-block",
       "type": "rawHtml",
       "data": {
-        "html": "<section aria-label=\"Trusted raw HTML example\"><h3>Trusted raw HTML</h3><p>This block keeps controlled markup for one-off content pieces.</p><ul><li><strong>Allowed:</strong> headings, paragraphs, lists, links, tables, code.</li><li><strong>Removed:</strong> scripts, inline handlers, iframes, styles, and unsafe attributes.</li></ul><p><a href=\"https://editorjs.io/\" target=\"_blank\">Editor.js documentation</a></p><script>alert('removed')</script></section>",
-        "caption": "Renderer sanitizes this trusted/admin-only HTML before insertion."
+        "html": "<style>.raw-html-demo-card{padding:24px;border:1px solid #38bdf8;border-radius:10px;background:linear-gradient(135deg,#ecfeff,#f8fafc);color:#0f172a}.raw-html-demo-card h3{margin:0 0 8px;font-size:24px}.raw-html-demo-card button{margin-top:12px;padding:10px 14px;border:0;border-radius:6px;background:#0f172a;color:#fff;cursor:pointer}</style><section class=\"raw-html-demo-card\" aria-label=\"Trusted raw HTML example\"><h3>Custom Raw HTML block</h3><p>This example contains local styles and a script. Safe rendering strips them; unsafe rendering executes the script.</p><button id=\"raw-html-demo-alert\" type=\"button\">Show alert</button><script>document.getElementById('raw-html-demo-alert')?.addEventListener('click',function(){alert('Raw HTML script executed')})</script></section>"
       },
       "tunes": {
         "anchor": {

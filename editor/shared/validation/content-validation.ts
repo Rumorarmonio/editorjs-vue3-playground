@@ -47,7 +47,6 @@ const maxCtaDescriptionLength = 240
 const maxCodeCaptionLength = 160
 const maxCodeLength = 12000
 const maxRawHtmlLength = 12000
-const maxRawHtmlCaptionLength = 160
 const maxCtaEventNameLength = 80
 const galleryIdPattern = /^[a-z0-9_-]+$/i
 const ctaEventNamePattern = /^[a-z0-9:_-]+$/i
@@ -321,15 +320,6 @@ export function validateRawHtmlBlockData(
     messages.fieldLabels.rawHtml,
     messages,
   )
-  pushMaxLengthIssue(
-    issues,
-    'caption',
-    data.caption,
-    maxRawHtmlCaptionLength,
-    messages.fieldLabels.rawHtmlCaption,
-    messages,
-  )
-
   return createValidationResult(issues)
 }
 

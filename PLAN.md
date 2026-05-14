@@ -30,7 +30,7 @@ deployment.
 - Четвёртое optional improvement этапа Некритичные улучшения реализовано: добавлен scoped `EmbedDisplayTune` для режима embed video `inline | fancybox`, а embed whitelist расширен Rutube, VK Video и Twitch.
 - Точечное UX-улучшение embed-блока реализовано: существующий `ManualEmbedTool` позволяет редактировать URL уже созданного embed без удаления блока.
 - Style-architecture improvement этапа Некритичные улучшения реализован: глобальные Editor.js/custom tool стили вынесены из CSS Module в `editor/admin/styles/editor.scss`.
-- Этап расширения набора контентных блоков и plugins завершён: реализованы typed `CTA/Button`, `Code snippet` с подсветкой, CTA event action и `Raw HTML`.
+- Этап расширения набора контентных блоков и plugins завершён: реализованы typed `CTA/Button`, `Code snippet` с подсветкой, CTA event action и `Raw HTML` на базе `@editorjs/raw`.
 - Review-fixes этапа расширения blocks/plugins внесены: уточнены Raw HTML sanitizer/baseURL behavior, CTA event validation, preview-level demo modal и link/event field UX в `CtaTool`.
 - Активный этап: Некритичные улучшения.
 
@@ -89,7 +89,7 @@ deployment.
 
 1. Research официальных и community Editor.js plugins на предмет реальной пользы для текущего проекта.
 2. Проектирование кастомного `CTA/Button` block для крупных ссылок/кнопок с `variant` и явным target contract — выполнено.
-3. Решение по `Raw HTML`: добавить на текущем этапе как trusted/admin-only block с явным sanitizer/allowlist и renderer contract — выполнено.
+3. Решение по `Raw HTML`: использовать готовый `@editorjs/raw` для editor-side ввода под ключом `rawHtml`, оставить project-level validation/normalization и явный renderer contract с code-level `safe | unsafe` режимом — выполнено.
 4. Решение по code block: вместо `@editorjs/code` реализован custom typed `Code snippet` с language field и renderer contract; renderer-side syntax highlighting добавлен через `highlight.js`.
 5. Решение по link preview: `@editorjs/link` отложен, пока в проекте нет backend/server route для metadata fetching.
 6. Решение по `@editorjs/warning`: не добавлять, потому что текущий `NoticeTool` покрывает warning/info/success без дублирования.
@@ -101,7 +101,7 @@ deployment.
 - production-ready upload/file workflow;
 - добавление plugins только из-за их наличия без renderer/validation/i18n/theme/accessibility контракта;
 - массовое расширение вложенных editor whitelist'ов без отдельного UX-сценария;
-- произвольный JavaScript execution из content JSON или Raw HTML.
+- произвольный JavaScript execution из content JSON или Raw HTML без явного включения unsafe renderer mode в коде.
 
 ## План этапа
 
@@ -121,7 +121,7 @@ deployment.
 
 Следующий крупный этап после расширения набора контентных блоков и plugins: финальная стабилизация / подготовка к следующему fullstack-проекту.
 
-Итог: этап расширения набора контентных блоков и plugins завершён. Добавлены custom blocks `cta`, `codeSnippet` и `rawHtml` с typed shared contracts, guards, validation, localized editor UI, main editor toolbox integration, renderer components, theme-aware styles и demo content. `CTA/Button` поддерживает link и typed event action, `Code snippet` получил renderer-side syntax highlighting через `highlight.js`, `Raw HTML` реализован как trusted/admin-only block с sanitizer/allowlist без произвольного JavaScript execution. Link preview отложен до появления backend metadata endpoint, `Warning` не добавлен из-за дублирования `NoticeTool`. `npm run check` проходит с существующими и новыми ожидаемыми предупреждениями `vue/no-v-html`; `npm run build` проходит.
+Итог: этап расширения набора контентных блоков и plugins завершён. Добавлены custom blocks `cta` и `codeSnippet`, а `rawHtml` переведён на готовый `@editorjs/raw` с typed shared contract `{ html }`, guards, validation, localized placeholder, main editor toolbox integration, renderer component, theme-aware styles и demo content. `CTA/Button` поддерживает link и typed event action, `Code snippet` получил renderer-side syntax highlighting через `highlight.js`, `Raw HTML` работает как trusted/admin-only escape hatch: по умолчанию renderer использует unsafe passthrough со styles/scripts, а safe sanitizer/allowlist включается изменением code-level режима. Link preview отложен до появления backend metadata endpoint, `Warning` не добавлен из-за дублирования `NoticeTool`. `npm run check` проходит с существующими и новыми ожидаемыми предупреждениями `vue/no-v-html`; `npm run build` проходит.
 
 ## Последний завершённый этап
 

@@ -18,9 +18,10 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: var(--color-code-background);
-  border: 1px solid var(--color-border);
+  background: var(--color-code-block-background);
+  border: 1px solid var(--color-code-block-border);
   border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
 }
 
 .codeSnippetPre :global(code.hljs) {
@@ -29,6 +30,7 @@
   width: 100%;
   padding: 18px;
   overflow-x: auto;
+  background: var(--color-code-block-background);
 }
 
 .codeSnippetCode {
@@ -48,8 +50,8 @@
   font-size: 0.75rem;
   line-height: 1.3;
   white-space: nowrap;
-  color: var(--color-muted);
-  background: var(--color-surface-muted);
-  border: 1px solid var(--color-border);
+  color: var(--color-code-block-badge-text);
+  background: var(--color-code-block-badge-background);
+  border: 1px solid var(--color-code-block-badge-border);
   border-radius: 999px;
 }

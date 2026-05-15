@@ -52,7 +52,6 @@
 
 .sidebar,
 .editorPanel {
-  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 8px;
 }
@@ -61,6 +60,7 @@
   position: sticky;
   top: 24px;
   padding: 20px;
+  background: var(--color-surface);
 }
 
 .metaList {
@@ -94,6 +94,7 @@
   display: grid;
   gap: 16px;
   padding: 20px;
+  background: var(--color-panel-background);
 }
 
 .actions {

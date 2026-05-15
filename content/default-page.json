@@ -33,6 +33,9 @@
       "tunes": {
         "label": {
           "label": "Inline tools intro"
+        },
+        "animation": {
+          "type": "fade-up"
         }
       }
     },
@@ -61,6 +64,11 @@
       "data": {
         "text": "Inline formatting",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -69,6 +77,11 @@
       "data": {
         "text": "Heading examples with <s class=\"cdx-strikethrough\">strikethrough</s>",
         "level": 4
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -77,6 +90,11 @@
       "data": {
         "text": "Lists and checklists",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -103,6 +121,11 @@
             "items": []
           }
         ]
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -142,6 +165,9 @@
         },
         "spacing": {
           "top": "medium"
+        },
+        "animation": {
+          "type": "fade-right"
         }
       }
     },
@@ -151,6 +177,11 @@
       "data": {
         "text": "Quote",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -171,13 +202,21 @@
         "spacing": {
           "top": "medium",
           "bottom": "medium"
+        },
+        "animation": {
+          "type": "fade-right"
         }
       }
     },
     {
       "id": "delimiter-block",
       "type": "delimiter",
-      "data": {}
+      "data": {},
+      "tunes": {
+        "animation": {
+          "type": "fade-up"
+        }
+      }
     },
     {
       "id": "table-header",
@@ -185,6 +224,11 @@
       "data": {
         "text": "Table",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -247,6 +291,11 @@
       "data": {
         "text": "Embed YouTube video",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -264,7 +313,9 @@
         "anchor": {},
         "spacing": {},
         "label": {},
-        "animation": {},
+        "animation": {
+          "type": "fade-right"
+        },
         "embedDisplay": {
           "mode": "fancybox"
         }
@@ -284,6 +335,9 @@
       "tunes": {
         "embedDisplay": {
           "mode": "fancybox"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -293,6 +347,11 @@
       "data": {
         "text": "Embed Vimeo video",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -312,6 +371,9 @@
         },
         "spacing": {
           "top": "large"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -321,6 +383,11 @@
       "data": {
         "text": "Embed Coub video",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -340,6 +407,9 @@
         },
         "spacing": {
           "top": "large"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -349,6 +419,11 @@
       "data": {
         "text": "Embed Rutube video",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -368,6 +443,9 @@
         },
         "spacing": {
           "top": "large"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -377,6 +455,11 @@
       "data": {
         "text": "Embed VK Video in Fancybox",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -396,6 +479,9 @@
         },
         "spacing": {
           "top": "large"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -405,6 +491,11 @@
       "data": {
         "text": "Embed Twitch video in Fancybox",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -424,7 +515,9 @@
           "top": "large"
         },
         "label": {},
-        "animation": {},
+        "animation": {
+          "type": "fade-left"
+        },
         "embedDisplay": {
           "mode": "fancybox"
         }
@@ -465,6 +558,9 @@
         },
         "spacing": {
           "top": "large"
+        },
+        "animation": {
+          "type": "fade-right"
         }
       }
     },
@@ -490,6 +586,11 @@
       "data": {
         "text": "Notice blocks",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -505,7 +606,10 @@
         "spacing": {
           "top": "medium"
         },
-        "label": {}
+        "label": {},
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -521,7 +625,10 @@
         "spacing": {
           "top": "medium"
         },
-        "label": {}
+        "label": {},
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -537,7 +644,10 @@
         "spacing": {
           "top": "medium"
         },
-        "label": {}
+        "label": {},
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -546,6 +656,11 @@
       "data": {
         "text": "CTA button",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -647,6 +762,11 @@
       "data": {
         "text": "Code snippet",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -668,7 +788,7 @@
           "label": "Code snippet"
         },
         "animation": {
-          "type": "fade-right"
+          "type": "fade-left"
         }
       }
     },
@@ -688,7 +808,7 @@
           "label": "CTA JSON"
         },
         "animation": {
-          "type": "fade-up"
+          "type": "fade-right"
         }
       }
     },
@@ -706,6 +826,9 @@
         },
         "label": {
           "label": "Shell commands"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -723,6 +846,9 @@
         },
         "label": {
           "label": "JavaScript"
+        },
+        "animation": {
+          "type": "fade-right"
         }
       }
     },
@@ -740,6 +866,9 @@
         },
         "label": {
           "label": "Vue"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -757,6 +886,9 @@
         },
         "label": {
           "label": "HTML"
+        },
+        "animation": {
+          "type": "fade-right"
         }
       }
     },
@@ -774,6 +906,9 @@
         },
         "label": {
           "label": "CSS"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -791,6 +926,9 @@
         },
         "label": {
           "label": "Plain text"
+        },
+        "animation": {
+          "type": "fade-up"
         }
       }
     },
@@ -800,6 +938,11 @@
       "data": {
         "text": "Raw HTML",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -829,6 +972,11 @@
       "data": {
         "text": "Rich nested fields",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -869,7 +1017,10 @@
         "spacing": {
           "top": "medium"
         },
-        "label": {}
+        "label": {},
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -878,6 +1029,11 @@
       "data": {
         "text": "Composite layout",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-right"
+        }
       }
     },
     {
@@ -941,6 +1097,9 @@
         },
         "label": {
           "label": "Two columns"
+        },
+        "animation": {
+          "type": "fade-left"
         }
       }
     },
@@ -950,6 +1109,11 @@
       "data": {
         "text": "Media blocks",
         "level": 2
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-up"
+        }
       }
     },
     {
@@ -958,6 +1122,11 @@
       "data": {
         "text": "Media gallery",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -1016,7 +1185,7 @@
           "anchor": "media-gallery"
         },
         "animation": {
-          "type": "fade-left"
+          "type": "fade-right"
         },
         "spacing": {
           "top": "large"
@@ -1032,6 +1201,11 @@
       "data": {
         "text": "Media slider",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -1139,6 +1313,11 @@
       "data": {
         "text": "Masked fields",
         "level": 3
+      },
+      "tunes": {
+        "animation": {
+          "type": "fade-left"
+        }
       }
     },
     {
@@ -1161,6 +1340,9 @@
         },
         "label": {
           "label": "Masked fields demo"
+        },
+        "animation": {
+          "type": "fade-right"
         }
       }
     }

@@ -1,10 +1,25 @@
 @use 'sass:meta';
 
+// Theme pairs can be switched by commenting the active pair and uncommenting
+// one of the alternatives below. Theme files are provided by highlight.js.
+
 :root,
 :root[data-theme='light'] {
-  @include meta.load-css('highlight.js/styles/github');
+   @include meta.load-css('highlight.js/styles/atom-one-light');
+  //@include meta.load-css('highlight.js/styles/github');
+  // @include meta.load-css('highlight.js/styles/a11y-light');
+  // @include meta.load-css('highlight.js/styles/xcode');
+  // @include meta.load-css('highlight.js/styles/stackoverflow-light');
+  // @include meta.load-css('highlight.js/styles/tokyo-night-light');
+  // @include meta.load-css('highlight.js/styles/rose-pine-dawn');
 }
 
 :root[data-theme='dark'] {
-  @include meta.load-css('highlight.js/styles/github-dark');
+   @include meta.load-css('highlight.js/styles/atom-one-dark');
+  //@include meta.load-css('highlight.js/styles/github-dark');
+  // @include meta.load-css('highlight.js/styles/a11y-dark');
+  // @include meta.load-css('highlight.js/styles/vs2015');
+  // @include meta.load-css('highlight.js/styles/stackoverflow-dark');
+  // @include meta.load-css('highlight.js/styles/tokyo-night-dark');
+  // @include meta.load-css('highlight.js/styles/rose-pine-moon');
 }

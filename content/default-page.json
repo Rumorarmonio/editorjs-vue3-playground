@@ -669,9 +669,9 @@
       "data": {
         "label": "Open preview workflow",
         "url": "/preview",
-        "description": "A typed CTA block stores the visible button text, safe URL, visual variant, and explicit target behavior.",
         "variant": "primary",
-        "target": "sameTab"
+        "target": "sameTab",
+        "eventPayloadJson": ""
       },
       "tunes": {
         "anchor": {
@@ -694,9 +694,9 @@
       "data": {
         "label": "Read Editor.js docs",
         "url": "https://editorjs.io/",
-        "description": "Secondary CTA variant opens an external documentation link in a new tab.",
         "variant": "secondary",
-        "target": "newTab"
+        "target": "newTab",
+        "eventPayloadJson": ""
       },
       "tunes": {
         "spacing": {
@@ -716,9 +716,9 @@
       "data": {
         "label": "Jump to media examples",
         "url": "#media-blocks",
-        "description": "Ghost CTA variant can also point to an in-page anchor without leaving the current document.",
         "variant": "ghost",
-        "target": "sameTab"
+        "target": "sameTab",
+        "eventPayloadJson": ""
       },
       "tunes": {
         "spacing": {
@@ -738,11 +738,11 @@
       "data": {
         "label": "Open demo modal",
         "url": "",
-        "description": "Event CTA variant emits a typed renderer event instead of navigating to a URL.",
         "variant": "primary",
         "target": "sameTab",
         "actionType": "event",
-        "eventName": "open-demo-modal"
+        "eventName": "open-demo-modal",
+        "eventPayloadJson": "{\n  \"modalText\": \"This modal text came from CTA payload JSON.\"\n}"
       },
       "tunes": {
         "spacing": {
@@ -1008,6 +1008,19 @@
               "data": {
                 "text": "Inline code is stored as <code class=\"inline-code\">inline code</code>, <span class=\"editor-text-color editor-text-color--muted\">muted text color</span> stays renderable, and removed wording can be shown with <s class=\"cdx-strikethrough\">strikethrough</s>."
               }
+            },
+            {
+              "id": "section-intro-cta",
+              "type": "cta",
+              "data": {
+                "label": "Open nested preview",
+                "url": "/preview",
+                "variant": "secondary",
+                "target": "sameTab",
+                "actionType": "link",
+                "eventName": "",
+                "eventPayloadJson": ""
+              }
             }
           ]
         }
@@ -1060,6 +1073,19 @@
               "data": {
                 "text": "The left column stores its own nested Editor.js output with <b>inline formatting</b> and <span class=\"editor-text-color editor-text-color--accent\">text color</span>."
               }
+            },
+            {
+              "id": "two-columns-left-cta",
+              "type": "cta",
+              "data": {
+                "label": "Go to CTA example",
+                "url": "#cta-button",
+                "variant": "ghost",
+                "target": "sameTab",
+                "actionType": "link",
+                "eventName": "",
+                "eventPayloadJson": ""
+              }
             }
           ]
         },
@@ -1085,6 +1111,19 @@
                     "items": []
                   }
                 ]
+              }
+            },
+            {
+              "id": "two-columns-right-cta",
+              "type": "cta",
+              "data": {
+                "label": "Trigger nested event",
+                "url": "",
+                "variant": "primary",
+                "target": "sameTab",
+                "actionType": "event",
+                "eventName": "nested-column-cta",
+                "eventPayloadJson": "{\n  \"modalText\": \"Nested CTA payload can carry its own modal text too.\"\n}"
               }
             }
           ]

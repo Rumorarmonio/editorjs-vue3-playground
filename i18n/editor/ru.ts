@@ -93,13 +93,14 @@ export const editorRu: EditorUiMessages = {
       labelPlaceholder: 'Начать проект',
       urlLabel: 'URL',
       urlPlaceholder: 'https://example.com/contact',
-      descriptionLabel: 'Описание',
-      descriptionPlaceholder: 'Короткий дополнительный текст',
       variantLabel: 'Вариант',
       targetLabel: 'Открывать',
       actionTypeLabel: 'Действие',
       eventNameLabel: 'Имя события',
       eventNamePlaceholder: 'open-demo-modal',
+      eventPayloadJsonLabel: 'Payload JSON',
+      eventPayloadJsonPlaceholder:
+        '{\n  "modalText": "Текст для модального окна"\n}',
       variantOptions: {
         primary: 'Основная',
         secondary: 'Вторичная',
@@ -217,8 +218,8 @@ export const editorRu: EditorUiMessages = {
       mediaAlt: 'Alt-текст',
       mediaCaption: 'Подпись',
       ctaLabel: 'Текст кнопки',
-      ctaDescription: 'Описание',
       ctaEventName: 'Имя события',
+      ctaEventPayloadJson: 'Payload JSON',
       codeSnippetCode: 'Код',
       codeSnippetCaption: 'Подпись',
       rawHtml: 'HTML',
@@ -243,6 +244,9 @@ export const editorRu: EditorUiMessages = {
     ctaEventNameRequired: 'Имя события обязательно.',
     ctaEventNameInvalid:
       'Используйте только буквы, цифры, дефисы, подчёркивания и двоеточия.',
+    ctaEventPayloadJsonInvalid: 'Введите валидный JSON.',
+    ctaEventPayloadJsonObjectRequired:
+      'Корневое значение payload должно быть JSON-объектом.',
     codeSnippetCodeRequired: 'Код обязателен.',
     rawHtmlRequired: 'HTML обязателен.',
     maxLength: (label, maxLength) =>

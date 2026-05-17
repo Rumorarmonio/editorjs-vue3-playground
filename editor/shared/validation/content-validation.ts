@@ -43,7 +43,7 @@ const maxGalleryIdLength = 80
 const maxMediaAltLength = 160
 const maxMediaCaptionLength = 300
 const maxCtaLabelLength = 80
-const maxCtaDescriptionLength = 240
+const maxCtaEventPayloadJsonLength = 4000
 const maxCodeCaptionLength = 160
 const maxCodeLength = 12000
 const maxRawHtmlLength = 12000
@@ -165,6 +165,13 @@ export function validateSectionIntroBlockData(
     messages.fieldLabels.sectionIntroTitle,
     messages,
   )
+  issues.push(
+    ...validateRichParagraphFieldCtaData(
+      data.description,
+      'description',
+      messages,
+    ),
+  )
 
   return createValidationResult(issues)
 }
@@ -186,6 +193,8 @@ export function validateTwoColumnsBlockData(
       message: messages.twoColumnsContentRequired,
     })
   }
+  issues.push(...validateTwoColumnsContentCtaData(data.left, 'left', messages))
+  issues.push(...validateTwoColumnsContentCtaData(data.right, 'right', messages))
 
   return createValidationResult(issues)
 }
@@ -270,6 +279,22 @@ export function validateCtaBlockData(
     })
   }
 
+  if (data.actionType === 'event' && hasText(data.eventPayloadJson)) {
+    const payloadValidation = validateJsonObject(data.eventPayloadJson)
+
+    if (payloadValidation === 'invalid') {
+      issues.push({
+        path: 'eventPayloadJson',
+        message: messages.ctaEventPayloadJsonInvalid,
+      })
+    } else if (payloadValidation === 'notObject') {
+      issues.push({
+        path: 'eventPayloadJson',
+        message: messages.ctaEventPayloadJsonObjectRequired,
+      })
+    }
+  }
+
   pushMaxLengthIssue(
     issues,
     'label',
@@ -278,22 +303,25 @@ export function validateCtaBlockData(
     messages.fieldLabels.ctaLabel,
     messages,
   )
-  pushMaxLengthIssue(
-    issues,
-    'description',
-    data.description,
-    maxCtaDescriptionLength,
-    messages.fieldLabels.ctaDescription,
-    messages,
-  )
-  pushMaxLengthIssue(
-    issues,
-    'eventName',
-    data.eventName,
-    maxCtaEventNameLength,
-    messages.fieldLabels.ctaEventName,
-    messages,
-  )
+
+  if (data.actionType === 'event') {
+    pushMaxLengthIssue(
+      issues,
+      'eventName',
+      data.eventName,
+      maxCtaEventNameLength,
+      messages.fieldLabels.ctaEventName,
+      messages,
+    )
+    pushMaxLengthIssue(
+      issues,
+      'eventPayloadJson',
+      data.eventPayloadJson,
+      maxCtaEventPayloadJsonLength,
+      messages.fieldLabels.ctaEventPayloadJson,
+      messages,
+    )
+  }
 
   return createValidationResult(issues)
 }
@@ -421,8 +449,49 @@ function validateMediaGalleryItem(
     messages.fieldLabels.mediaCaption,
     messages,
   )
+  issues.push(
+    ...validateRichParagraphFieldCtaData(
+      item.description,
+      `${basePath}.description`,
+      messages,
+    ),
+  )
 
   return issues
+}
+
+function validateRichParagraphFieldCtaData(
+  data: RichParagraphFieldData,
+  basePath: string,
+  messages: EditorValidationMessages,
+): ValidationIssue[] {
+  return data.blocks.flatMap((block, index) => {
+    if (block.type !== 'cta') {
+      return []
+    }
+
+    return prefixValidationIssues(
+      validateCtaBlockData(block.data, messages).issues,
+      `${basePath}.blocks.${index}`,
+    )
+  })
+}
+
+function validateTwoColumnsContentCtaData(
+  data: TwoColumnsContentData,
+  basePath: string,
+  messages: EditorValidationMessages,
+): ValidationIssue[] {
+  return data.blocks.flatMap((block, index) => {
+    if (block.type !== 'cta') {
+      return []
+    }
+
+    return prefixValidationIssues(
+      validateCtaBlockData(block.data, messages).issues,
+      `${basePath}.blocks.${index}`,
+    )
+  })
 }
 
 function createValidationResult(issues: ValidationIssue[]): ValidationResult {
@@ -466,8 +535,31 @@ function hasText(value: string): boolean {
   return value.trim().length > 0
 }
 
+function validateJsonObject(value: string): 'valid' | 'invalid' | 'notObject' {
+  try {
+    const parsed: unknown = JSON.parse(value)
+
+    return isPlainJsonObject(parsed) ? 'valid' : 'notObject'
+  } catch {
+    return 'invalid'
+  }
+}
+
+function isPlainJsonObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
 function hasRichParagraphContent(data: RichParagraphFieldData): boolean {
-  return data.blocks.some((block) => hasText(block.data.text))
+  return data.blocks.some((block) => {
+    switch (block.type) {
+      case 'paragraph':
+        return hasText(block.data.text)
+      case 'cta':
+        return hasText(block.data.label)
+      default:
+        return false
+    }
+  })
 }
 
 function hasTwoColumnsContent(data: TwoColumnsContentData): boolean {
@@ -478,6 +570,8 @@ function hasTwoColumnsContent(data: TwoColumnsContentData): boolean {
         return hasText(block.data.text)
       case 'list':
         return block.data.items.some(hasListItemContent)
+      case 'cta':
+        return hasText(block.data.label)
       default:
         return false
     }

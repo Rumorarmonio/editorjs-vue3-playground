@@ -33,10 +33,6 @@ export default class CtaTool implements BlockTool {
   private data: CtaBlockData
   private labelField: PlainFieldControl<string, HTMLInputElement> | null = null
   private urlField: PlainFieldControl<string, HTMLInputElement> | null = null
-  private descriptionField: PlainFieldControl<
-    string,
-    HTMLTextAreaElement
-  > | null = null
   private variantField: PlainFieldControl<
     CtaBlockVariant,
     HTMLSelectElement
@@ -51,6 +47,10 @@ export default class CtaTool implements BlockTool {
   > | null = null
   private eventNameField: PlainFieldControl<string, HTMLInputElement> | null =
     null
+  private eventPayloadJsonField: PlainFieldControl<
+    string,
+    HTMLTextAreaElement
+  > | null = null
 
   static get toolbox(): ToolboxConfig {
     const messages = getCurrentEditorMessages()
@@ -99,20 +99,6 @@ export default class CtaTool implements BlockTool {
       },
     })
 
-    this.descriptionField = createPlainTextareaField({
-      name: 'cta-description',
-      label: messages.tools.cta.descriptionLabel,
-      value: this.data.description,
-      placeholder: messages.tools.cta.descriptionPlaceholder,
-      rows: 3,
-      readOnly: this.readOnly,
-      onChange: (value) => {
-        this.data.description = value
-        this.descriptionField?.setError(undefined)
-        this.dispatchChange()
-      },
-    })
-
     this.variantField = createPlainSelectField<CtaBlockVariant>({
       name: 'cta-variant',
       label: messages.tools.cta.variantLabel,
@@ -140,6 +126,7 @@ export default class CtaTool implements BlockTool {
       onChange: (value) => {
         this.data.actionType = value
         this.eventNameField?.setError(undefined)
+        this.eventPayloadJsonField?.setError(undefined)
         this.urlField?.setError(undefined)
         this.updateActionFields()
         this.dispatchChange()
@@ -174,19 +161,36 @@ export default class CtaTool implements BlockTool {
       },
     })
 
+    this.eventPayloadJsonField = createPlainTextareaField({
+      name: 'cta-event-payload-json',
+      label: messages.tools.cta.eventPayloadJsonLabel,
+      value: this.data.eventPayloadJson,
+      placeholder: messages.tools.cta.eventPayloadJsonPlaceholder,
+      rows: 5,
+      readOnly: this.readOnly,
+      onChange: (value) => {
+        this.data.eventPayloadJson = value
+        this.eventPayloadJsonField?.setError(undefined)
+        this.dispatchChange()
+      },
+    })
+    this.eventPayloadJsonField.root.classList.add(
+      'editor-cta-tool__payload-field',
+    )
+
     const settings = document.createElement('div')
 
     settings.className = 'editor-cta-tool__settings'
     settings.append(
       this.variantField.root,
       this.actionTypeField.root,
+      this.urlField.root,
       this.targetField.root,
       this.eventNameField.root,
+      this.eventPayloadJsonField.root,
     )
     wrapper.append(
       this.labelField.root,
-      this.urlField.root,
-      this.descriptionField.root,
       settings,
     )
     this.updateActionFields()
@@ -212,13 +216,13 @@ export default class CtaTool implements BlockTool {
     return normalizeCtaBlockData({
       label: this.labelField?.getValue() ?? this.data.label,
       url: this.urlField?.getValue() ?? this.data.url,
-      description:
-        this.descriptionField?.getValue() ?? this.data.description,
       variant: this.variantField?.getValue() ?? this.data.variant,
       actionType:
         this.actionTypeField?.getValue() ?? this.data.actionType,
       target: this.targetField?.getValue() ?? this.data.target,
       eventName: this.eventNameField?.getValue() ?? this.data.eventName,
+      eventPayloadJson:
+        this.eventPayloadJsonField?.getValue() ?? this.data.eventPayloadJson,
     })
   }
 
@@ -231,11 +235,11 @@ export default class CtaTool implements BlockTool {
     this.urlField?.setError(
       result.issues.find((issue) => issue.path === 'url')?.message,
     )
-    this.descriptionField?.setError(
-      result.issues.find((issue) => issue.path === 'description')?.message,
-    )
     this.eventNameField?.setError(
       result.issues.find((issue) => issue.path === 'eventName')?.message,
+    )
+    this.eventPayloadJsonField?.setError(
+      result.issues.find((issue) => issue.path === 'eventPayloadJson')?.message,
     )
 
     return result.valid
@@ -247,17 +251,18 @@ export default class CtaTool implements BlockTool {
 
     if (this.urlField) {
       this.urlField.root.hidden = !isLinkAction
-      this.urlField.setDisabled(!isLinkAction)
     }
 
     if (this.targetField) {
       this.targetField.root.hidden = !isLinkAction
-      this.targetField.setDisabled(!isLinkAction)
     }
 
     if (this.eventNameField) {
       this.eventNameField.root.hidden = isLinkAction
-      this.eventNameField.setDisabled(isLinkAction)
+    }
+
+    if (this.eventPayloadJsonField) {
+      this.eventPayloadJsonField.root.hidden = isLinkAction
     }
   }
 

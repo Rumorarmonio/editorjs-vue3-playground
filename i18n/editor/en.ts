@@ -91,13 +91,14 @@ export const editorEn: EditorUiMessages = {
       labelPlaceholder: 'Start a project',
       urlLabel: 'URL',
       urlPlaceholder: 'https://example.com/contact',
-      descriptionLabel: 'Description',
-      descriptionPlaceholder: 'Optional short supporting text',
       variantLabel: 'Variant',
       targetLabel: 'Target',
       actionTypeLabel: 'Action',
       eventNameLabel: 'Event name',
       eventNamePlaceholder: 'open-demo-modal',
+      eventPayloadJsonLabel: 'Payload JSON',
+      eventPayloadJsonPlaceholder:
+        '{\n  "modalText": "Text for the modal window"\n}',
       variantOptions: {
         primary: 'Primary',
         secondary: 'Secondary',
@@ -215,8 +216,8 @@ export const editorEn: EditorUiMessages = {
       mediaAlt: 'Alt text',
       mediaCaption: 'Caption',
       ctaLabel: 'Button label',
-      ctaDescription: 'Description',
       ctaEventName: 'Event name',
+      ctaEventPayloadJson: 'Payload JSON',
       codeSnippetCode: 'Code',
       codeSnippetCaption: 'Caption',
       rawHtml: 'HTML',
@@ -239,6 +240,9 @@ export const editorEn: EditorUiMessages = {
     ctaEventNameRequired: 'Event name is required.',
     ctaEventNameInvalid:
       'Use only letters, numbers, dashes, underscores, and colons.',
+    ctaEventPayloadJsonInvalid: 'Enter valid JSON.',
+    ctaEventPayloadJsonObjectRequired:
+      'The payload root value must be a JSON object.',
     codeSnippetCodeRequired: 'Code is required.',
     rawHtmlRequired: 'HTML is required.',
     maxLength: (label, maxLength) =>

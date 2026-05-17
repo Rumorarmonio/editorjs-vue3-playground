@@ -4,6 +4,7 @@ import type {
 } from '@editorjs/editorjs/types'
 import InlineCodeTool from '~~/editor/admin/tools/InlineCodeTool'
 import { TextColorToolConstructable } from '~~/editor/admin/tools/TextColorTool'
+import { CtaToolConstructable } from '~~/editor/admin/tools/blocks/CtaTool'
 
 export const nestedRichFieldInlineToolbar = [
   'bold',
@@ -19,7 +20,10 @@ export const nestedRichFieldInlineToolbar = [
 export async function createNestedParagraphTools(): Promise<
   EditorConfig['tools']
 > {
-  return createNestedInlineTools()
+  return {
+    cta: CtaToolConstructable,
+    ...(await createNestedInlineTools()),
+  }
 }
 
 export async function createNestedHeaderTools(): Promise<EditorConfig['tools']> {
@@ -65,6 +69,7 @@ export async function createNestedColumnTools(): Promise<EditorConfig['tools']> 
         defaultStyle: 'unordered',
       },
     },
+    cta: CtaToolConstructable,
     ...inlineTools,
   }
 }

@@ -32,6 +32,7 @@ const navigationMode = ref<'labels' | 'headings'>('headings')
 const activeAnchor = ref<string | null>(null)
 const previewPanelRef = ref<HTMLElement | null>(null)
 const demoCtaEventName = ref<string | null>(null)
+const demoCtaModalText = ref<string | null>(null)
 const headingNavigationItems = computed(() =>
   buildHeadingNavigationItems(resolvedContent.value.data),
 )
@@ -54,11 +55,19 @@ const translatedSourceLabel = computed(() =>
     ? t('app.common.localDraft')
     : t('app.common.defaultJson'),
 )
+const demoCtaModalDisplayText = computed(
+  () =>
+    demoCtaModalText.value ??
+    t('app.previewPage.ctaDemoModalText', {
+      eventName: demoCtaEventName.value,
+    }),
+)
 let activeAnchorAnimationFrame = 0
 let activeAnchorResizeObserver: ResizeObserver | null = null
 
 interface CtaActionEventDetail {
   eventName?: string
+  payload?: Record<string, unknown>
 }
 
 function getFlattenedNavigationItems(items: NavigationItem[]): NavigationItem[] {
@@ -241,10 +250,21 @@ function handleCtaAction(event: Event): void {
   }
 
   demoCtaEventName.value = detail.eventName
+  demoCtaModalText.value = getPayloadString(detail.payload, 'modalText')
 }
 
 function closeDemoModal(): void {
   demoCtaEventName.value = null
+  demoCtaModalText.value = null
+}
+
+function getPayloadString(
+  payload: Record<string, unknown> | undefined,
+  key: string,
+): string | null {
+  const value = payload?.[key]
+
+  return typeof value === 'string' && value.trim() ? value : null
 }
 
 onMounted(() => {
@@ -402,11 +422,7 @@ onBeforeUnmount(() => {
             {{ t('app.previewPage.ctaDemoModalTitle') }}
           </p>
           <p :class="$style.modalText">
-            {{
-              t('app.previewPage.ctaDemoModalText', {
-                eventName: demoCtaEventName,
-              })
-            }}
+            {{ demoCtaModalDisplayText }}
           </p>
           <button
             type="button"

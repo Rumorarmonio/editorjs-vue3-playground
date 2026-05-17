@@ -16,8 +16,8 @@ export interface EditorValidationMessages {
     mediaAlt: string
     mediaCaption: string
     ctaLabel: string
-    ctaDescription: string
     ctaEventName: string
+    ctaEventPayloadJson: string
     codeSnippetCode: string
     codeSnippetCaption: string
     rawHtml: string
@@ -37,6 +37,8 @@ export interface EditorValidationMessages {
   ctaUrlInvalid: string
   ctaEventNameRequired: string
   ctaEventNameInvalid: string
+  ctaEventPayloadJsonInvalid: string
+  ctaEventPayloadJsonObjectRequired: string
   codeSnippetCodeRequired: string
   rawHtmlRequired: string
   maxLength: (label: string, maxLength: number) => string
@@ -133,13 +135,13 @@ export interface EditorUiMessages {
       labelPlaceholder: string
       urlLabel: string
       urlPlaceholder: string
-      descriptionLabel: string
-      descriptionPlaceholder: string
       variantLabel: string
       targetLabel: string
       actionTypeLabel: string
       eventNameLabel: string
       eventNamePlaceholder: string
+      eventPayloadJsonLabel: string
+      eventPayloadJsonPlaceholder: string
       variantOptions: {
         primary: string
         secondary: string

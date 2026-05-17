@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import type { CtaBlockData } from '~~/editor/shared'
+import { useCssModule } from 'vue'
+import type { CtaBlockData, CtaBlockVariant } from '~~/editor/shared'
 
 const props = defineProps<{
   data: CtaBlockData
 }>()
 
 const runtimeConfig = useRuntimeConfig()
+const style = useCssModule()
 
 const href = computed(() => {
   return resolveCtaHref(props.data.url, runtimeConfig.app.baseURL)
+})
+
+const isInternalAppLink = computed(() => {
+  return (
+    props.data.actionType === 'link' &&
+    props.data.target === 'sameTab' &&
+    isRootRelativeAppUrl(props.data.url)
+  )
 })
 
 const target = computed(() => {
@@ -26,10 +36,22 @@ function handleEventAction(): void {
     new CustomEvent('editor:cta-action', {
       detail: {
         eventName,
+        payload: parseEventPayload(props.data.eventPayloadJson),
         data: props.data,
       },
     }),
   )
+}
+
+function getCtaVariantClass(variant: CtaBlockVariant): string {
+  switch (variant) {
+    case 'secondary':
+      return style.ctaActionSecondary ?? ''
+    case 'ghost':
+      return style.ctaActionGhost ?? ''
+    default:
+      return style.ctaActionPrimary ?? ''
+  }
 }
 
 function resolveCtaHref(url: string, baseURL: string): string {
@@ -41,34 +63,59 @@ function resolveCtaHref(url: string, baseURL: string): string {
 
   return `${normalizedBaseURL}${url}`
 }
+
+function isRootRelativeAppUrl(url: string): boolean {
+  return url.startsWith('/') && !url.startsWith('//')
+}
+
+function parseEventPayload(value: string): Record<string, unknown> | undefined {
+  if (!value.trim()) {
+    return undefined
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(value)
+
+    if (
+      typeof parsed === 'object' &&
+      parsed !== null &&
+      !Array.isArray(parsed)
+    ) {
+      return parsed as Record<string, unknown>
+    }
+  } catch {
+    return undefined
+  }
+
+  return undefined
+}
 </script>
 
 <template>
-  <aside :class="[$style.cta, $style[`cta_${data.variant}`]]">
-    <p
-      v-if="data.description"
-      :class="$style.ctaDescription"
-    >
-      {{ data.description }}
-    </p>
-    <a
-      v-if="data.actionType === 'link'"
-      :class="$style.ctaAction"
-      :href="href"
-      :target="target"
-      :rel="rel"
-    >
-      {{ data.label }}
-    </a>
-    <button
-      v-else
-      type="button"
-      :class="$style.ctaAction"
-      @click="handleEventAction"
-    >
-      {{ data.label }}
-    </button>
-  </aside>
+  <NuxtLink
+    v-if="isInternalAppLink"
+    :class="[$style.ctaAction, getCtaVariantClass(data.variant)]"
+    :to="data.url"
+  >
+    {{ data.label }}
+  </NuxtLink>
+  <a
+    v-else-if="data.actionType === 'link'"
+    :class="[$style.ctaAction, getCtaVariantClass(data.variant)]"
+    :href="href"
+    :target="target"
+    :rel="rel"
+  >
+    {{ data.label }}
+  </a>
+  <button
+    v-else
+    type="button"
+    :class="[$style.ctaAction, getCtaVariantClass(data.variant)]"
+    @click="handleEventAction"
+  >
+    {{ data.label }}
+  </button>
 </template>
 
 <style module lang="scss" src="./EditorCtaBlock.module.scss" />

@@ -17,7 +17,7 @@ export type NoticeBlockType = (typeof noticeBlockTypes)[number]
 export type SectionIntroDescriptionBlock = EditorOutputBlock<
   'paragraph',
   ParagraphBlockData
->
+> | EditorOutputBlock<'cta', CtaBlockData>
 
 export type SectionIntroDescriptionData =
   EditorOutputData<SectionIntroDescriptionBlock>
@@ -76,6 +76,7 @@ export type TwoColumnsContentBlock =
   | EditorOutputBlock<'paragraph', ParagraphBlockData>
   | EditorOutputBlock<'header', HeaderBlockData>
   | EditorOutputBlock<'list', ListBlockData>
+  | EditorOutputBlock<'cta', CtaBlockData>
 
 export type TwoColumnsContentData = EditorOutputData<TwoColumnsContentBlock>
 
@@ -126,11 +127,11 @@ export interface MaskedFieldsDemoBlockData {
 export interface CtaBlockData {
   label: string
   url: string
-  description: string
   variant: CtaBlockVariant
   target: CtaBlockTarget
   actionType: CtaBlockActionType
   eventName: string
+  eventPayloadJson: string
 }
 
 export interface CodeSnippetBlockData {
@@ -311,13 +312,13 @@ export function normalizeCtaBlockData(value: unknown): CtaBlockData {
   return {
     label: normalizePlainValue(value.label),
     url: normalizeCtaUrlValue(value.url),
-    description: normalizeMultilineValue(value.description),
     variant: isCtaBlockVariant(value.variant) ? value.variant : 'primary',
     target: isCtaBlockTarget(value.target) ? value.target : 'sameTab',
     actionType: isCtaBlockActionType(value.actionType)
       ? value.actionType
       : 'link',
     eventName: normalizeEventNameValue(value.eventName),
+    eventPayloadJson: normalizeJsonValue(value.eventPayloadJson),
   }
 }
 
@@ -468,12 +469,13 @@ export function isCtaBlockData(value: unknown): value is CtaBlockData {
     (actionType === 'event' ||
       value.url === '' ||
       isAllowedCtaUrl(value.url)) &&
-    typeof value.description === 'string' &&
     isCtaBlockVariant(value.variant) &&
     isCtaBlockTarget(value.target) &&
     (value.actionType === undefined ||
       isCtaBlockActionType(value.actionType)) &&
-    (value.eventName === undefined || typeof value.eventName === 'string')
+    (value.eventName === undefined || typeof value.eventName === 'string') &&
+    (value.eventPayloadJson === undefined ||
+      typeof value.eventPayloadJson === 'string')
   )
 }
 
@@ -574,11 +576,11 @@ function createDefaultCtaBlockData(): CtaBlockData {
   return {
     label: '',
     url: '',
-    description: '',
     variant: 'primary',
     target: 'sameTab',
     actionType: 'link',
     eventName: '',
+    eventPayloadJson: '',
   }
 }
 
@@ -637,8 +639,15 @@ function isCodeSnippetLanguage(
 function isRichParagraphFieldBlock(
   value: unknown,
 ): value is RichParagraphBlockData {
+  if (!isRecord(value)) {
+    return false
+  }
+
+  if (value.type === 'cta') {
+    return isCtaBlock(value)
+  }
+
   return (
-    isRecord(value) &&
     (value.id === undefined || typeof value.id === 'string') &&
     value.type === 'paragraph' &&
     isRecord(value.data) &&
@@ -673,9 +682,23 @@ function isTwoColumnsContentBlock(
       return isRichHeaderFieldBlock(value)
     case 'list':
       return isListBlock(value)
+    case 'cta':
+      return isCtaBlock(value)
     default:
       return false
   }
+}
+
+function isCtaBlock(
+  value: unknown,
+): value is EditorOutputBlock<'cta', CtaBlockData> {
+  return (
+    isRecord(value) &&
+    (value.id === undefined || typeof value.id === 'string') &&
+    value.type === 'cta' &&
+    isCtaBlockData(value.data) &&
+    (value.tunes === undefined || isRecord(value.tunes))
+  )
 }
 
 function isListBlock(
@@ -769,6 +792,12 @@ function normalizeHtmlValue(value: unknown): string {
 
 function normalizeEventNameValue(value: unknown): string {
   return typeof value === 'string' ? value.trim() : ''
+}
+
+function normalizeJsonValue(value: unknown): string {
+  return typeof value === 'string'
+    ? value.replaceAll('\r\n', '\n').replaceAll('\r', '\n').trim()
+    : ''
 }
 
 export function isAllowedCtaUrl(value: string): boolean {

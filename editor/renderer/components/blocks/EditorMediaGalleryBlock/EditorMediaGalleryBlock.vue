@@ -12,6 +12,7 @@ import {
   sanitizeInlineHtml,
 } from '~~/editor/renderer/helpers/sanitize-inline-html'
 import { normalizeRichParagraphContent } from '~~/editor/renderer/helpers/rich-field-content'
+import EditorContentRenderer from '~~/editor/renderer/components/EditorContentRenderer/EditorContentRenderer.vue'
 import {
   normalizeMediaGalleryBlockData,
   type MediaGalleryBlockData,
@@ -128,10 +129,8 @@ function getItemAlt(item: MediaGalleryItemData): string {
           v-if="normalizeRichParagraphContent(item.description).blocks.length"
           :class="$style.description"
         >
-          <p
-            v-for="(descriptionBlock, descriptionIndex) in normalizeRichParagraphContent(item.description).blocks"
-            :key="descriptionBlock.id ?? descriptionIndex"
-            v-html="sanitizeInlineHtml(descriptionBlock.data.text)"
+          <EditorContentRenderer
+            :content="normalizeRichParagraphContent(item.description)"
           />
         </div>
       </article>
@@ -198,10 +197,8 @@ function getItemAlt(item: MediaGalleryItemData): string {
             v-if="normalizeRichParagraphContent(item.description).blocks.length"
             :class="$style.description"
           >
-            <p
-              v-for="(descriptionBlock, descriptionIndex) in normalizeRichParagraphContent(item.description).blocks"
-              :key="descriptionBlock.id ?? descriptionIndex"
-              v-html="sanitizeInlineHtml(descriptionBlock.data.text)"
+            <EditorContentRenderer
+              :content="normalizeRichParagraphContent(item.description)"
             />
           </div>
         </article>

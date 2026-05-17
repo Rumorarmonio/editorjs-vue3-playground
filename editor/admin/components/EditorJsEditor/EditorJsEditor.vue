@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type EditorJS from '@editorjs/editorjs'
-import { onBeforeUnmount, onMounted, shallowRef, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, shallowRef, ref } from 'vue'
 import {
   enableEditorToolbarKeyboardAccess,
   type EditorToolbarKeyboardPatch,
@@ -75,6 +75,7 @@ async function save(options: SaveOptions = {}): Promise<boolean> {
 
     if (validationSummary) {
       errorMessage.value = validationSummary
+      scheduleScrollToFirstValidationError()
       return false
     }
 
@@ -161,6 +162,73 @@ onBeforeUnmount(() => {
 
 function cloneEditorContent(content: EditorContentData): EditorContentData {
   return JSON.parse(JSON.stringify(content)) as EditorContentData
+}
+
+function scheduleScrollToFirstValidationError(): void {
+  if (!import.meta.client) {
+    return
+  }
+
+  void nextTick(() => {
+    requestAnimationFrame(scrollToFirstValidationError)
+  })
+}
+
+function scrollToFirstValidationError(): void {
+  const root = holderElement.value
+
+  if (!root) {
+    return
+  }
+
+  const invalidElement = findFirstVisibleElement(root, [
+    '.editor-plain-field--invalid',
+    '.editor-block-tune-field--invalid',
+  ])
+
+  if (!invalidElement) {
+    return
+  }
+
+  invalidElement.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center',
+  })
+  focusValidationElement(invalidElement)
+}
+
+function findFirstVisibleElement(
+  root: HTMLElement,
+  selectors: string[],
+): HTMLElement | null {
+  const elements = root.querySelectorAll<HTMLElement>(selectors.join(', '))
+
+  return (
+    Array.from(elements).find((element) => isVisibleElement(element)) ?? null
+  )
+}
+
+function isVisibleElement(element: HTMLElement): boolean {
+  if (element.hidden) {
+    return false
+  }
+
+  return Boolean(element.offsetParent || element.getClientRects().length > 0)
+}
+
+function focusValidationElement(element: HTMLElement): void {
+  const focusTarget = element.querySelector<HTMLElement>(
+    [
+      '[aria-invalid="true"]',
+      'input:not([disabled])',
+      'textarea:not([disabled])',
+      'select:not([disabled])',
+      'button:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(', '),
+  )
+
+  focusTarget?.focus({ preventScroll: true })
 }
 </script>
 

@@ -94,13 +94,14 @@ export const editorEs: EditorUiMessages = {
       labelPlaceholder: 'Iniciar un proyecto',
       urlLabel: 'URL',
       urlPlaceholder: 'https://example.com/contact',
-      descriptionLabel: 'Descripción',
-      descriptionPlaceholder: 'Texto breve opcional',
       variantLabel: 'Variante',
       targetLabel: 'Destino',
       actionTypeLabel: 'Acción',
       eventNameLabel: 'Nombre del evento',
       eventNamePlaceholder: 'open-demo-modal',
+      eventPayloadJsonLabel: 'Payload JSON',
+      eventPayloadJsonPlaceholder:
+        '{\n  "modalText": "Texto para la ventana modal"\n}',
       variantOptions: {
         primary: 'Principal',
         secondary: 'Secundario',
@@ -218,8 +219,8 @@ export const editorEs: EditorUiMessages = {
       mediaAlt: 'Texto alt',
       mediaCaption: 'Leyenda',
       ctaLabel: 'Texto del botón',
-      ctaDescription: 'Descripción',
       ctaEventName: 'Nombre del evento',
+      ctaEventPayloadJson: 'Payload JSON',
       codeSnippetCode: 'Código',
       codeSnippetCaption: 'Leyenda',
       rawHtml: 'HTML',
@@ -243,6 +244,9 @@ export const editorEs: EditorUiMessages = {
     ctaEventNameRequired: 'El nombre del evento es obligatorio.',
     ctaEventNameInvalid:
       'Use solo letras, números, guiones, guiones bajos y dos puntos.',
+    ctaEventPayloadJsonInvalid: 'Introduzca JSON válido.',
+    ctaEventPayloadJsonObjectRequired:
+      'El valor raíz del payload debe ser un objeto JSON.',
     codeSnippetCodeRequired: 'El código es obligatorio.',
     rawHtmlRequired: 'El HTML es obligatorio.',
     maxLength: (label, maxLength) =>

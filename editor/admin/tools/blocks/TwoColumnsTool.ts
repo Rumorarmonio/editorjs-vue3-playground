@@ -27,6 +27,7 @@ import {
   type TwoColumnsLayoutVariant,
 } from '~~/editor/shared'
 import { getCurrentEditorMessages } from '~~/i18n/editor'
+import { createBlockToolLabel } from './tool-label'
 
 const layoutOptions = [
   {
@@ -130,7 +131,11 @@ export default class TwoColumnsTool implements BlockTool {
     )
 
     columns.append(this.leftColumnField.root, this.rightColumnField.root)
-    wrapper.append(controls, columns)
+    wrapper.append(
+      createBlockToolLabel(messages.tools.twoColumns.toolboxTitle),
+      controls,
+      columns,
+    )
 
     this.syncLayoutAttributes(columns)
 

@@ -15,6 +15,7 @@ import {
   type MaskedFieldsDemoBlockData,
 } from '~~/editor/shared'
 import { getCurrentEditorMessages } from '~~/i18n/editor'
+import { createBlockToolLabel } from './tool-label'
 
 type MaskedFieldName = keyof MaskedFieldsDemoBlockData
 
@@ -151,7 +152,10 @@ export default class MaskedFieldsDemoTool implements BlockTool {
       fieldsRoot.append(field.root)
     })
 
-    wrapper.append(fieldsRoot)
+    wrapper.append(
+      createBlockToolLabel(messages.tools.maskedFieldsDemo.toolboxTitle),
+      fieldsRoot,
+    )
 
     return wrapper
   }

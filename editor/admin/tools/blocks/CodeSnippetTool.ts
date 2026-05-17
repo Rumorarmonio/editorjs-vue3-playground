@@ -18,6 +18,7 @@ import {
   type CodeSnippetLanguage,
 } from '~~/editor/shared'
 import { getCurrentEditorMessages } from '~~/i18n/editor'
+import { createBlockToolLabel } from './tool-label'
 
 export default class CodeSnippetTool implements BlockTool {
   static isReadOnlySupported = true
@@ -106,6 +107,7 @@ export default class CodeSnippetTool implements BlockTool {
     })
 
     wrapper.append(
+      createBlockToolLabel(messages.tools.codeSnippet.toolboxTitle),
       this.languageField.root,
       this.codeField.root,
       this.captionField.root,

@@ -28,6 +28,7 @@ import {
   type RichParagraphFieldData,
 } from '~~/editor/shared'
 import { getCurrentEditorMessages } from '~~/i18n/editor'
+import { createBlockToolLabel } from './tool-label'
 
 interface MediaCardControls {
   root: HTMLElement
@@ -172,7 +173,13 @@ export default class MediaGalleryTool implements BlockTool {
       this.urlSyncField.root,
     )
     actions.append(addButton)
-    wrapper.append(settings, this.cardsRoot, this.cardsErrorElement, actions)
+    wrapper.append(
+      createBlockToolLabel(messages.tools.mediaGallery.toolboxTitle),
+      settings,
+      this.cardsRoot,
+      this.cardsErrorElement,
+      actions,
+    )
     this.renderCards()
 
     return wrapper

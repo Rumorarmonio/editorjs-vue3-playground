@@ -18,6 +18,7 @@ import {
   type SectionIntroDescriptionData,
 } from '~~/editor/shared'
 import { getCurrentEditorMessages } from '~~/i18n/editor'
+import { createBlockToolLabel } from './tool-label'
 
 export default class SectionIntroTool implements BlockTool {
   static isReadOnlySupported = true
@@ -77,7 +78,11 @@ export default class SectionIntroTool implements BlockTool {
       },
     })
 
-    wrapper.append(this.titleField.root, this.descriptionField.root)
+    wrapper.append(
+      createBlockToolLabel(messages.tools.sectionIntro.toolboxTitle),
+      this.titleField.root,
+      this.descriptionField.root,
+    )
 
     void this.descriptionField.initialize()
 

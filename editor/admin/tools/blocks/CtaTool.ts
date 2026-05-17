@@ -24,6 +24,7 @@ import {
   type CtaBlockVariant,
 } from '~~/editor/shared'
 import { getCurrentEditorMessages } from '~~/i18n/editor'
+import { createBlockToolLabel } from './tool-label'
 
 export default class CtaTool implements BlockTool {
   static isReadOnlySupported = true
@@ -190,6 +191,7 @@ export default class CtaTool implements BlockTool {
       this.eventPayloadJsonField.root,
     )
     wrapper.append(
+      createBlockToolLabel(messages.tools.cta.toolboxTitle),
       this.labelField.root,
       settings,
     )

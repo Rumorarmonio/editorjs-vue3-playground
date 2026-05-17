@@ -18,6 +18,7 @@ import {
   type NoticeBlockType,
 } from '~~/editor/shared'
 import { getCurrentEditorMessages } from '~~/i18n/editor'
+import { createBlockToolLabel } from './tool-label'
 
 const noticeTypeOptions = [
   {
@@ -108,6 +109,7 @@ export default class NoticeTool implements BlockTool {
     })
 
     wrapper.append(
+      createBlockToolLabel(messages.tools.notice.toolboxTitle),
       this.titleField.root,
       this.textField.root,
       this.typeField.root,
